@@ -54,6 +54,17 @@ significantly influence cost estimates, include:</p>
 <li>Number of users</li>
 <li>Usage patterns of users</li>
 </ul>
+<div class="section" id="interactive-estimator">
+<h2>Interactive Estimator<a class="headerlink" href="#interactive-estimator" title="Permalink to this headline">¶</a></h2>
+<p>We’ve put together a small notebook that can help you estimate your costs
+for a JupyterHub instance. Below is a notebook with a single plot inside.
+The plot represents users over a single month. You can draw any pattern
+of user activity you like, then click the button and it will estimate
+the cost associated with that pattern of activity over the month.</p>
+<br />
+<iframe src="http://beta.mybinder.org/v2/gh/choldgraf/zero-to-jupyterhub-k8s/cost_demo?filepath=draw_function.ipynb" style="width:100%; height:800px; border:1px solid"></iframe><a class="reference external image-reference" href="http://beta.mybinder.org/v2/gh/choldgraf/zero-to-jupyterhub-k8s/cost_demo?filepath=draw_function.ipynb"><img alt="http://mybinder.org/badge.svg" src="http://mybinder.org/badge.svg" /></a>
+<p>For a description of how these costs are broken down, see below.</p>
+</div>
 <div class="section" id="hardware">
 <h2>Hardware<a class="headerlink" href="#hardware" title="Permalink to this headline">¶</a></h2>
 <p><strong>Memory (RAM)</strong> makes up the largest part of a cost estimate. More RAM means
@@ -98,15 +109,6 @@ of CPU and memory usage. Ryan Lovett put together a short Jupyter notebook
 needs.</p>
 </div>
 </div>
-<div class="section" id="interactive-estimator">
-<h2>Interactive Estimator<a class="headerlink" href="#interactive-estimator" title="Permalink to this headline">¶</a></h2>
-<p>We’ve put together a small notebook that can help you estimate your costs
-for a JupyterHub instance. Below is a notebook with a single plot inside.
-The plot represents users over a single month. You can draw any pattern
-of user activity you like, then click the button and it will estimate
-the cost associated with that pattern of activity over the month.</p>
-<br />
-<iframe src="http://beta.mybinder.org/v2/gh/choldgraf/zero-to-jupyterhub-k8s/cost_demo?filepath=draw_function.ipynb" style="width:100%; height:800px; border:1px solid"></iframe></div>
 </div>
 
 
@@ -121,6 +123,7 @@ the cost associated with that pattern of activity over the month.</p>
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Estimating costs</a><ul>
+<li><a class="reference internal" href="#interactive-estimator">Interactive Estimator</a></li>
 <li><a class="reference internal" href="#hardware">Hardware</a></li>
 <li><a class="reference internal" href="#users">Users</a></li>
 <li><a class="reference internal" href="#user-usage-patterns">User usage patterns</a></li>
@@ -128,7 +131,6 @@ the cost associated with that pattern of activity over the month.</p>
 <li><a class="reference internal" href="#data-8">Data 8</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#interactive-estimator">Interactive Estimator</a></li>
 </ul>
 </li>
 </ul>
