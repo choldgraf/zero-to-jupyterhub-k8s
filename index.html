@@ -1,0 +1,181 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Zero to JupyterHub &#8212; Zero to JupyterHub with Kubernetes 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Getting started with JupyterHub" href="getting-started.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="zero-to-jupyterhub">
+<h1>Zero to JupyterHub<a class="headerlink" href="#zero-to-jupyterhub" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://github.com/jupyterhub/jupyterhub">JupyterHub</a> is a tool that allows you to quickly utilize cloud computing
+infrastructure to manage a hub that enables users to interact remotely
+with a computing environment that you specify. JupyterHub offers a useful way
+to standardize the computing environment of a group of people (e.g.,
+for a class of students), as well as allowing people to access the
+hub remotely.</p>
+<p>This growing collection of information will help you set up your own
+JupyterHub instance. It is in an early stage, so the information and
+tools may change quickly. If you see anything that is incorrect or have any
+questions, feel free to reach out at the <a class="reference external" href="https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues">issues page</a>.</p>
+<p id="creating-your-jupyterhub"><strong>Creating your JupyterHub</strong></p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started with JupyterHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="create-k8s-cluster.html">Creating a Kubernetes Cluster</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="create-k8s-cluster.html#setting-up-kubernetes-on-google-cloud">Setting up Kubernetes on Google Cloud</a></li>
+<li class="toctree-l2"><a class="reference internal" href="create-k8s-cluster.html#setting-up-kubernetes-on-microsoft-azure-container-service-acs">Setting up Kubernetes on Microsoft Azure Container Service (ACS)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="create-k8s-cluster.html#next-step">Next Step</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="setup-helm.html">Setting up Helm</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="setup-helm.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="setup-helm.html#initialization">Initialization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="setup-helm.html#next-step">Next Step</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="setup-jupyterhub.html">Setting up JupyterHub</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="setup-jupyterhub.html#prepare-configuration-file">Prepare configuration file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="setup-jupyterhub.html#install-jupyterhub">Install JupyterHub</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="turn-off.html">Turning Off JupyterHub and Resources</a></li>
+</ul>
+</div>
+<p><strong>Customization Guide</strong></p>
+<p>JupyterHub can be configured and customized to fit a variety of deployment
+requirements. This guide helps outline how to customize and extend a
+JupyterHub deployment.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="extending-jupyterhub.html">Extending your JupyterHub setup</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="extending-jupyterhub.html#applying-configuration-changes">Applying configuration changes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending-jupyterhub.html#using-an-existing-image">Using an existing image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending-jupyterhub.html#setting-memory-and-cpu-guarantees-limits-for-your-users">Setting memory and CPU guarantees / limits for your users</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending-jupyterhub.html#extending-your-software-stack-with-s2i">Extending your software stack with s2i</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending-jupyterhub.html#pre-populating-home-directory-with-notebooks-when-using-persistent-volumes">Pre-populating <cite>$HOME</cite> directory with notebooks when using Persistent Volumes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending-jupyterhub.html#authenticating-with-oauth2">Authenticating with OAuth2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending-jupyterhub.html#full-example-of-google-oauth2">Full Example of Google OAuth2</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">Tools used in a JupyterHub Deployment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tools.html#cloud-computing-providers">Cloud Computing Providers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools.html#container-technology">Container Technology</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools.html#kubernetes">Kubernetes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools.html#helm">Helm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools.html#jupyterhub">JupyterHub</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p><strong>Administrator Guide</strong></p>
+<p>This section provides information on managing and maintaining a staging or
+production deployment of JupyterHub.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="resource-mgmt.html">Resource management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cost.html">Estimating costs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cost.html#hardware">Hardware</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cost.html#users">Users</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cost.html#user-usage-patterns">User usage patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cost.html#examples">Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cost.html#interactive-estimator">Interactive Estimator</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="backups.html">Backups</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security-considerations.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="troubleshooting.html#faq-general">FAQ - General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="troubleshooting.html#common-error-messages">Common error messages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="troubleshooting.html#investigating-issues">Investigating Issues</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p><strong>Reference</strong></p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="additional-resources.html">Additional resources</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="#">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p><p>
+  <iframe src="http://ghbtns.com/github-btn.html?user=jupyterhub&repo=zero-to-jupyterhub-k8s&type=watch&count=true&size=large"
+    allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+<p>
+  Zero to JupyterHub with Kubernetes is a tutorial to help install and manage JupyterHub.
+</p>
+
+<h3>Useful Links</h3>
+<ul>
+  <li><a href="http://github.com/jupyterhub/zero-to-jupyterhub-k8s">GitHub Repo</a></li>
+  <li><a href="http://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues">Issue Tracker</a></li>
+</ul>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Project Jupyter team.
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,269 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Creating a Kubernetes Cluster &#8212; Zero to JupyterHub with Kubernetes 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Setting up Helm" href="setup-helm.html" />
+    <link rel="prev" title="Getting started with JupyterHub" href="getting-started.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="creating-a-kubernetes-cluster">
+<span id="create-k8s-cluster"></span><h1>Creating a Kubernetes Cluster<a class="headerlink" href="#creating-a-kubernetes-cluster" title="Permalink to this headline">¶</a></h1>
+<p>Kubernetes’ documentation describes the many <a class="reference external" href="https://kubernetes.io/docs/setup/pick-right-solution/">ways to set up a cluster</a>.
+Here, we shall provide quick instructions for the most painless and
+popular ways of getting setup in various cloud providers:</p>
+<ul class="simple">
+<li><a class="reference internal" href="#google-cloud"><span class="std std-ref">Google Cloud</span></a></li>
+<li><a class="reference internal" href="#microsoft-azure"><span class="std std-ref">Microsoft Azure</span></a></li>
+<li>Amazon EC2</li>
+<li>Red Hat OpenShift</li>
+<li>Others</li>
+</ul>
+<div class="section" id="setting-up-kubernetes-on-google-cloud">
+<span id="google-cloud"></span><h2>Setting up Kubernetes on <a class="reference external" href="https://cloud.google.com/">Google Cloud</a><a class="headerlink" href="#setting-up-kubernetes-on-google-cloud" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://cloud.google.com/container-engine/">Google Container Engine</a>
+(confusingly abbreviated to GKE) is the simplest and most common way of setting
+up a Kubernetes Cluster. You may be able to receive <a class="reference external" href="https://cloud.google.com/free/">free credits</a> for trying it out. You will need to
+connect your credit card or other payment method to your google cloud account.</p>
+<ol class="arabic">
+<li><p class="first">Go to <code class="docutils literal"><span class="pre">https://console.cloud.google.com</span></code>.</p>
+</li>
+<li><p class="first">Click the hamburger icon in the top left (the icon has three horizontal lines
+in one button). Go to “Billing” then “Payment Methods”, and make sure you
+have a credit card linked to the account. (You may also receive $300 in trial
+credits.)</p>
+</li>
+<li><p class="first">Install and initialize the <strong>gcloud command-line tools</strong>. These tools send
+commands to Google Cloud and lets you do things like create and delete
+clusters.</p>
+<ul>
+<li><p class="first">Go to the <a class="reference external" href="https://cloud.google.com/sdk/downloads">gcloud downloads page</a>
+to <strong>download and install the gcloud SDK</strong>.</p>
+</li>
+<li><p class="first">See the <a class="reference external" href="https://cloud.google.com/sdk/">gcloud documentation</a> for
+more information on the gcloud SDK.</p>
+</li>
+<li><p class="first">Install <code class="docutils literal"><span class="pre">kubectl</span></code>, which is a tool for controlling kubernetes. From
+the terminal, enter:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>gcloud components install kubectl
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+<li><p class="first">Create a Kubernetes cluster on Google Cloud, by typing in the following
+command:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>gcloud container clusters create &lt;YOUR_CLUSTER&gt; <span class="se">\</span>
+    --num-nodes<span class="o">=</span><span class="m">3</span> <span class="se">\</span>
+    --machine-type<span class="o">=</span>n1-highmem-2 <span class="se">\</span>
+    --zone<span class="o">=</span>us-central1-b
+</pre></div>
+</div>
+<p>where:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">--num-nodes</span></code> specifies how many computers to spin up. The higher the
+number, the greater the cost.</li>
+<li><code class="docutils literal"><span class="pre">--machine-type</span></code> specifies the amount of CPU and RAM in each node. There
+is a <a class="reference external" href="https://cloud.google.com/compute/docs/machine-types">variety of types</a>
+to choose from.</li>
+<li><code class="docutils literal"><span class="pre">--zone</span></code> specifies which computer center to use.  To reduce latency,
+choose a zone closest to whoever is sending the commands. View available
+zones via <code class="docutils literal"><span class="pre">gcloud</span> <span class="pre">compute</span> <span class="pre">zones</span> <span class="pre">list</span></code> .</li>
+</ul>
+</li>
+<li><p class="first">To test if your cluster is initialized, run:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>kubectl get node
+</pre></div>
+</div>
+<p>The response should list three running nodes.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="setting-up-kubernetes-on-microsoft-azure-container-service-acs">
+<span id="microsoft-azure"></span><h2>Setting up Kubernetes on Microsoft Azure Container Service (ACS)<a class="headerlink" href="#setting-up-kubernetes-on-microsoft-azure-container-service-acs" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This is an alpha work-in-progress on ACS. We’ll be evolving this over time.</p>
+</div>
+<ol class="arabic">
+<li><p class="first">Install and initialize the <strong>Azure command-line tools</strong>, which send commands
+to Azure and let you do things like create and delete clusters.</p>
+<ul class="simple">
+<li>Go to the <a class="reference external" href="https://github.com/Azure/azure-cli">azure-cli github repo</a>
+to download and install the <strong>azure-cli</strong> tools.</li>
+<li>See the <a class="reference external" href="https://docs.microsoft.com/en-us/cli/azure/acs">az documentation</a>
+for more information on using the <code class="docutils literal"><span class="pre">az</span></code> tool with the Azure Container
+Service.</li>
+</ul>
+</li>
+<li><p class="first">Authenticate the <code class="docutils literal"><span class="pre">az</span></code> tool so it may access your Azure account:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>az login
+</pre></div>
+</div>
+</li>
+<li><p class="first">Specify a <a class="reference external" href="https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-overview#resource-groups">Azure resource group</a>, and create one if it doesn’t already
+exist:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">RESOURCE_GROUP</span><span class="o">=</span>&lt;YOUR_RESOURCE_GROUP&gt;
+<span class="nb">export</span> <span class="nv">LOCATION</span><span class="o">=</span>&lt;YOUR_LOCATION&gt;
+az group create --name<span class="o">=</span><span class="si">${</span><span class="nv">RESOURCE_GROUP</span><span class="si">}</span> --location<span class="o">=</span><span class="si">${</span><span class="nv">LOCATION</span><span class="si">}</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<blockquote>
+<div><p>where:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">--name</span></code> specifies your Azure resource group. If a group doesn’t exist,
+az will create it for you.</li>
+<li><code class="docutils literal"><span class="pre">--location</span></code> specifies which computer center to use.  To reduce latency,
+choose a zone closest to whoever is sending the commands. View available
+zones via <code class="docutils literal"><span class="pre">az</span> <span class="pre">account</span> <span class="pre">list-locations</span></code>.</li>
+</ul>
+</div></blockquote>
+<ol class="arabic" start="5">
+<li><p class="first">Install <code class="docutils literal"><span class="pre">kubectl</span></code>, a tool for controlling Kubernetes:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>az acs kubernetes install-cli
+</pre></div>
+</div>
+</li>
+<li><p class="first">Create a Kubernetes cluster on Azure, by typing in the following commands:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">CLUSTER_NAME</span><span class="o">=</span>&lt;YOUR_CLUSTER_NAME&gt;
+<span class="nb">export</span> <span class="nv">DNS_PREFIX</span><span class="o">=</span>&lt;YOUR_PREFIX&gt;
+az acs create --orchestrator-type<span class="o">=</span>kubernetes <span class="se">\</span>
+    --resource-group<span class="o">=</span><span class="si">${</span><span class="nv">RESOURCE_GROUP</span><span class="si">}</span> <span class="se">\</span>
+    --name<span class="o">=</span><span class="si">${</span><span class="nv">CLUSTER_NAME</span><span class="si">}</span> <span class="se">\</span>
+    --dns-prefix<span class="o">=</span><span class="si">${</span><span class="nv">DNS_PREFIX</span><span class="si">}</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Authenticate kubectl:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>az acs kubernetes get-credentials <span class="se">\</span>
+    --resource-group<span class="o">=</span><span class="si">${</span><span class="nv">RESOURCE_GROUP</span><span class="si">}</span> <span class="se">\</span>
+    --name<span class="o">=</span><span class="si">${</span><span class="nv">CLUSTER_NAME</span><span class="si">}</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<blockquote>
+<div><p>where:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">--resource-group</span></code> specifies your Azure resource group.</li>
+<li><code class="docutils literal"><span class="pre">--name</span></code> is your ACS cluster name.</li>
+<li><code class="docutils literal"><span class="pre">--dns-prefix</span></code> is the domain name prefix for the cluster.</li>
+</ul>
+</div></blockquote>
+<ol class="arabic" start="8">
+<li><p class="first">To test if your cluster is initialized, run:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>kubectl get node
+</pre></div>
+</div>
+<p>The response should list three running nodes.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="next-step">
+<h2>Next Step<a class="headerlink" href="#next-step" title="Permalink to this headline">¶</a></h2>
+<p>Now that you have a Kubernetes cluster running, it is time to
+<a class="reference internal" href="setup-helm.html#setup-helm"><span class="std std-ref">set up helm</span></a>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Creating a Kubernetes Cluster</a><ul>
+<li><a class="reference internal" href="#setting-up-kubernetes-on-google-cloud">Setting up Kubernetes on Google Cloud</a></li>
+<li><a class="reference internal" href="#setting-up-kubernetes-on-microsoft-azure-container-service-acs">Setting up Kubernetes on Microsoft Azure Container Service (ACS)</a></li>
+<li><a class="reference internal" href="#next-step">Next Step</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="getting-started.html" title="previous chapter">Getting started with JupyterHub</a></li>
+      <li>Next: <a href="setup-helm.html" title="next chapter">Setting up Helm</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/create-k8s-cluster.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Project Jupyter team.
+      
+      |
+      <a href="_sources/create-k8s-cluster.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

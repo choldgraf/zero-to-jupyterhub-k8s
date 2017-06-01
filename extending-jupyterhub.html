@@ -1,0 +1,411 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Extending your JupyterHub setup &#8212; Zero to JupyterHub with Kubernetes 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Tools used in a JupyterHub Deployment" href="tools.html" />
+    <link rel="prev" title="Turning Off JupyterHub and Resources" href="turn-off.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="extending-your-jupyterhub-setup">
+<span id="extending-jupyterhub"></span><h1>Extending your JupyterHub setup<a class="headerlink" href="#extending-your-jupyterhub-setup" title="Permalink to this headline">¶</a></h1>
+<p>The helm chart used to install JupyterHub has a lot of options for you to tweak.
+This page lists some of the most common changes.</p>
+<div class="section" id="applying-configuration-changes">
+<h2>Applying configuration changes<a class="headerlink" href="#applying-configuration-changes" title="Permalink to this headline">¶</a></h2>
+<p>The general method is:</p>
+<ol class="arabic">
+<li><p class="first">Make a change to the <code class="docutils literal"><span class="pre">config.yaml</span></code></p>
+</li>
+<li><p class="first">Run a helm upgrade:</p>
+<blockquote>
+<div><div class="highlight-bash"><div class="highlight"><pre><span></span>helm upgrade &lt;YOUR_RELEASE_NAME&gt; https://github.com/jupyterhub/helm-chart/releases/download/v0.3/jupyterhub-v0.3.tgz -f config.yaml
+</pre></div>
+</div>
+</div></blockquote>
+<p>Where <code class="docutils literal"><span class="pre">&lt;YOUR_RELEASE_NAME&gt;</span></code> is the parameter you passed to <code class="docutils literal"><span class="pre">--name</span></code> when
+<a class="reference external" href="setup-jupyterhub.html#install-jupyterhub">installing jupyterhub</a> with
+<code class="docutils literal"><span class="pre">helm</span> <span class="pre">install</span></code>. If you don’t remember it, you can probably find it by doing
+<code class="docutils literal"><span class="pre">helm</span> <span class="pre">list</span></code>.</p>
+</li>
+<li><p class="first">Wait for the upgrade to finish, and make sure that when you do
+<code class="docutils literal"><span class="pre">kubectl</span> <span class="pre">--namespace=&lt;YOUR_NAMESPACE&gt;</span> <span class="pre">get</span> <span class="pre">pod</span></code> the hub and proxy pods are
+in <code class="docutils literal"><span class="pre">Ready</span></code> state. Your configuration change has been applied!</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Currently, most config changes (except for changing which user image is
+used) require you to manually restart the hub pod. You can do this by
+finding the name of the pod with
+<code class="docutils literal"><span class="pre">kubectl</span> <span class="pre">--namespace=&lt;YOUR_NAMESPACE&gt;</span> <span class="pre">get</span> <span class="pre">pod</span></code> (it’s the one that starts
+with <cite>hub-`</cite>), and doing
+<code class="docutils literal"><span class="pre">kubectl</span> <span class="pre">--namespace=&lt;YOUR_NAMESPACE&gt;</span> <span class="pre">delete</span> <span class="pre">pod</span> <span class="pre">&lt;hub-pod-name&gt;</span></code>. This
+will be fixed soon!</p>
+</div>
+</li>
+</ol>
+</div>
+<div class="section" id="using-an-existing-image">
+<h2>Using an existing image<a class="headerlink" href="#using-an-existing-image" title="Permalink to this headline">¶</a></h2>
+<p>It’s possible to build your JupyterHub deployment off of a pre-existing Docker
+image. To do this, you need to find an existing image somewhere (such as
+DockerHub), and configure your installation to use it.</p>
+<p>For example, UC Berkeley’s <a class="reference external" href="https://hub.docker.com/r/berkeleydsep/singleuser-data8">Data8 Program</a>
+publishes the image they are using on Dockerhub. To instruct JupyterHub to use
+this image, simply add this to your <code class="docutils literal"><span class="pre">config.yaml</span></code> file:</p>
+<blockquote>
+<div><div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">singleuser</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">image</span><span class="p p-Indicator">:</span>
+       <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">berkeleydsep/singleuser-data8</span>
+       <span class="l l-Scalar l-Scalar-Plain">tag</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">v0.1</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>You can then <a class="reference external" href="#applying-configuration-changes">apply the change</a> to the
+config as usual.</p>
+</div>
+<div class="section" id="setting-memory-and-cpu-guarantees-limits-for-your-users">
+<h2>Setting memory and CPU guarantees / limits for your users<a class="headerlink" href="#setting-memory-and-cpu-guarantees-limits-for-your-users" title="Permalink to this headline">¶</a></h2>
+<p>Each user on your JupyterHub gets a slice of memory and CPU to use. There are
+two ways to specify how much users get to use: resource <em>guarantees</em> and
+resource <em>limits</em>.</p>
+<p>A resource <em>guarantee</em> means that all users will have <em>at least</em> this resource
+available at all times, but they may be given more resources if they’re
+available. For example, if users are <em>guaranteed</em> 1G of RAM, users can
+technically use more than 1G of RAM if these resources aren’t being used by
+other users.</p>
+<p>A resource <em>limit</em> sets a hard limit on the resources available. In the example
+above, if there were a 1G memory limit, it would mean that users could use
+no more than 1G of RAM, no matter what other resources are being used on the
+machines.</p>
+<p>By default, each user is <em>guaranteed</em> 1G of RAM. All users have <em>at least</em> 1G,
+but they can technically use more if it is available. You can easily change the
+amount of these resources, and whether they are a <em>guarantee</em> or a <em>limit</em>, by
+changing your <code class="docutils literal"><span class="pre">config.yaml</span></code> file. This is done with the following structure.</p>
+<blockquote>
+<div><div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">singleuser</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">memory</span><span class="p p-Indicator">:</span>
+       <span class="l l-Scalar l-Scalar-Plain">limit</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">1G</span>
+       <span class="l l-Scalar l-Scalar-Plain">guarantee</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">1G</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This sets a memory limit and guarantee of 1G. Kubernetes will make sure that
+each user will always have access to 1G of RAM, and requests for more RAM will
+fail (your kernel will usually die). You can set the limit to be higher than
+the guarantee to allow some users to use larger amounts of RAM for
+a very short-term time (e.g. when running a single, short-lived function that
+consumes a lot of memory).</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Remember <a class="reference external" href="#applying-configuraiton-changes">apply the changes</a> after changing
+your config.yaml file!</p>
+</div>
+</div>
+<div class="section" id="extending-your-software-stack-with-s2i">
+<h2>Extending your software stack with s2i<a class="headerlink" href="#extending-your-software-stack-with-s2i" title="Permalink to this headline">¶</a></h2>
+<p>s2i, also known as <a class="reference external" href="https://github.com/openshift/source-to-image">Source to Image</a>,
+lets you quickly convert a GitHub repository into a Docker image that we can use
+as a base for your JupyterHub instance. Anything inside the GitHub repository
+will exist in a user’s environment when they join your JupyterHub. If you
+include a <code class="docutils literal"><span class="pre">requirements.txt</span></code> file in the root level of your of the repository,
+s2i will <code class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span></code> each of these packages into the Docker image to be
+built. Below we’ll cover how to use s2i to generate a Docker image and how to
+configure JupyterHub to build off of this image.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">For this section, you’ll need to install s2i and docker.</p>
+</div>
+<ol class="arabic">
+<li><p class="first"><strong>Download s2i.</strong> This is easily done with homebrew on a mac. For linux and
+Windows it entails a couple of quick commands that you can find in the
+links below:</p>
+<blockquote>
+<div><ul class="simple">
+<li>On OSX: <code class="docutils literal"><span class="pre">brew</span> <span class="pre">install</span> <span class="pre">s2i</span></code></li>
+<li>On Linux and Windows: <a class="reference external" href="https://github.com/openshift/source-to-image#installation">follow these instructions</a></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>Download and start Docker.</strong> You can do this by downloading and installing
+Docker at <a class="reference external" href="https://store.docker.com/search?offering=community&amp;platform=desktop%2Cserver&amp;q=&amp;type=edition">this link</a>.
+Once you’ve started Docker, it will show up as a tiny background application.</p>
+</li>
+<li><p class="first"><strong>Create (or find) a GitHub repository you want to use.</strong> This repo should
+have all materials that you want your users to access. In addition you can
+include a <code class="docutils literal"><span class="pre">requirements.txt</span></code> file that has one package per line. These
+packages should be listed in the same way that you’d install them using
+<code class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span></code>. You should also specify the versions explicitly so the image is
+fully reproducible. E.g.:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="nv">numpy</span><span class="o">==</span><span class="m">1</span>.12.1
+<span class="nv">scipy</span><span class="o">==</span><span class="m">0</span>.19.0
+<span class="nv">matplotlib</span><span class="o">==</span><span class="m">2</span>.0
+</pre></div>
+</div>
+</li>
+<li><p class="first"><strong>Use s2i to build your Docker image.</strong> <cite>s2i</cite> uses a template in order to
+know how to create the Docker image. We have provided one at the url in the
+commands below. Run this command:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">s2i</span> <span class="n">build</span> <span class="o">--</span><span class="n">exclude</span> <span class="s2">&quot;&quot;</span> <span class="o">&lt;</span><span class="n">git</span><span class="o">-</span><span class="n">repo</span><span class="o">-</span><span class="n">url</span><span class="o">&gt;</span>  <span class="n">jupyterhub</span><span class="o">/</span><span class="n">singleuser</span><span class="o">-</span><span class="n">builder</span><span class="o">-</span><span class="n">venv</span><span class="o">-</span><span class="mf">3.5</span><span class="p">:</span><span class="n">v0</span><span class="o">.</span><span class="mf">1.5</span> <span class="n">gcr</span><span class="o">.</span><span class="n">io</span><span class="o">/&lt;</span><span class="n">project</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;/&lt;</span><span class="n">name</span><span class="o">-</span><span class="n">of</span><span class="o">-</span><span class="n">image</span><span class="o">&gt;</span><span class="p">:</span><span class="o">&lt;</span><span class="n">tag</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>this effectively says <em>s2i, build `&lt;this repository&gt;` to a Docker image by
+using `&lt;this template&gt;` and call the image `&lt;this&gt;`</em>. The <cite>–exclude “”</cite> ensures
+that all files are included in the container (e.g. <cite>.git</cite> directory).</p>
+</li>
+</ol>
+<blockquote>
+<div><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>The project name should match your google cloud project’s name.</li>
+<li>Don’t use underscores in your image name. Other than this it can be
+anything memorable. This is a bug that will be fixed soon.</li>
+<li>The tag should be the first 6 characters of the SHA in the GitHub
+commit for the image to build from.</li>
+</ul>
+</div>
+</div></blockquote>
+<ol class="arabic" start="5">
+<li><p class="first"><strong>Push our newly-built Docker image to the cloud.</strong> You can either push this
+to Docker Hub, or to the gcloud docker repository. Here we’ll push to the
+gcloud repository:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">gcloud</span> <span class="n">docker</span> <span class="o">--</span> <span class="n">push</span> <span class="n">gcr</span><span class="o">.</span><span class="n">io</span><span class="o">/&lt;</span><span class="n">project</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;/&lt;</span><span class="n">image</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span><span class="p">:</span><span class="o">&lt;</span><span class="n">tag</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first"><strong>Edit the JupyterHub configuration to build from this image.</strong> We do this
+by editing the <code class="docutils literal"><span class="pre">config.yaml</span></code> file that we originally created to include
+the jupyter hashes. Edit <code class="docutils literal"><span class="pre">config.yaml</span></code> by including these lines in it:</p>
+<blockquote>
+<div><div class="highlight-bash"><div class="highlight"><pre><span></span>singleuser:
+  image:
+    name: gcr.io/&lt;project-name&gt;/&lt;image-name&gt;
+    tag: &lt;tag&gt;
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>Tell helm to update JupyterHub to use this configuration.</strong> Using the
+normal method to <a class="reference external" href="#applying-configuration-changes">apply the change</a> to
+the config.</p>
+</li>
+<li><p class="first"><strong>Restart your notebook if you are already logging in</strong> If you already have
+a running JupyterHub session, you’ll need to restart it (by stopping and
+starting your session from the control panel in the top right). New users
+won’t have to do this.</p>
+</li>
+<li><p class="first"><strong>Enjoy your new computing environment!</strong> You should now have a live
+computing environment built off of the Docker image we’ve created.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The contents of your GitHub repository might not show up if you have
+enabled persistent storage. Disable persistent storage if you want them
+to show up!</p>
+</div>
+</li>
+</ol>
+</div>
+<div class="section" id="pre-populating-home-directory-with-notebooks-when-using-persistent-volumes">
+<h2>Pre-populating <cite>$HOME</cite> directory with notebooks when using Persistent Volumes<a class="headerlink" href="#pre-populating-home-directory-with-notebooks-when-using-persistent-volumes" title="Permalink to this headline">¶</a></h2>
+<p>By default, Persistent Volumes are used, so if you would like to include the
+contents of the GitHub repository in the <cite>$HOME</cite> directory (e.g. all of the
+<cite>*.ipynb</cite> files), then edit <code class="docutils literal"><span class="pre">config.yaml</span></code> include these lines in it:</p>
+<blockquote>
+<div><div class="highlight-bash"><div class="highlight"><pre><span></span>singleuser:
+  lifecycleHooks:
+    postStart:
+      exec:
+        command: <span class="o">[</span><span class="s2">&quot;/bin/sh&quot;</span>, <span class="s2">&quot;-c&quot;</span>, <span class="s2">&quot;test -f </span><span class="nv">$HOME</span><span class="s2">/.copied || cp -Rf /srv/app/src/. </span><span class="nv">$HOME</span><span class="s2">/; touch </span><span class="nv">$HOME</span><span class="s2">/.copied&quot;</span><span class="o">]</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Note that this will only copy the contents of the directory to $HOME <em>once</em> -
+the first time the user logs in. Further updates will not be reflected. There
+is work in progress for making this better.</p>
+</div>
+<div class="section" id="authenticating-with-oauth2">
+<h2>Authenticating with OAuth2<a class="headerlink" href="#authenticating-with-oauth2" title="Permalink to this headline">¶</a></h2>
+<p>JupyterHub’s <a class="reference external" href="https://github.com/jupyterhub/oauthenticator">oauthenticator</a>
+has support for enabling your users to authenticate via a third-party OAuth
+provider, including GitHub, Google, and CILogon.</p>
+<p>Follow the service-specific instructions linked on the
+<a class="reference external" href="https://github.com/jupyterhub/oauthenticator">oauthenticator repository</a>
+to generate your JupyterHub instance’s OAuth2 client ID and client secret. Then
+declare the values in the helm chart (<code class="docutils literal"><span class="pre">config.yaml</span></code>).</p>
+<p>Here are example configurations for two common authentication services. Note
+that in each case, you need to get the authentication credential information
+before you can configure the helmchart for authentication.</p>
+<p><strong>Google</strong></p>
+<p>For more information see the full example of Google OAuth2 in the next section.</p>
+<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">auth</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">google</span>
+  <span class="l l-Scalar l-Scalar-Plain">google</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">clientId</span><span class="p p-Indicator">:</span> <span class="s">&quot;yourlongclientidstring.apps.googleusercontent.com&quot;</span>
+    <span class="l l-Scalar l-Scalar-Plain">clientSecret</span><span class="p p-Indicator">:</span> <span class="s">&quot;adifferentlongstring&quot;</span>
+    <span class="l l-Scalar l-Scalar-Plain">callbackUrl</span><span class="p p-Indicator">:</span> <span class="s">&quot;http://&lt;your_jupyterhub_host&gt;/hub/oauth_callback&quot;</span>
+    <span class="l l-Scalar l-Scalar-Plain">hostedDomain</span><span class="p p-Indicator">:</span> <span class="s">&quot;youruniversity.edu&quot;</span>
+    <span class="l l-Scalar l-Scalar-Plain">loginService</span><span class="p p-Indicator">:</span> <span class="s">&quot;Your</span><span class="nv"> </span><span class="s">University&quot;</span>
+</pre></div>
+</div>
+<p><strong>GitHub</strong></p>
+<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">auth</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">github</span>
+  <span class="l l-Scalar l-Scalar-Plain">github</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">clientId</span><span class="p p-Indicator">:</span> <span class="s">&quot;y0urg1thubc1ient1d&quot;</span>
+    <span class="l l-Scalar l-Scalar-Plain">clientSecret</span><span class="p p-Indicator">:</span> <span class="s">&quot;an0ther1ongs3cretstr1ng&quot;</span>
+    <span class="l l-Scalar l-Scalar-Plain">callbackUrl</span><span class="p p-Indicator">:</span> <span class="s">&quot;http://&lt;your_jupyterhub_host&gt;/hub/oauth_callback&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="full-example-of-google-oauth2">
+<h2>Full Example of Google OAuth2<a class="headerlink" href="#full-example-of-google-oauth2" title="Permalink to this headline">¶</a></h2>
+<p>If your institution is a <a class="reference external" href="https://gsuite.google.com">G Suite customer</a> that
+integrates with Google services such as Gmail, Calendar, and Drive, you can
+authenticate users to your JupyterHub using Google for authentication.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Google requires that you specify a fully qualified domain name for your
+hub rather than an IP address.</p>
+</div>
+<ol class="arabic simple">
+<li>Log in to the <a class="reference external" href="https://console.developers.google.com">Google API Console</a>.</li>
+<li>Select a project &gt; Create a project… and set ‘Project name’. This is a
+short term that is only displayed in the console. If you have already
+created a project you may skip this step.</li>
+<li>Type “Credentials” in the search field at the top and click to access the
+Credentials API.</li>
+<li>Click “Create credentials”, then “OAuth client ID”. Choose
+“Application type” &gt; “Web application”.</li>
+<li>Enter a name for your JupyterHub instance. You can give it a descriptive
+name or set it to be the hub’s hostname.</li>
+<li>Set “Authorized JavaScript origins” to be your hub’s URL.</li>
+<li>Set “Authorized redirect URIs” to be your hub’s URL followed by
+“/hub/oauth_callback”. For example, <a class="reference external" href="http://example.com/hub/oauth_callback">http://example.com/hub/oauth_callback</a>.</li>
+<li>When you click “Create”, the console will generate and display a Client ID
+and Client Secret. Save these values.</li>
+<li>Type “consent screen” in the search field at the top and click to access the
+OAuth consent screen. Here you will customize what your users see when they
+login to your JupyterHub instance for the first time. Click Save when you
+are done.</li>
+<li>In your helm chart, create a stanza that contains these OAuth fields:</li>
+</ol>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>auth:
+  type: google
+  google:
+    clientId: <span class="s2">&quot;yourlongclientidstring.apps.googleusercontent.com&quot;</span>
+    clientSecret: <span class="s2">&quot;adifferentlongstring&quot;</span>
+    callbackUrl: <span class="s2">&quot;http://&lt;your_jupyterhub_host&gt;/hub/oauth_callback&quot;</span>
+    hostedDomain: <span class="s2">&quot;youruniversity.edu&quot;</span>
+    loginService: <span class="s2">&quot;Your University&quot;</span>
+</pre></div>
+</div>
+<p>The ‘callbackUrl’ key is set to the authorized redirect URI you specified
+earlier. Set ‘hostedDomain’ to your institution’s domain name. The value of
+‘loginService’ is a descriptive term for your institution that reminds your
+users which account they are using to login.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Extending your JupyterHub setup</a><ul>
+<li><a class="reference internal" href="#applying-configuration-changes">Applying configuration changes</a></li>
+<li><a class="reference internal" href="#using-an-existing-image">Using an existing image</a></li>
+<li><a class="reference internal" href="#setting-memory-and-cpu-guarantees-limits-for-your-users">Setting memory and CPU guarantees / limits for your users</a></li>
+<li><a class="reference internal" href="#extending-your-software-stack-with-s2i">Extending your software stack with s2i</a></li>
+<li><a class="reference internal" href="#pre-populating-home-directory-with-notebooks-when-using-persistent-volumes">Pre-populating <cite>$HOME</cite> directory with notebooks when using Persistent Volumes</a></li>
+<li><a class="reference internal" href="#authenticating-with-oauth2">Authenticating with OAuth2</a></li>
+<li><a class="reference internal" href="#full-example-of-google-oauth2">Full Example of Google OAuth2</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="turn-off.html" title="previous chapter">Turning Off JupyterHub and Resources</a></li>
+      <li>Next: <a href="tools.html" title="next chapter">Tools used in a JupyterHub Deployment</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/extending-jupyterhub.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Project Jupyter team.
+      
+      |
+      <a href="_sources/extending-jupyterhub.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

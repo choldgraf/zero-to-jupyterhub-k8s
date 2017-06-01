@@ -1,0 +1,255 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Step by Step Instructions &#8212; Zero to JupyterHub with Kubernetes 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Extending your JupyterHub setup" href="extending.html" />
+    <link rel="prev" title="Zero to JupyterHub" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="step-by-step-instructions">
+<h1>Step by Step Instructions<a class="headerlink" href="#step-by-step-instructions" title="Permalink to this headline">¶</a></h1>
+<p>These instructions will guide you through the process of setting up your JupyterHub for the first time.</p>
+<div class="section" id="setting-up-kubernetes-on-google-cloud">
+<h2>Setting up kubernetes on Google Cloud<a class="headerlink" href="#setting-up-kubernetes-on-google-cloud" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><p class="first">We’ll be using google cloud in this tutorial, though in the future many more cloud platforms will be supported. You should be able to get free credits for trying out google cloud. However, first you need to connect your credit card to your google cloud account.</p>
+</li>
+<li><p class="first">Go to <a class="reference external" href="https://console.cloud.google.com">https://console.cloud.google.com</a>.</p>
+</li>
+<li><p class="first">Click the hamburger in the top left (it has 3 horizontal lines in one button). Go to “Billing” then “Payment Methods”, and make sure you have a credit card linked to the account. (you should also get $300 in credits).</p>
+</li>
+<li><p class="first">Install and initialize the gcloud command-line tools, which send commands to google cloud and lets you do things like create / delete clusters.</p>
+<ul>
+<li><p class="first">Go to the <a class="reference external" href="https://cloud.google.com/sdk/downloads">gcloud downloads page</a>
+to download/install the gcloud SDK.</p>
+</li>
+<li><p class="first">See the <a class="reference external" href="https://cloud.google.com/sdk/">gcloud documentation</a> for
+more information on the gcloud SDK.</p>
+</li>
+<li><p class="first">Install <code class="docutils literal"><span class="pre">kubectl</span></code>, which is a tool for controlling kubernetes.</p>
+<blockquote>
+<div><p><code class="docutils literal"><span class="pre">gcloud</span> <span class="pre">components</span> <span class="pre">install</span> <span class="pre">kubectl</span></code></p>
+</div></blockquote>
+</li>
+</ul>
+</li>
+<li><p class="first">Create a kubernetes cluster on google cloud, by typing in the following command.</p>
+<blockquote>
+<div><p><code class="docutils literal"><span class="pre">gcloud</span> <span class="pre">container</span> <span class="pre">clusters</span> <span class="pre">create</span> <span class="pre">YOUR_CLUSTER</span> <span class="pre">--num-nodes=3</span> <span class="pre">--zone=us-central1-b</span></code></p>
+</div></blockquote>
+</li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal"><span class="pre">--num-nodes</span></code> specifies how many computers to spin up. The higher the number, the greater the cost.</li>
+<li><code class="docutils literal"><span class="pre">--zone</span></code> specifies which computer center to use.  To reduce latency, choose a zone closest to whoever is sending the commands. View available zones via <cite>gcloud compute zones list</cite> .</li>
+<li>When it’s done initializing your cluster, run <code class="docutils literal"><span class="pre">kubectl</span> <span class="pre">get</span> <span class="pre">node</span></code>. It should list three running nodes.</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This may take several minutes, so create a new shell tab. Then move on to the section “Setting up JupyterHub”. You&#8217;ll know it&#8217;s done initializing when <code class="docutils literal"><span class="pre">kubectl</span> <span class="pre">get</span> <span class="pre">node</span></code> shows your new nodes.</p>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="setting-up-jupyterhub">
+<h2>Setting up JupyterHub<a class="headerlink" href="#setting-up-jupyterhub" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><p class="first">Install helm:</p>
+<blockquote>
+<div><div class="code highlight-default"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">raw</span><span class="o">.</span><span class="n">githubusercontent</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">kubernetes</span><span class="o">/</span><span class="n">helm</span><span class="o">/</span><span class="n">master</span><span class="o">/</span><span class="n">scripts</span><span class="o">/</span><span class="n">get</span> <span class="o">|</span> <span class="n">bash</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">Create a file called <code class="docutils literal"><span class="pre">config.yaml</span></code> to hold the various customizations describing our JupyterHub installation:</p>
+<blockquote>
+<div><p><code class="docutils literal"><span class="pre">nano</span> <span class="pre">config.yaml</span></code></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Remember where you store your <code class="docutils literal"><span class="pre">config.yaml</span></code> file in case you need to use it again or make changes to it. You&#8217;ll be able to &#8220;re-initialize&#8221; helm if you make changes in order to modify the kubernetes setup.</p>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">Run these two commands (they’re the same command but run them twice):</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">openssl</span> <span class="n">rand</span> <span class="o">-</span><span class="nb">hex</span> <span class="mi">32</span>
+<span class="n">openssl</span> <span class="n">rand</span> <span class="o">-</span><span class="nb">hex</span> <span class="mi">32</span>
+</pre></div>
+</div>
+<p>Copy the output each time, we’ll use this in the next step.</p>
+</li>
+<li><p class="first">Insert these lines into the file, making sure they do not contain curly quotes or tabs. Substitute each occurrence of RANDOM_STRING_N below with the output of <cite>openssl rand -hex 32</cite> . The strings are tokens that will be used to authenticate your JupyterHub instance (make sure that you keep the quotation marks):</p>
+<blockquote>
+<div><div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">hub</span><span class="p p-Indicator">:</span>
+    <span class="c1"># output of first execution of &#39;openssl rand -hex 32&#39;</span>
+    <span class="l l-Scalar l-Scalar-Plain">cookieSecret</span><span class="p p-Indicator">:</span> <span class="s">&quot;RANDOM_STRING_1&quot;</span>
+<span class="l l-Scalar l-Scalar-Plain">token</span><span class="p p-Indicator">:</span>
+    <span class="c1"># output of second execution of &#39;openssl rand -hex 32&#39;</span>
+    <span class="l l-Scalar l-Scalar-Plain">proxy</span><span class="p p-Indicator">:</span> <span class="s">&quot;RANDOM_STRING_2&quot;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">Save the file by hitting <code class="docutils literal"><span class="pre">Ctrl-X</span></code> and make sure to answer ‘yes’ when it asks you to save.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="getting-it-all-running">
+<h2>Getting it all running<a class="headerlink" href="#getting-it-all-running" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><p class="first">Run <code class="docutils literal"><span class="pre">helm</span> <span class="pre">init</span></code> to prepare the kubernetes cluster for helm installation</p>
+</li>
+<li><p class="first">Tell helm to create the instances you configured with the <code class="docutils literal"><span class="pre">yaml</span></code> file.
+This will spin up JupyterHub:</p>
+<blockquote>
+<div><div class="code highlight-default"><div class="highlight"><pre><span></span><span class="n">helm</span> <span class="n">install</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">jupyterhub</span><span class="o">/</span><span class="n">helm</span><span class="o">-</span><span class="n">chart</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">download</span><span class="o">/</span><span class="n">v0</span><span class="o">.</span><span class="mi">1</span><span class="o">/</span><span class="n">jupyterhub</span><span class="o">-</span><span class="mf">0.1</span><span class="o">.</span><span class="n">tgz</span> <span class="o">--</span><span class="n">name</span><span class="o">=</span><span class="n">YOUR_RELEASE_NAME</span> <span class="o">--</span><span class="n">namespace</span><span class="o">=</span><span class="n">YOUR_NAMESPACE</span> <span class="o">-</span><span class="n">f</span> <span class="n">config</span><span class="o">.</span><span class="n">yaml</span>
+</pre></div>
+</div>
+<p>where:</p>
+<ol class="arabic simple">
+<li><code class="docutils literal"><span class="pre">--name</span></code> can be whatever you like. People often base this off what this particular JupyterHub does. For example, if you are deploying for a class named &#8216;data8&#8217; you might set this to &#8216;data8-jupyterhub&#8217;</li>
+<li><code class="docutils literal"><span class="pre">--namespace</span></code>  is a nifty feature of kubernetes that essentially lets you have multiple sub-deployments using a single helm-chart. People often use this to have both a “live” and a “dev” environment. You can use whatever you like but make it easy to re-type and remember.</li>
+</ol>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you get a <code class="docutils literal"><span class="pre">release</span> <span class="pre">named</span> <span class="pre">&lt;YOUR_CHART&gt;</span> <span class="pre">already</span> <span class="pre">exists</span></code> error, then you should delete this helm-chart by running <code class="docutils literal"><span class="pre">helm</span> <span class="pre">delete</span> <span class="pre">--purge</span> <span class="pre">&lt;YOUR_CHART&gt;</span></code> . Then reinstall by repeating this step.</p>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">You can see the pods being created with <code class="docutils literal"><span class="pre">kubectl</span> <span class="pre">--namespace=YOUR_NAMESPACE</span> <span class="pre">get</span> <span class="pre">pod</span></code>.</p>
+</li>
+<li><p class="first">Wait for the hub and proxy pod to get to running. Ignore cull errors for now; that will be fixed by <a class="reference external" href="https://github.com/data-8/jupyterhub-k8s/issues/143">https://github.com/data-8/jupyterhub-k8s/issues/143</a>.</p>
+</li>
+<li><p class="first">You can find the IP to use for accessing the JupyterHub with <code class="docutils literal"><span class="pre">kubectl</span> <span class="pre">--namespace=&lt;YOUR_NAMESPACE&gt;</span> <span class="pre">get</span> <span class="pre">svc</span></code> . The external IP for the ‘proxy-public’ service should be accessible in a minute or two.</p>
+</li>
+<li><p class="first">The default authenticator is ‘dummy’ - any username / password will let you in!</p>
+</li>
+</ol>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Now that you have a JupyterHub running, you can customize it in many ways!
+You can use a pre-built image for the user container, build your own, configure different authenticators, and more!</p>
+<p class="last">For information on extending your JupyterHub deployment, see <a class="reference external" href="extending.html">Extending Jupyterhub</a>.</p>
+</div>
+</div>
+<div class="section" id="turning-it-all-off">
+<h2>Turning it all off<a class="headerlink" href="#turning-it-all-off" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><p class="first">If you want to stop these resources from running, you’ll need to tell google cloud to explicitly turn off the cluster that we have created. This is possible <a class="reference external" href="https://console.cloud.google.com">from the web console</a> if you click on the hamburger menu (the 3 horizontal lines) in the top left, and then click on the <code class="docutils literal"><span class="pre">Container</span> <span class="pre">Engine</span></code> section (see figure). Click on the container you wish to delete and press the “delete” button.</p>
+<a class="reference internal image-reference" href="https://lh5.googleusercontent.com/zNIFrF0TmAKVO4RWXXiosPvl33_YdX_hqQJtN8zbSSILjbfEKZ3xCwc3kGkE7xDhIgpxAGQy-n01Ign8UPNSdbSD5qaIYRUOJx4dciHpwK-sduBms-njh7AhPmPk1_N7K51rHfOs"><img alt="https://lh5.googleusercontent.com/zNIFrF0TmAKVO4RWXXiosPvl33_YdX_hqQJtN8zbSSILjbfEKZ3xCwc3kGkE7xDhIgpxAGQy-n01Ign8UPNSdbSD5qaIYRUOJx4dciHpwK-sduBms-njh7AhPmPk1_N7K51rHfOs" src="https://lh5.googleusercontent.com/zNIFrF0TmAKVO4RWXXiosPvl33_YdX_hqQJtN8zbSSILjbfEKZ3xCwc3kGkE7xDhIgpxAGQy-n01Ign8UPNSdbSD5qaIYRUOJx4dciHpwK-sduBms-njh7AhPmPk1_N7K51rHfOs" style="height: 200px;" /></a>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Alternatively, you can run the following command to delete the cluster of your choice.</p>
+<p class="last"><code class="docutils literal"><span class="pre">gcloud</span> <span class="pre">container</span> <span class="pre">clusters</span> <span class="pre">delete</span> <span class="pre">YOUR_CLUSTER</span> <span class="pre">--zone=YOUR_ZONE</span></code></p>
+</div>
+</li>
+<li><p class="first">Now your cluster resources should be gone after a few moments - double check this or you will continue to incur charges!</p>
+</li>
+</ol>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Step by Step Instructions</a><ul>
+<li><a class="reference internal" href="#setting-up-kubernetes-on-google-cloud">Setting up kubernetes on Google Cloud</a></li>
+<li><a class="reference internal" href="#setting-up-jupyterhub">Setting up JupyterHub</a></li>
+<li><a class="reference internal" href="#getting-it-all-running">Getting it all running</a></li>
+<li><a class="reference internal" href="#turning-it-all-off">Turning it all off</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Zero to JupyterHub</a></li>
+      <li>Next: <a href="extending.html" title="next chapter">Extending your JupyterHub setup</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/setup.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Project Jupyter team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      
+      |
+      <a href="_sources/setup.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

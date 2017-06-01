@@ -1,0 +1,227 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Setting up JupyterHub &#8212; Zero to JupyterHub with Kubernetes 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Turning Off JupyterHub and Resources" href="turn-off.html" />
+    <link rel="prev" title="Setting up Helm" href="setup-helm.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="setting-up-jupyterhub">
+<span id="setup-jupyterhub"></span><h1>Setting up JupyterHub<a class="headerlink" href="#setting-up-jupyterhub" title="Permalink to this headline">¶</a></h1>
+<p>Now that we have a <a class="reference external" href="create-k8s-cluster.html">Kubernetes cluster</a> and
+<a class="reference external" href="setup-helm.html">helm</a> setup, we can begin setting up a JupyterHub.</p>
+<div class="section" id="prepare-configuration-file">
+<h2>Prepare configuration file<a class="headerlink" href="#prepare-configuration-file" title="Permalink to this headline">¶</a></h2>
+<p>This step prepares a configuration file (config file). We will use the
+<a class="reference external" href="https://en.wikipedia.org/wiki/YAML">YAML</a> file format to specify
+JupyterHub’s configuration.</p>
+<p>It’s important to save the config file in a safe place. The config file is
+needed for future changes to JupyterHub’s settings.</p>
+<p>For the following steps, use your favorite code editor. We’ll use the
+<a class="reference external" href="https://en.wikipedia.org/wiki/GNU_nano">nano</a> editor as an example.</p>
+<ol class="arabic">
+<li><p class="first">Create a file called <code class="docutils literal"><span class="pre">config.yaml</span></code>. Using the nano editor, for example,
+entering <code class="docutils literal"><span class="pre">nano</span> <span class="pre">config.yaml</span></code> at the terminal will start the editor and
+open the config file.</p>
+</li>
+<li><p class="first">Create two random hex strings to use as security tokens. Run these two
+commands (they’re the same command but run them twice) in a terminal:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>openssl rand -hex <span class="m">32</span>
+openssl rand -hex <span class="m">32</span>
+</pre></div>
+</div>
+<p>Copy the output each time, we’ll use these hex strings in the next step.</p>
+</li>
+<li><p class="first">Insert these lines into the <code class="docutils literal"><span class="pre">config.yaml</span></code> file. When editing YAML files,
+use straight quotes and spaces and avoid using curly quotes or tabs.
+Substitute each occurrence of <code class="docutils literal"><span class="pre">RANDOM_STRING_N</span></code> below with the output of
+<code class="docutils literal"><span class="pre">openssl</span> <span class="pre">rand</span> <span class="pre">-hex</span> <span class="pre">32</span></code>. The random hex strings are tokens that will be used
+to secure your JupyterHub instance (make sure that you keep the quotation
+marks):</p>
+<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">hub</span><span class="p p-Indicator">:</span>
+  <span class="c1"># output of first execution of &#39;openssl rand -hex 32&#39;</span>
+  <span class="l l-Scalar l-Scalar-Plain">cookieSecret</span><span class="p p-Indicator">:</span> <span class="s">&quot;RANDOM_STRING_1&quot;</span>
+<span class="l l-Scalar l-Scalar-Plain">token</span><span class="p p-Indicator">:</span>
+  <span class="c1"># output of second execution of &#39;openssl rand -hex 32&#39;</span>
+  <span class="l l-Scalar l-Scalar-Plain">proxy</span><span class="p p-Indicator">:</span> <span class="s">&quot;RANDOM_STRING_2&quot;</span>
+</pre></div>
+</div>
+<p>For example:</p>
+<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">hub</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">cookieSecret</span><span class="p p-Indicator">:</span> <span class="s">&quot;cb0b45df678709c5cc780ed73690898f7ba0659902f996017296143976ffb97c&quot;</span>
+<span class="l l-Scalar l-Scalar-Plain">token</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">proxy</span><span class="p p-Indicator">:</span> <span class="s">&quot;712c4c6c0e78c6c745cfb126f5bbc4b9ba763c78b4bba5797e2eaf508ac99475&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Save the <code class="docutils literal"><span class="pre">config.yaml</span></code> file. If using the nano editor, hit <code class="docutils literal"><span class="pre">Ctrl-X</span></code> and
+make sure to answer ‘yes’ when it asks you to save.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="install-jupyterhub">
+<h2>Install JupyterHub<a class="headerlink" href="#install-jupyterhub" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><p class="first">Let’s use helm to create the instances that you configured with the
+<code class="docutils literal"><span class="pre">config.yaml</span></code> file. Run this command from the directory that contains the
+<code class="docutils literal"><span class="pre">config.yaml</span></code> file to spin up JupyterHub:</p>
+<div class="code bash highlight-default"><div class="highlight"><pre><span></span><span class="n">helm</span> <span class="n">install</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">jupyterhub</span><span class="o">/</span><span class="n">helm</span><span class="o">-</span><span class="n">chart</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">download</span><span class="o">/</span><span class="n">v0</span><span class="o">.</span><span class="mf">3.1</span><span class="o">/</span><span class="n">jupyterhub</span><span class="o">-</span><span class="n">v0</span><span class="o">.</span><span class="mf">3.1</span><span class="o">.</span><span class="n">tgz</span> \
+    <span class="o">--</span><span class="n">name</span><span class="o">=&lt;</span><span class="n">YOUR_RELEASE_NAME</span><span class="o">&gt;</span> \
+    <span class="o">--</span><span class="n">namespace</span><span class="o">=&lt;</span><span class="n">YOUR_NAMESPACE</span><span class="o">&gt;</span> \
+    <span class="o">-</span><span class="n">f</span> <span class="n">config</span><span class="o">.</span><span class="n">yaml</span>
+</pre></div>
+</div>
+<p>where:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">--name</span></code> is an identifier used by helm to refer to this deployment.
+You need it when you are changing the configuration of this install
+or deleting it. Use something descriptive that you will easily
+remember. For a class called <em>data8</em> you might wish set the name to
+<strong>data8-jupyterhub</strong>. In the future you can find out the name by
+using <code class="docutils literal"><span class="pre">helm</span> <span class="pre">list</span></code>.</li>
+<li><code class="docutils literal"><span class="pre">--namespace</span></code>  is an identifier
+<a class="reference external" href="https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/">used by Kubernetes</a>
+(among other things) to identify a particular application that might
+be running on a single Kubernetes cluster. You can install many
+applications into the same Kubernetes cluster, and each instance of
+an application is usually separated by being in its own namespace.
+You’ll need the namespace identifier for performing any commands
+with <code class="docutils literal"><span class="pre">kubectl</span></code>.</li>
+</ul>
+<p>We recommend providing the same value to <code class="docutils literal"><span class="pre">--name</span></code> and <code class="docutils literal"><span class="pre">--namespace</span></code>
+for now to avoid too much confusion, but advanced users of Kubernetes and
+helm should feel free to use different values.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you get a <code class="docutils literal"><span class="pre">release</span> <span class="pre">named</span> <span class="pre">&lt;YOUR_CHART&gt;</span> <span class="pre">already</span> <span class="pre">exists</span></code> error, then
+you should delete this helm-chart by running
+<code class="docutils literal"><span class="pre">helm</span> <span class="pre">delete</span> <span class="pre">--purge</span> <span class="pre">&lt;YOUR_CHART&gt;</span></code>. Then reinstall by repeating this
+step.</p>
+</div>
+</li>
+<li><p class="first">While Step 1 is running, you can see the pods being created by entering in
+a different terminal:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>kubectl --namespace<span class="o">=</span>&lt;YOUR_NAMESPACE&gt; get pod
+</pre></div>
+</div>
+</li>
+<li><p class="first">Wait for the hub and proxy pod to begin running.</p>
+</li>
+<li><p class="first">You can find the IP to use for accessing the JupyterHub with:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>kubectl --namespace<span class="o">=</span>&lt;YOUR_NAMESPACE&gt; get svc
+</pre></div>
+</div>
+<p>The external IP for the <cite>proxy-public</cite> service should be accessible in a
+minute or two.</p>
+</li>
+<li><p class="first">To use JupyterHub, enter the external IP for the <cite>proxy-public</cite> service in
+to a browser. JupyterHub is running with a default <em>dummy</em> authenticator so
+entering any username and password combination will let you enter the hub.</p>
+</li>
+</ol>
+<p>Congratulations! Now that you have JupyterHub running, you can
+<a class="reference external" href="extending-jupyterhub.html">extend it</a> in many ways. You can use a pre-built
+image for the user container, build your own image, configure different
+authenticators, and more!</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Setting up JupyterHub</a><ul>
+<li><a class="reference internal" href="#prepare-configuration-file">Prepare configuration file</a></li>
+<li><a class="reference internal" href="#install-jupyterhub">Install JupyterHub</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="setup-helm.html" title="previous chapter">Setting up Helm</a></li>
+      <li>Next: <a href="turn-off.html" title="next chapter">Turning Off JupyterHub and Resources</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/setup-jupyterhub.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Project Jupyter team.
+      
+      |
+      <a href="_sources/setup-jupyterhub.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
