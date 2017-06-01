@@ -10,8 +10,8 @@ significantly influence cost estimates, include:
 - Number of users
 - Usage patterns of users
 
-Interactive Estimator
----------------------
+Interactive Cost Estimator
+--------------------------
 
 We've put together a small notebook that can help you estimate your costs
 for a JupyterHub instance. Below is a notebook with a single plot inside.
