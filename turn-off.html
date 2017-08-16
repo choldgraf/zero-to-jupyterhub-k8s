@@ -1,12 +1,12 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Turning Off JupyterHub and Resources &#8212; Zero to JupyterHub with Kubernetes 0.1 documentation</title>
+    <title>Turning Off JupyterHub and Computational Resources &#8212; Zero to JupyterHub with Kubernetes 0.4 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.1',
+        VERSION:     '0.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -37,7 +37,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body>
+  <body role="document">
   
 
     <div class="document">
@@ -45,25 +45,40 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="turning-off-jupyterhub-and-resources">
-<span id="turn-off"></span><h1>Turning Off JupyterHub and Resources<a class="headerlink" href="#turning-off-jupyterhub-and-resources" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="turning-off-jupyterhub-and-computational-resources">
+<span id="turn-off"></span><h1>Turning Off JupyterHub and Computational Resources<a class="headerlink" href="#turning-off-jupyterhub-and-computational-resources" title="Permalink to this headline">¶</a></h1>
+<p>When you are done with your hub, you should delete it so you are no longer
+paying money for it.</p>
 <ol class="arabic">
-<li><p class="first">If you want to stop these resources from running, you’ll need to tell Google
-Cloud to explicitly turn off the cluster that we have created. This is
-possible from <a class="reference external" href="https://console.cloud.google.com">the web console</a>.
-Click on the hamburger menu icon (the 3 horizontal lines) in the top left,
-and then click on the <code class="docutils literal"><span class="pre">Container</span> <span class="pre">Engine</span></code> section (see figure). Select the
-container you wish to delete and press the “delete” button.</p>
-<a class="reference internal image-reference" href="_images/container_engine_location.jpg"><img alt="_images/container_engine_location.jpg" src="_images/container_engine_location.jpg" style="height: 600px;" /></a>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p>Alternatively, you can run the following command to delete the cluster of
-your choice.</p>
-<p class="last"><code class="docutils literal"><span class="pre">gcloud</span> <span class="pre">container</span> <span class="pre">clusters</span> <span class="pre">delete</span> <span class="pre">YOUR_CLUSTER</span> <span class="pre">--zone=YOUR_ZONE</span></code></p>
+<li><p class="first">First, delete the namespace the hub was installed in. This deletes any disks
+that may have been created to store user&#8217;s data, and any IP addresses that
+may have been provisioned.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>kubectl delete namespace &lt;your-namespace&gt;
+</pre></div>
 </div>
 </li>
-<li><p class="first">Now your cluster resources should be gone after a few moments - double check
-this or you will continue to incur charges!</p>
+<li><p class="first">Next, you should delete the kubernetes cluster. You can list all the clusters
+you have.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>gcloud container clusters list
+</pre></div>
+</div>
+<p>You can then delete the one you want.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>gcloud container clusters delete &lt;CLUSTER-NAME&gt; --zone<span class="o">=</span>&lt;CLUSTER-ZONE&gt;
+</pre></div>
+</div>
+</li>
+<li><p class="first">Double check to make sure all the resources are now deleted, since anything you
+have not deleted will cost you money! You can check the <a class="reference external" href="https://console.cloud.google.com">web console</a>
+(make sure you are in the right project and account!) to make sure everything
+has been deleted.</p>
+<p>At a minimum, check the following under the Hamburger (left top corner) menu:</p>
+<ol class="arabic simple">
+<li>Compute Engine -&gt; Disks</li>
+<li>Container Engine</li>
+<li>Networking -&gt; Load Balancing</li>
+</ol>
+<p>These might take several minutes to clear up, but they shouldn&#8217;t have anything
+related to your JupyterHub cluster after you have deleted the cluster.</p>
 </li>
 </ol>
 </div>

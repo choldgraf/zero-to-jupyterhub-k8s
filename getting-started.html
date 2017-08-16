@@ -1,12 +1,12 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Getting started with JupyterHub &#8212; Zero to JupyterHub with Kubernetes 0.1 documentation</title>
+    <title>Getting started with JupyterHub &#8212; Zero to JupyterHub with Kubernetes 0.4 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.1',
+        VERSION:     '0.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -37,7 +37,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body>
+  <body role="document">
   
 
     <div class="document">
@@ -60,14 +60,31 @@ others</li>
 <li><strong>Docker</strong> to use containers that standardize computing environments</li>
 <li><strong>JupyterHub</strong> to manage users and deploy Jupyter notebooks</li>
 </ul>
-<p>To get started, we recommend beginning with the first item on our
-<a class="reference internal" href="index.html#creating-your-jupyterhub"><span class="std std-ref">main page</span></a>. If you’d like to know how to
-expand and customize your jupyterhub setup, check out
-<a class="reference internal" href="extending-jupyterhub.html#extending-jupyterhub"><span class="std std-ref">Extending your JupyterHub setup</span></a>. Finally, for a more extensive description of the
-tools and services that JupyterHub utilizes, see our
-<a class="reference internal" href="tools.html#tools"><span class="std std-ref">Tools used in a JupyterHub Deployment</span></a> page.</p>
+<p>You already are well on your way to understanding what it means (procedurally)
+to deploy Jupyterhub.</p>
+<div class="section" id="deployment-guide">
+<h2>Deployment Guide<a class="headerlink" href="#deployment-guide" title="Permalink to this headline">¶</a></h2>
+<p>We&#8217;ve put together a short walkthrough going from having nothing set up to a
+complete deployment of jupyterhub on Google Cloud. If you want to follow that
+comprehensive walkthrough, the next step on your journey is to <a class="reference internal" href="create-k8s-cluster.html#google-cloud"><span class="std std-ref">create a
+Kubernetes cluster on Google Cloud</span></a>.</p>
+</div>
+<div class="section" id="extending-and-customizing-jupyterhub">
+<h2>Extending and Customizing JupyterHub<a class="headerlink" href="#extending-and-customizing-jupyterhub" title="Permalink to this headline">¶</a></h2>
+<p>If you&#8217;d like to know how to expand and customize your jupyterhub setup, such
+as increasing the computational resources available to users or changing authentication
+services, check out <a class="reference internal" href="extending-jupyterhub.html#extending-jupyterhub"><span class="std std-ref">Extending your JupyterHub setup</span></a>.</p>
+</div>
+<div class="section" id="dependencies-for-deploying-a-jupyterhub-instance">
+<h2>Dependencies for Deploying a JupyterHub Instance<a class="headerlink" href="#dependencies-for-deploying-a-jupyterhub-instance" title="Permalink to this headline">¶</a></h2>
+<p>For a more extensive description of the tools and services that JupyterHub
+depends upon, see our <a class="reference internal" href="tools.html#tools"><span class="std std-ref">Tools used in a JupyterHub Deployment</span></a> page.</p>
+</div>
+<div class="section" id="questions-or-suggestions">
+<h2>Questions or Suggestions?<a class="headerlink" href="#questions-or-suggestions" title="Permalink to this headline">¶</a></h2>
 <p>If you have questions or suggestions, please reach out at our <a class="reference external" href="https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues">issues page</a>
 on GitHub.</p>
+</div>
 </div>
 
 
@@ -78,7 +95,18 @@ on GitHub.</p>
         <div class="sphinxsidebarwrapper">
             <p class="logo"><a href="index.html">
               <img class="logo" src="_static/logo.png" alt="Logo"/>
-            </a></p><div class="relations">
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Getting started with JupyterHub</a><ul>
+<li><a class="reference internal" href="#deployment-guide">Deployment Guide</a></li>
+<li><a class="reference internal" href="#extending-and-customizing-jupyterhub">Extending and Customizing JupyterHub</a></li>
+<li><a class="reference internal" href="#dependencies-for-deploying-a-jupyterhub-instance">Dependencies for Deploying a JupyterHub Instance</a></li>
+<li><a class="reference internal" href="#questions-or-suggestions">Questions or Suggestions?</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>

@@ -1,12 +1,12 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Troubleshooting &#8212; Zero to JupyterHub with Kubernetes 0.1 documentation</title>
+    <title>Troubleshooting &#8212; Zero to JupyterHub with Kubernetes 0.4 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.1',
+        VERSION:     '0.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -37,7 +37,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body>
+  <body role="document">
   
 
     <div class="document">
@@ -56,14 +56,14 @@ specific set of resources is available at all times. This means that if you
 only delete the nodes, but not the kubernetes instance, then it will detect
 the loss of computers and will create two new nodes to compensate.</p>
 <p><strong>How does billing for this work?</strong></p>
-<p>JupyterHub isn’t handling any of the billing for your usage. That’s done
-through whatever cloud service you’re using.</p>
+<p>JupyterHub isn&#8217;t handling any of the billing for your usage. That&#8217;s done
+through whatever cloud service you&#8217;re using.</p>
 </div>
 <div class="section" id="common-error-messages">
 <h2>Common error messages<a class="headerlink" href="#common-error-messages" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="general">
 <h3>General<a class="headerlink" href="#general" title="Permalink to this headline">¶</a></h3>
-<p>This section includes “provider agnostic” error messages for JupyterHub
+<p>This section includes &#8220;provider agnostic&#8221; error messages for JupyterHub
 and Kubernetes.</p>
 </div>
 <div class="section" id="google-cloud">
@@ -80,14 +80,14 @@ use cases.</p>
 <span class="pre">message=Project</span> <span class="pre">staeiou-5f880</span> <span class="pre">is</span> <span class="pre">not</span> <span class="pre">fully</span> <span class="pre">initialized</span> <span class="pre">with</span> <span class="pre">the</span> <span class="pre">default</span>
 <span class="pre">service</span> <span class="pre">accounts.</span> <span class="pre">Please</span> <span class="pre">try</span> <span class="pre">again</span> <span class="pre">later.</span></code></p>
 <p>Go to <a class="reference external" href="https://console.cloud.google.com/kubernetes/list">https://console.cloud.google.com/kubernetes/list</a> and click
-‘enable’ and follow the prompts.</p>
+&#8216;enable&#8217; and follow the prompts.</p>
 </li>
 </ol>
 </div>
 </div>
 <div class="section" id="investigating-issues">
 <h2>Investigating Issues<a class="headerlink" href="#investigating-issues" title="Permalink to this headline">¶</a></h2>
-<p>If you encounter any issues or wish to see what’s happening under the hood,
+<p>If you encounter any issues or wish to see what&#8217;s happening under the hood,
 use the following commands.</p>
 <p>To see running pods:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">kubectl</span> <span class="o">--</span><span class="n">namespace</span><span class="o">=&lt;</span><span class="n">YOUR</span><span class="o">-</span><span class="n">NAMESPACE</span><span class="o">&gt;</span> <span class="n">get</span> <span class="n">pod</span>
