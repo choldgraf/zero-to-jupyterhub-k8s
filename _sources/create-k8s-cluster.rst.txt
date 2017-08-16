@@ -301,7 +301,7 @@ and recommend using this for setting up your stack.
 
    you should see a list of three nodes, each beginning with ``ip``.
 
-4. Enable dynamic storage on your Kubernetes cluster.
+7. Enable dynamic storage on your Kubernetes cluster.
    Create a file, ``storageclass.yml`` on your local computer, and enter
    this text::
 
