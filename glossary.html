@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Glossary &#8212; Zero to JupyterHub with Kubernetes 0.4 documentation</title>
+    <title>Glossary &#8212; Zero to JupyterHub with Kubernetes 0.1 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.4',
+        VERSION:     '0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -51,31 +51,20 @@
 descriptions of the components in JupyterHub, see <a class="reference external" href="tools.html">the list of tools
 used in JupyterHub</a>. Here we try to keep the definition as
 succinct and relevant as possible, and provide links to learn more details.</p>
-<dl class="glossary docutils">
-<dt id="term-admin-user">admin user</dt>
+<dl class="docutils">
+<dt>admin user</dt>
 <dd>A user who can access the JupyterHub admin panel. They can start/stop user
 pods, and potentially access their notebooks.</dd>
-<dt id="term-authenticator"><a class="reference external" href="http://jupyterhub.readthedocs.io/en/stable/authenticators.html">authenticator</a></dt>
-<dd>The way in which users are authenticated to log into JupyterHub. There
-are many authenticators available, like GitHub, Google, MediaWiki,
+<dt><a class="reference external" href="http://jupyterhub.readthedocs.io/en/stable/authenticators.html">authenticator</a></dt>
+<dd>The way in which users are authenticated to log into JupyterHub. There are
+many authenticators available, like GitHub, Google, MediaWiki,
 Dummy (anyone can log in), etc.</dd>
-<dt id="term-culler">culler</dt>
+<dt>culler</dt>
 <dd>A separate process that stops the user pods of users who have not been
 active in a configured interval.</dd>
-<dt id="term-docker-image">docker image</dt>
-<dd>A docker image is similar to a recipe that Docker can use to build
-a working space which gives users the tools, libraries, and capabilities to
-be productive.</dd>
-<dt id="term-environment-variables"><a class="reference external" href="https://en.wikipedia.org/wiki/Environment_variable">environment variables</a></dt>
-<dd>A set of named values that can affect the way running processes will
-behave on a computer. Some common examples are <code class="docutils literal"><span class="pre">PATH</span></code>, <code class="docutils literal"><span class="pre">HOME</span></code>, and
-<code class="docutils literal"><span class="pre">EDITOR</span></code>.</dd>
-<dt id="term-persistent-storage">persistent storage</dt>
+<dt>persistent storage</dt>
 <dd>A filesystem attached to a user pod that allows the user to store
 notebooks and files that persist across multiple logins.</dd>
-<dt id="term-repo2docker"><a class="reference external" href="https://github.com/jupyter/repo2docker">repo2docker</a></dt>
-<dd>A tool which lets you quickly convert a GitHub repository into a Docker
-image that can be used as a base for your JupyterHub instance.</dd>
 </dl>
 </div>
 

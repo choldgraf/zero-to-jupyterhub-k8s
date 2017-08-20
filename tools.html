@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Tools used in a JupyterHub Deployment &#8212; Zero to JupyterHub with Kubernetes 0.4 documentation</title>
+    <title>Tools used in a JupyterHub Deployment &#8212; Zero to JupyterHub with Kubernetes 0.1 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.4',
+        VERSION:     '0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -29,7 +29,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Resource management" href="resource-mgmt.html" />
-    <link rel="prev" title="Customization of the User Experience" href="user-experience.html" />
+    <link rel="prev" title="Extending your JupyterHub setup" href="extending-jupyterhub.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -54,10 +54,10 @@ information.</p>
 <div class="section" id="cloud-computing-providers">
 <h2>Cloud Computing Providers<a class="headerlink" href="#cloud-computing-providers" title="Permalink to this headline">¶</a></h2>
 <p>This is whatever will run the actual computation. Generally it means a
-company, university server, or some other organization that hosts computational
-resources that can be accessed remotely. JupyterHub will run on these
-computational resources, meaning that users will also be operating on these
-resources if they&#8217;re interacting with your JupyterHub.</p>
+company, university server, or some other organization that hosts computers
+that can be accessed remotely. JupyterHub will run on this hardware, meaning
+that users will also be operating on this hardware if they&#8217;re interacting
+with your JupyterHub.</p>
 <p>They provide the following things:</p>
 <ul class="simple">
 <li>Computing</li>
@@ -186,7 +186,7 @@ We&#8217;ll cover this in the section on &#8220;Helm&#8221;.</p>
 <h3>Service<a class="headerlink" href="#service" title="Permalink to this headline">¶</a></h3>
 <p>A service is simply a stable way of referring to a deployment. Kubernetes
 is all about intelligently handling dynamic and quickly-changing
-computational environments. This means that the VMs running your pods may change,
+computational environments. This means that the hardware may change,
 IP addresses will be different, etc. However you don&#8217;t want to have to
 re-orient yourself every time this happens. A Kubernetes service keeps
 track of all these changes on the backend, and provides a single address
@@ -197,9 +197,13 @@ to manage your deployment.</p>
 <div class="section" id="namespace">
 <h3>Namespace<a class="headerlink" href="#namespace" title="Permalink to this headline">¶</a></h3>
 <p>Finally, a <a class="reference external" href="https://kubernetes.io/docs/admin/namespaces/">namespace</a>
-defines a collection of objects in Kubernetes. It
+defines a collection of objects in Kubernetes. This will define
+the boundaries of hardware that the deployments have to exist within. It
 is generally the most &#8220;high-level&#8221; of the groups we&#8217;ve discussed thus far.
-For example, a a namespace could be a single class running with JupyterHub.</p>
+For example, a a namespace could be a single class running with JupyterHub.
+It defines all the hardware that is available to students. It also defines
+the JupyterHub machinery that glues together all of the student containers,
+manages disk space, etc.</p>
 <p>For more information about namespaces, see the
 <a class="reference external" href="https://kubernetes.io/docs/tasks/administer-cluster/namespaces/">Kubernetes documentation on namespaces</a>.</p>
 </div>
@@ -338,7 +342,7 @@ what kind of usage exists on the cluster.</li>
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="user-experience.html" title="previous chapter">Customization of the User Experience</a></li>
+      <li>Previous: <a href="extending-jupyterhub.html" title="previous chapter">Extending your JupyterHub setup</a></li>
       <li>Next: <a href="resource-mgmt.html" title="next chapter">Resource management</a></li>
   </ul></li>
 </ul>
