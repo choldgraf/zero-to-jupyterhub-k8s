@@ -1,20 +1,17 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Zero to JupyterHub &#8212; Zero to JupyterHub with Kubernetes 0.1 documentation</title>
-    
+    <title>Zero to JupyterHub &#8212; Zero to JupyterHub with Kubernetes 0.4 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.1',
+        VERSION:     '0.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -24,7 +21,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -36,7 +33,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">
+  <body>
   
 
     <div class="document">
@@ -59,16 +56,24 @@ questions, feel free to reach out at the <a class="reference external" href="htt
 <p id="creating-your-jupyterhub"><strong>Creating your JupyterHub</strong></p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started with JupyterHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started with JupyterHub</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="getting-started.html#deployment-guide">Deployment Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting-started.html#extending-and-customizing-jupyterhub">Extending and Customizing JupyterHub</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting-started.html#dependencies-for-deploying-a-jupyterhub-instance">Dependencies for Deploying a JupyterHub Instance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting-started.html#questions-or-suggestions">Questions or Suggestions?</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="create-k8s-cluster.html">Creating a Kubernetes Cluster</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="create-k8s-cluster.html#setting-up-kubernetes-on-google-cloud">Setting up Kubernetes on Google Cloud</a></li>
 <li class="toctree-l2"><a class="reference internal" href="create-k8s-cluster.html#setting-up-kubernetes-on-microsoft-azure-container-service-acs">Setting up Kubernetes on Microsoft Azure Container Service (ACS)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="create-k8s-cluster.html#setting-up-kubernetes-on-amazon-web-services-aws">Setting up Kubernetes on Amazon Web Services (AWS)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="create-k8s-cluster.html#next-step">Next Step</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="setup-helm.html">Setting up Helm</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="setup-helm.html#installation">Installation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="setup-helm.html#initialization">Initialization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="setup-helm.html#verify">Verify</a></li>
 <li class="toctree-l2"><a class="reference internal" href="setup-helm.html#next-step">Next Step</a></li>
 </ul>
 </li>
@@ -77,7 +82,11 @@ questions, feel free to reach out at the <a class="reference external" href="htt
 <li class="toctree-l2"><a class="reference internal" href="setup-jupyterhub.html#install-jupyterhub">Install JupyterHub</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="turn-off.html">Turning Off JupyterHub and Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="turn-off.html">Turning Off JupyterHub and Computational Resources</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="turn-off.html#google-cloud-engine">Google Cloud Engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="turn-off.html#amazon-aws">Amazon AWS</a></li>
+</ul>
+</li>
 </ul>
 </div>
 <p><strong>Customization Guide</strong></p>
@@ -88,12 +97,19 @@ JupyterHub deployment.</p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="extending-jupyterhub.html">Extending your JupyterHub setup</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="extending-jupyterhub.html#applying-configuration-changes">Applying configuration changes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="extending-jupyterhub.html#using-an-existing-image">Using an existing image</a></li>
-<li class="toctree-l2"><a class="reference internal" href="extending-jupyterhub.html#setting-memory-and-cpu-guarantees-limits-for-your-users">Setting memory and CPU guarantees / limits for your users</a></li>
-<li class="toctree-l2"><a class="reference internal" href="extending-jupyterhub.html#extending-your-software-stack-with-s2i">Extending your software stack with s2i</a></li>
-<li class="toctree-l2"><a class="reference internal" href="extending-jupyterhub.html#pre-populating-home-directory-with-notebooks-when-using-persistent-volumes">Pre-populating <cite>$HOME</cite> directory with notebooks when using Persistent Volumes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="extending-jupyterhub.html#authenticating-with-oauth2">Authenticating with OAuth2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="extending-jupyterhub.html#full-example-of-google-oauth2">Full Example of Google OAuth2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending-jupyterhub.html#expanding-and-contracting-the-size-of-your-cluster">Expanding and contracting the size of your cluster</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="user-experience.html">Customizing the User Experience</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user-experience.html#tailoring-the-user-environment">Tailoring the user environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-experience.html#allocating-and-controlling-user-resources">Allocating and controlling user resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-experience.html#advanced-topic-pre-populating-user-s-home-directory-with-notebooks">Advanced topic: Pre-populating user’s <code class="docutils literal"><span class="pre">$HOME</span></code> directory with notebooks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="schema.html">Helm Chart Schema</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="schema.html#config">Config</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="tools.html">Tools used in a JupyterHub Deployment</a><ul>
@@ -138,6 +154,16 @@ production deployment of JupyterHub.</p>
 <li class="toctree-l1"><a class="reference internal" href="additional-resources.html">Additional resources</a></li>
 </ul>
 </div>
+<p><strong>Institutional support</strong></p>
+<p>This guide and the <a class="reference external" href="https://github.com/jupyterhub/helm-chart">associated helm chart</a>
+would not be possible without the amazing institutional support from the following
+organizations (and the organizations that support them!)</p>
+<ul class="simple">
+<li><a class="reference external" href="http://data.berkeley.edu/">UC Berkeley Data Science Division</a></li>
+<li><a class="reference external" href="https://bids.berkeley.edu/">Berkeley Institute for Data Science</a></li>
+<li><a class="reference external" href="http://www.calpoly.edu/">Cal Poly, San Luis Obispo</a></li>
+<li><a class="reference external" href="https://www.simula.no/">Simula Research Institute</a></li>
+</ul>
 </div>
 
 

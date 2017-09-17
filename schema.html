@@ -1,0 +1,576 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Helm Chart Schema &#8212; Zero to JupyterHub with Kubernetes 0.4 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Tools used in a JupyterHub Deployment" href="tools.html" />
+    <link rel="prev" title="Customization of the User Experience" href="user-experience.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="helm-chart-schema">
+<span id="id1"></span><h1>Helm Chart Schema<a class="headerlink" href="#helm-chart-schema" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference external" href="https://github.com/jupyterhub/helm-chart">JupyterHub helm chart</a>
+is configurable so that you can customize your
+Kubernetes setup however you’d like. You can extend user resources, build
+off of different Docker images, manage security and authentication, and more.</p>
+<p>Below is a description of the fields that are exposed with the JupyterHub
+helm chart. For more detailed information about some specific things you can do
+with modifications to the helm chart, see the <a class="reference internal" href="extending-jupyterhub.html#extending-jupyterhub"><span class="std std-ref">Extending your JupyterHub setup</span></a> and
+<a class="reference internal" href="user-experience.html#user-experience"><span class="std std-ref">Customization of the User Experience</span></a> pages.</p>
+<div class="section" id="config">
+<h2>Config<a class="headerlink" href="#config" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="17%" />
+<col width="17%" />
+<col width="17%" />
+<col width="17%" />
+<col width="17%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>type</td>
+<td colspan="5"><em>object</em></td>
+</tr>
+<tr class="row-even"><td colspan="6">properties</td>
+</tr>
+<tr class="row-odd"><td rowspan="41"><ul class="first last simple">
+<li>hub</li>
+</ul>
+</td>
+<td>type</td>
+<td colspan="4"><em>object</em></td>
+</tr>
+<tr class="row-even"><td colspan="5">properties</td>
+</tr>
+<tr class="row-odd"><td rowspan="2"><ul class="first last simple">
+<li>cookieSecret</li>
+</ul>
+</td>
+<td colspan="4"><p class="first">A 64-byte cryptographically secure randomly generated string used to sign values of
+secure cookies set by the hub. If unset, jupyterhub will generate one on startup and
+save it in the file <cite>jupyterhub_cookie_secret</cite> in the <cite>/srv/jupyterhub</cite> directory of
+the hub container. Value set here will override the value in <cite>jupyterhub_cookie_secret</cite>.</p>
+<p>You do not need to set this at all if you are using the default configuration for
+storing databases - sqlite on a persistent volume (with <cite>hub.db.type</cite> set to the
+default <cite>sqlite-pvc</cite>). If you are using an external database, then you must set this
+value explicitly - or your users will keep getting logged out each time the hub pod
+restarts.</p>
+<p>This must be generated with <cite>openssl rand -hex 32</cite>.</p>
+<p class="last">Changing this value will all user logins to be invalidated. If this secret leaks,
+<em>immediately</em> change it to something else, or user data can be compromised</p>
+</td>
+</tr>
+<tr class="row-even"><td>type</td>
+<td colspan="3"><em>string</em></td>
+</tr>
+<tr class="row-odd"><td rowspan="15"><ul class="first last simple">
+<li>db</li>
+</ul>
+</td>
+<td>type</td>
+<td colspan="3"><em>object</em></td>
+</tr>
+<tr class="row-even"><td colspan="4">properties</td>
+</tr>
+<tr class="row-odd"><td rowspan="8"><ul class="first last simple">
+<li>pvc</li>
+</ul>
+</td>
+<td>type</td>
+<td colspan="2"><em>object</em></td>
+</tr>
+<tr class="row-even"><td colspan="3">properties</td>
+</tr>
+<tr class="row-odd"><td rowspan="2"><ul class="first last simple">
+<li>annotations</li>
+</ul>
+</td>
+<td colspan="2"><p class="first">Annotations to apply to the PVC containing the sqlite database.</p>
+<p class="last">TODO: Link to pvc annotations</p>
+</td>
+</tr>
+<tr class="row-even"><td>type</td>
+<td><em>object</em></td>
+</tr>
+<tr class="row-odd"><td rowspan="2"><ul class="first last simple">
+<li>selector</li>
+</ul>
+</td>
+<td colspan="2"><p class="first">Selectors to set for the PVC containing the sqlite database.</p>
+<p>Useful when you are using a static PVC.</p>
+<p class="last">TODO: Link to pvc selector docs.</p>
+</td>
+</tr>
+<tr class="row-even"><td>type</td>
+<td><em>object</em></td>
+</tr>
+<tr class="row-odd"><td rowspan="2"><ul class="first last simple">
+<li>storage</li>
+</ul>
+</td>
+<td colspan="2">Size of disk to request for the database disk.</td>
+</tr>
+<tr class="row-even"><td>type</td>
+<td><em>string</em></td>
+</tr>
+<tr class="row-odd"><td rowspan="3"><ul class="first last simple">
+<li>type</li>
+</ul>
+</td>
+<td colspan="3"><p class="first">Type of database backend to use for the hub database.</p>
+<p>The Hub requires a persistent database to function, and this lets you specify
+where it should be stored.</p>
+<p>The various options are:</p>
+<ol class="last arabic">
+<li><p class="first"><strong>sqlite-pvc</strong></p>
+<p>Use an <cite>sqlite</cite> database kept on a persistent volume attached to the hub.</p>
+<p>By default, this disk is dynamically created using the default
+[dynamic provisioner]. You can customize how this disk is created / attached
+by setting various properties under <cite>hub.db.pvc</cite>.</p>
+<p>This is the default setting, and should work well for most cloud provider
+deployments.</p>
+</li>
+<li><p class="first"><strong>sqlite-memory</strong></p>
+<p>Use an in-memory <cite>sqlite</cite> database. This should only be used for testing,
+since the database is erased whenever the hub pod restarts - causing the hub
+to lose all memory of users who had logged in before.</p>
+<p>When using this for testing, make sure you delete all other objects that the
+hub has created (such as user pods, user PVCs, etc) every time the hub restarts.
+Otherwise you might run into errors about duplicate resources.</p>
+</li>
+<li><p class="first"><strong>mysql</strong></p>
+<p>Use an externaly hosted mysql database.</p>
+<p>You have to specify an sqlalchemy connection string for the mysql database you
+want to connect to in <cite>hub.db.url</cite> if using this option.</p>
+<p>The general format of the connection string is:
+<code class="docutils literal"><span class="pre">`</span>
+<span class="pre">mysql+pymysql://&lt;db-username&gt;:&lt;db-password&gt;&#64;&lt;db-hostname&gt;:&lt;db-port&gt;/&lt;db-name&gt;</span>
+<span class="pre">`</span></code></p>
+<p>The user specified in the connection string must have the rights to create
+tables in the database specified.</p>
+<p>Note that if you use this, you <em>must</em> also set <cite>hub.cookieSecret</cite>.</p>
+</li>
+<li><p class="first"><strong>postgres</strong></p>
+<p>Use an externaly hosted postgres database.</p>
+<p>You have to specify an sqlalchemy connection string for the postgres database you
+want to connect to in <cite>hub.db.url</cite> if using this option.</p>
+<p>The general format of the connection string is:
+<code class="docutils literal"><span class="pre">`</span>
+<span class="pre">postgres+psycopg2://&lt;db-username&gt;:&lt;db-password&gt;&#64;&lt;db-hostname&gt;:&lt;db-port&gt;/&lt;db-name&gt;</span>
+<span class="pre">`</span></code></p>
+<p>The user specified in the connection string must have the rights to create
+tables in the database specified.</p>
+<p>Note that if you use this, you <em>must</em> also set <cite>hub.cookieSecret</cite>.</p>
+</li>
+</ol>
+</td>
+</tr>
+<tr class="row-even"><td>type</td>
+<td colspan="2"><em>string</em></td>
+</tr>
+<tr class="row-odd"><td>enum</td>
+<td colspan="2">sqlite-pvc, sqlite-memory, mysql, postgres</td>
+</tr>
+<tr class="row-even"><td rowspan="2"><ul class="first last simple">
+<li>url</li>
+</ul>
+</td>
+<td colspan="3"><p class="first">Connection string when <cite>hub.db.type</cite> is mysql or postgres.</p>
+<p class="last">See documentation for <cite>hub.db.type</cite> for more details on the format of this property.</p>
+</td>
+</tr>
+<tr class="row-odd"><td>type</td>
+<td colspan="2"><em>string</em></td>
+</tr>
+<tr class="row-even"><td rowspan="2"><ul class="first last simple">
+<li>extraConfig</li>
+</ul>
+</td>
+<td colspan="4"><p class="first">Arbitrary extra python based configuration that should be in <cite>jupyterhub_config.py</cite>.</p>
+<p>This is the <em>escape hatch</em> - if you want to configure JupyterHub to do something specific
+that is not present here as an option, you can just write the raw Python to do it here.</p>
+<dl class="docutils">
+<dt>Non-exhaustive examples of things you can do here:</dt>
+<dd><ul class="first last simple">
+<li>Subclass authenticator / spawner to do a custom thing</li>
+<li>Dynamically launch different images for different sets of images</li>
+<li>Inject an auth token from GitHub authenticator into user pod</li>
+<li>Anything else you can think of!</li>
+</ul>
+</dd>
+</dl>
+<p>Since this is usually a multi-line string, you want to format it using YAML’s
+[| operator](<a class="reference external" href="http://www.yaml.org/spec/1.2/spec.html#id2795688">http://www.yaml.org/spec/1.2/spec.html#id2795688</a>).</p>
+<dl class="docutils">
+<dt>For example:</dt>
+<dd><p class="first"><a href="#id2"><span class="problematic" id="id3">``</span></a>`
+hub:</p>
+<blockquote class="last">
+<div><dl class="docutils">
+<dt>extraConfig: |</dt>
+<dd>c.JupyterHub.something = ‘something’
+c.Spawner.somethingelse = ‘something else’</dd>
+</dl>
+</div></blockquote>
+</dd>
+</dl>
+<p class="last">No validation of this python is performed! If you make a mistake here, it will probably
+manifest as either the hub pod going into <cite>Error</cite> or <cite>CrashLoopBackoff</cite> states, or in
+some special cases, the hub running but… just doing very random things. Be careful!</p>
+</td>
+</tr>
+<tr class="row-odd"><td>type</td>
+<td colspan="3"><em>string</em></td>
+</tr>
+<tr class="row-even"><td rowspan="2"><ul class="first last simple">
+<li>extraEnv</li>
+</ul>
+</td>
+<td colspan="4"><p class="first">Extra environment variables that should be set for the hub pod.</p>
+<p>A dictionary of key value pairs (both strings), where the key is the name of the
+environment value and the value is the value of the environment variable that should
+be set on the hub pod.</p>
+<dl class="last docutils">
+<dt>These are usually used in two circumstances:</dt>
+<dd><ul class="first last simple">
+<li>Passing parameters to some custom code specified with <cite>extraConfig</cite></li>
+<li>Passing parameters to an authenticator or spawner that can be directly customized
+by environment variables (rarer)</li>
+</ul>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="row-odd"><td>type</td>
+<td colspan="3"><em>object</em></td>
+</tr>
+<tr class="row-even"><td rowspan="3"><ul class="first last simple">
+<li>fsGid</li>
+</ul>
+</td>
+<td colspan="4">The gid the hub process should be using when touching any volumes mounted.
+Use this only if you are building your own image &amp; know that a group with this gid exists inside the hub container! Advanced feature, handle with care!
+Defaults to 1000, which is the uid of the <cite>jovyan</cite> user that is present in the default hub image.</td>
+</tr>
+<tr class="row-odd"><td>type</td>
+<td colspan="3"><em>integer</em></td>
+</tr>
+<tr class="row-even"><td>minimum</td>
+<td colspan="3">0</td>
+</tr>
+<tr class="row-odd"><td rowspan="7"><ul class="first last simple">
+<li>image</li>
+</ul>
+</td>
+<td colspan="4"><p class="first">Set custom image name / tag for the hub pod.</p>
+<p class="last">Use this to customize which hub image is used. Note that you must use a version of
+the hub image that was bundled with this particular version of the helm-chart - using
+other images might not work.</p>
+</td>
+</tr>
+<tr class="row-even"><td>type</td>
+<td colspan="3"><em>object</em></td>
+</tr>
+<tr class="row-odd"><td colspan="4">properties</td>
+</tr>
+<tr class="row-even"><td rowspan="2"><ul class="first last simple">
+<li>name</li>
+</ul>
+</td>
+<td colspan="3"><p class="first">Name of the image, without the tag.</p>
+<dl class="last docutils">
+<dt>Examples:</dt>
+<dd><ul class="first last simple">
+<li>yuvipanda/wikimedia-hub</li>
+<li>gcr.io/my-project/my-hub</li>
+</ul>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="row-odd"><td>type</td>
+<td colspan="2"><em>string</em></td>
+</tr>
+<tr class="row-even"><td rowspan="2"><ul class="first last simple">
+<li>tag</li>
+</ul>
+</td>
+<td colspan="3"><p class="first">The tag of the image to pull.</p>
+<p class="last">This is the value after the <cite>:</cite> in your full image name.</p>
+</td>
+</tr>
+<tr class="row-odd"><td>type</td>
+<td colspan="2"><em>string</em></td>
+</tr>
+<tr class="row-even"><td rowspan="3"><ul class="first last simple">
+<li>imagePullPolicy</li>
+</ul>
+</td>
+<td colspan="4"><p class="first">Set the imagePullPolicy on the hub pod.</p>
+<p class="last">See [the kubernetes docs](<a class="reference external" href="https://kubernetes.io/docs/concepts/containers/images/#updating-images">https://kubernetes.io/docs/concepts/containers/images/#updating-images</a>)
+for more info on what the values mean.</p>
+</td>
+</tr>
+<tr class="row-odd"><td>type</td>
+<td colspan="3"><em>string</em></td>
+</tr>
+<tr class="row-even"><td>enum</td>
+<td colspan="3">IfNotPresent, Always, Never</td>
+</tr>
+<tr class="row-odd"><td rowspan="2"><ul class="first last simple">
+<li>labels</li>
+</ul>
+</td>
+<td colspan="4"><p class="first">Extra labels to add to the hub pod.</p>
+<p class="last">See [the kubernetes documentation](<a class="reference external" href="https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/">https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/</a>)
+to learn more about labels.</p>
+</td>
+</tr>
+<tr class="row-even"><td>type</td>
+<td colspan="3"><em>object</em></td>
+</tr>
+<tr class="row-odd"><td rowspan="3"><ul class="first last simple">
+<li>uid</li>
+</ul>
+</td>
+<td colspan="4">The UID the hub process should be running as.
+Use this only if you are building your own image &amp; know that a user with this uid exists inside the hub container! Advanced feature, handle with care!
+Defaults to 1000, which is the uid of the <cite>jovyan</cite> user that is present in the default hub image.</td>
+</tr>
+<tr class="row-even"><td>type</td>
+<td colspan="3"><em>integer</em></td>
+</tr>
+<tr class="row-odd"><td>minimum</td>
+<td colspan="3">0</td>
+</tr>
+<tr class="row-even"><td rowspan="4"><ul class="first last simple">
+<li>proxy</li>
+</ul>
+</td>
+<td>type</td>
+<td colspan="4"><em>object</em></td>
+</tr>
+<tr class="row-odd"><td colspan="5">properties</td>
+</tr>
+<tr class="row-even"><td rowspan="2"><ul class="first last simple">
+<li><strong>secretToken</strong></li>
+</ul>
+</td>
+<td colspan="4"><p class="first">A 64-byte cryptographically secure randomly generated string used to secure communications
+between the hub and the configurable-http-proxy.</p>
+<p>This must be generated with <cite>openssl rand -hex 32</cite>.</p>
+<p class="last">Changing this value will cause the proxy and hub pods to restart. It is good security
+practice to rotate these values over time. If this secret leaks, <em>immediately</em> change
+it to something else, or user data can be compromised</p>
+</td>
+</tr>
+<tr class="row-odd"><td>type</td>
+<td colspan="3"><em>string</em></td>
+</tr>
+<tr class="row-even"><td rowspan="20"><ul class="first last simple">
+<li>singleuser</li>
+</ul>
+</td>
+<td colspan="5">Options for customizing the environment that is provided to the users after they log in.</td>
+</tr>
+<tr class="row-odd"><td>type</td>
+<td colspan="4"><em>object</em></td>
+</tr>
+<tr class="row-even"><td colspan="5">properties</td>
+</tr>
+<tr class="row-odd"><td rowspan="5"><ul class="first last simple">
+<li>cpu</li>
+</ul>
+</td>
+<td colspan="4"><p class="first">Set CPU limits &amp; guarantees that are enforced for each user.</p>
+<p class="last">TODO: Link to k8s docs about CPU limits and guarantees.</p>
+</td>
+</tr>
+<tr class="row-even"><td>type</td>
+<td colspan="3"><em>object</em></td>
+</tr>
+<tr class="row-odd"><td colspan="4">properties</td>
+</tr>
+<tr class="row-even"><td><ul class="first last simple">
+<li>guarantee</li>
+</ul>
+</td>
+<td>type</td>
+<td colspan="2"><em>string</em></td>
+</tr>
+<tr class="row-odd"><td><ul class="first last simple">
+<li>limit</li>
+</ul>
+</td>
+<td>type</td>
+<td colspan="2"><em>string</em></td>
+</tr>
+<tr class="row-even"><td rowspan="7"><ul class="first last simple">
+<li>image</li>
+</ul>
+</td>
+<td colspan="4"><p class="first">Set custom image name / tag used for spawned users.</p>
+<p class="last">This image is used to launch the pod for each user.</p>
+</td>
+</tr>
+<tr class="row-odd"><td>type</td>
+<td colspan="3"><em>object</em></td>
+</tr>
+<tr class="row-even"><td colspan="4">properties</td>
+</tr>
+<tr class="row-odd"><td rowspan="2"><ul class="first last simple">
+<li>name</li>
+</ul>
+</td>
+<td colspan="3"><p class="first">Name of the image, without the tag.</p>
+<dl class="last docutils">
+<dt>Examples:</dt>
+<dd><ul class="first last simple">
+<li>yuvipanda/wikimedia-hub-user</li>
+<li>gcr.io/my-project/my-user-image</li>
+</ul>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="row-even"><td>type</td>
+<td colspan="2"><em>string</em></td>
+</tr>
+<tr class="row-odd"><td rowspan="2"><ul class="first last simple">
+<li>tag</li>
+</ul>
+</td>
+<td colspan="3"><p class="first">The tag of the image to use.</p>
+<p class="last">This is the value after the <cite>:</cite> in your full image name.</p>
+</td>
+</tr>
+<tr class="row-even"><td>type</td>
+<td colspan="2"><em>string</em></td>
+</tr>
+<tr class="row-odd"><td rowspan="5"><ul class="first last simple">
+<li>memory</li>
+</ul>
+</td>
+<td colspan="4"><p class="first">Set Memory limits &amp; guarantees that are enforced for each user.</p>
+<p class="last">TODO: Link to k8s docs about Memory limits and guarantees.</p>
+</td>
+</tr>
+<tr class="row-even"><td>type</td>
+<td colspan="3"><em>object</em></td>
+</tr>
+<tr class="row-odd"><td colspan="4">properties</td>
+</tr>
+<tr class="row-even"><td><ul class="first last simple">
+<li>guarantee</li>
+</ul>
+</td>
+<td>type</td>
+<td colspan="2"><em>string</em></td>
+</tr>
+<tr class="row-odd"><td><ul class="first last simple">
+<li>limit</li>
+</ul>
+</td>
+<td>type</td>
+<td colspan="2"><em>string</em></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Helm Chart Schema</a><ul>
+<li><a class="reference internal" href="#config">Config</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="user-experience.html" title="previous chapter">Customization of the User Experience</a></li>
+      <li>Next: <a href="tools.html" title="next chapter">Tools used in a JupyterHub Deployment</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/schema.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Project Jupyter team.
+      
+      |
+      <a href="_sources/schema.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

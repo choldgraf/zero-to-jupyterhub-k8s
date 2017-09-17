@@ -1,0 +1,153 @@
+{
+  "properties": {
+    "hub": {
+      "properties": {
+        "cookieSecret": {
+          "description": "A 64-byte cryptographically secure randomly generated string used to sign values of\nsecure cookies set by the hub. If unset, jupyterhub will generate one on startup and\nsave it in the file `jupyterhub_cookie_secret` in the `/srv/jupyterhub` directory of\nthe hub container. Value set here will override the value in `jupyterhub_cookie_secret`.\n\nYou do not need to set this at all if you are using the default configuration for\nstoring databases - sqlite on a persistent volume (with `hub.db.type` set to the\ndefault `sqlite-pvc`). If you are using an external database, then you must set this\nvalue explicitly - or your users will keep getting logged out each time the hub pod\nrestarts.\n\nThis must be generated with `openssl rand -hex 32`.\n\nChanging this value will all user logins to be invalidated. If this secret leaks,\n*immediately* change it to something else, or user data can be compromised\n", 
+          "type": "string"
+        }, 
+        "db": {
+          "properties": {
+            "pvc": {
+              "descripton": "Customize the Persistent Volume Claim used when `hub.db.type` is `sqlite-pvc`.\n", 
+              "properties": {
+                "annotations": {
+                  "description": "Annotations to apply to the PVC containing the sqlite database.\n\nTODO: Link to pvc annotations\n", 
+                  "type": "object"
+                }, 
+                "selector": {
+                  "description": "Selectors to set for the PVC containing the sqlite database.\n\nUseful when you are using a static PVC.\n\nTODO: Link to pvc selector docs.\n", 
+                  "type": "object"
+                }, 
+                "storage": {
+                  "description": "Size of disk to request for the database disk.\n", 
+                  "type": "string"
+                }
+              }, 
+              "type": "object"
+            }, 
+            "type": {
+              "description": "Type of database backend to use for the hub database.\n\nThe Hub requires a persistent database to function, and this lets you specify\nwhere it should be stored.\n\nThe various options are:\n\n1. **sqlite-pvc**\n\n   Use an `sqlite` database kept on a persistent volume attached to the hub.\n\n   By default, this disk is dynamically created using the default\n   [dynamic provisioner]. You can customize how this disk is created / attached\n   by setting various properties under `hub.db.pvc`.\n\n   This is the default setting, and should work well for most cloud provider\n   deployments.\n\n2. **sqlite-memory**\n\n   Use an in-memory `sqlite` database. This should only be used for testing,\n   since the database is erased whenever the hub pod restarts - causing the hub\n   to lose all memory of users who had logged in before.\n\n   When using this for testing, make sure you delete all other objects that the\n   hub has created (such as user pods, user PVCs, etc) every time the hub restarts.\n   Otherwise you might run into errors about duplicate resources.\n\n3. **mysql**\n\n   Use an externaly hosted mysql database.\n\n   You have to specify an sqlalchemy connection string for the mysql database you\n   want to connect to in `hub.db.url` if using this option.\n\n   The general format of the connection string is:\n   ```\n   mysql+pymysql://<db-username>:<db-password>@<db-hostname>:<db-port>/<db-name>\n   ```\n\n   The user specified in the connection string must have the rights to create\n   tables in the database specified.\n\n   Note that if you use this, you *must* also set `hub.cookieSecret`.\n\n4. **postgres**\n\n   Use an externaly hosted postgres database.\n\n   You have to specify an sqlalchemy connection string for the postgres database you\n   want to connect to in `hub.db.url` if using this option.\n\n   The general format of the connection string is:\n   ```\n   postgres+psycopg2://<db-username>:<db-password>@<db-hostname>:<db-port>/<db-name>\n   ```\n\n   The user specified in the connection string must have the rights to create\n   tables in the database specified.\n\n   Note that if you use this, you *must* also set `hub.cookieSecret`.\n", 
+              "enum": [
+                "sqlite-pvc", 
+                "sqlite-memory", 
+                "mysql", 
+                "postgres"
+              ], 
+              "type": "string"
+            }, 
+            "url": {
+              "description": "Connection string when `hub.db.type` is mysql or postgres.\n\nSee documentation for `hub.db.type` for more details on the format of this property.\n", 
+              "type": "string"
+            }
+          }, 
+          "type": "object"
+        }, 
+        "extraConfig": {
+          "description": "Arbitrary extra python based configuration that should be in `jupyterhub_config.py`.\n\nThis is the *escape hatch* - if you want to configure JupyterHub to do something specific\nthat is not present here as an option, you can just write the raw Python to do it here.\n\nNon-exhaustive examples of things you can do here:\n  - Subclass authenticator / spawner to do a custom thing\n  - Dynamically launch different images for different sets of images\n  - Inject an auth token from GitHub authenticator into user pod\n  - Anything else you can think of!\n\nSince this is usually a multi-line string, you want to format it using YAML's\n[| operator](http://www.yaml.org/spec/1.2/spec.html#id2795688).\n\nFor example:\n  ```\n  hub:\n    extraConfig: |\n      c.JupyterHub.something = 'something'\n      c.Spawner.somethingelse = 'something else'\n\nNo validation of this python is performed! If you make a mistake here, it will probably\nmanifest as either the hub pod going into `Error` or `CrashLoopBackoff` states, or in\nsome special cases, the hub running but... just doing very random things. Be careful!\n", 
+          "type": "string"
+        }, 
+        "extraEnv": {
+          "description": "Extra environment variables that should be set for the hub pod.\n\nA dictionary of key value pairs (both strings), where the key is the name of the\nenvironment value and the value is the value of the environment variable that should\nbe set on the hub pod.\n\nThese are usually used in two circumstances:\n  - Passing parameters to some custom code specified with `extraConfig`\n  - Passing parameters to an authenticator or spawner that can be directly customized\n    by environment variables (rarer)\n", 
+          "type": "object"
+        }, 
+        "fsGid": {
+          "description": "The gid the hub process should be using when touching any volumes mounted.\nUse this only if you are building your own image & know that a group with this gid exists inside the hub container! Advanced feature, handle with care!\nDefaults to 1000, which is the uid of the `jovyan` user that is present in the default hub image.", 
+          "minimum": 0, 
+          "type": "integer"
+        }, 
+        "image": {
+          "description": "Set custom image name / tag for the hub pod.\n\nUse this to customize which hub image is used. Note that you must use a version of\nthe hub image that was bundled with this particular version of the helm-chart - using\nother images might not work.\n", 
+          "properties": {
+            "name": {
+              "description": "Name of the image, without the tag.\n\nExamples:\n  - yuvipanda/wikimedia-hub\n  - gcr.io/my-project/my-hub\n", 
+              "type": "string"
+            }, 
+            "tag": {
+              "description": "The tag of the image to pull.\n\nThis is the value after the `:` in your full image name.\n", 
+              "type": "string"
+            }
+          }, 
+          "type": "object"
+        }, 
+        "imagePullPolicy": {
+          "description": "Set the imagePullPolicy on the hub pod.\n\nSee [the kubernetes docs](https://kubernetes.io/docs/concepts/containers/images/#updating-images)\nfor more info on what the values mean.\n", 
+          "enum": [
+            "IfNotPresent", 
+            "Always", 
+            "Never"
+          ], 
+          "type": "string"
+        }, 
+        "labels": {
+          "description": "Extra labels to add to the hub pod.\n\nSee [the kubernetes documentation](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)\nto learn more about labels.\n", 
+          "type": "object"
+        }, 
+        "uid": {
+          "description": "The UID the hub process should be running as.\nUse this only if you are building your own image & know that a user with this uid exists inside the hub container! Advanced feature, handle with care!\nDefaults to 1000, which is the uid of the `jovyan` user that is present in the default hub image.", 
+          "minimum": 0, 
+          "type": "integer"
+        }
+      }, 
+      "type": "object"
+    }, 
+    "proxy": {
+      "properties": {
+        "secretToken": {
+          "description": "A 64-byte cryptographically secure randomly generated string used to secure communications\nbetween the hub and the configurable-http-proxy.\n\nThis must be generated with `openssl rand -hex 32`.\n\nChanging this value will cause the proxy and hub pods to restart. It is good security\npractice to rotate these values over time. If this secret leaks, *immediately* change\nit to something else, or user data can be compromised\n", 
+          "type": "string"
+        }
+      }, 
+      "required": [
+        "secretToken"
+      ], 
+      "type": "object"
+    }, 
+    "singleuser": {
+      "description": "Options for customizing the environment that is provided to the users after they log in.\n", 
+      "properties": {
+        "cpu": {
+          "description": "Set CPU limits & guarantees that are enforced for each user.\n\nTODO: Link to k8s docs about CPU limits and guarantees.\n", 
+          "properties": {
+            "guarantee": {
+              "type": "string"
+            }, 
+            "limit": {
+              "type": "string"
+            }
+          }, 
+          "type": "object"
+        }, 
+        "image": {
+          "description": "Set custom image name / tag used for spawned users.\n\nThis image is used to launch the pod for each user.\n", 
+          "properties": {
+            "name": {
+              "description": "Name of the image, without the tag.\n\nExamples:\n  - yuvipanda/wikimedia-hub-user\n  - gcr.io/my-project/my-user-image\n", 
+              "type": "string"
+            }, 
+            "tag": {
+              "description": "The tag of the image to use.\n\nThis is the value after the `:` in your full image name.\n", 
+              "type": "string"
+            }
+          }, 
+          "type": "object"
+        }, 
+        "memory": {
+          "description": "Set Memory limits & guarantees that are enforced for each user.\n\nTODO: Link to k8s docs about Memory limits and guarantees.\n", 
+          "properties": {
+            "guarantee": {
+              "type": "string"
+            }, 
+            "limit": {
+              "type": "string"
+            }
+          }, 
+          "type": "object"
+        }
+      }, 
+      "type": "object"
+    }
+  }, 
+  "title": "Config", 
+  "type": "object"
+}
