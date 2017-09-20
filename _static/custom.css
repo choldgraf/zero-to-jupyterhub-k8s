@@ -6,6 +6,15 @@ div#helm-chart-schema h6 {
     font-family: courier new;
 }
 
+div#helm-chart-schema h2 li,
+div#helm-chart-schema h3 li,
+div#helm-chart-schema h4 li,
+div#helm-chart-schema h5 li,
+div#helm-chart-schema h6 li {
+  margin-left: 5%;
+}
+
+
 h3, h3 ~ * {
   margin-left: 3% !important;
 }

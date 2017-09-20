@@ -44,81 +44,73 @@
           <div class="body" role="main">
             
   <div class="section" id="helm-chart-schema">
-<span id="id1"></span><h1>Helm Chart Schema<a class="headerlink" href="#helm-chart-schema" title="Permalink to this headline">¶</a></h1>
-<p>The <a class="reference external" href="https://github.com/jupyterhub/helm-chart">JupyterHub helm chart</a>
-is configurable so that you can customize your
-Kubernetes setup however you’d like. You can extend user resources, build
-off of different Docker images, manage security and authentication, and more.</p>
-<p>Below is a description of the fields that are exposed with the JupyterHub
-helm chart. For more detailed information about some specific things you can do
-with modifications to the helm chart, see the <a class="reference internal" href="extending-jupyterhub.html#extending-jupyterhub"><span class="std std-ref">Extending your JupyterHub setup</span></a> and
-<a class="reference internal" href="user-experience.html#user-experience"><span class="std std-ref">Customizing the User Experience</span></a>.</p>
+<span id="helm-chart-schema"></span><span id="id1"></span><h1>Helm Chart Schema<a class="headerlink" href="#helm-chart-schema" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference external" href="https://github.com/jupyterhub/helm-chart">JupyterHub helm chart</a>. is configurable so that you can customize your Kubernetes setup however you'd like. You can extend user resources, build off of different Docker images, manage security and authentication, and more.</p>
+<p>Below is a description of the fields that are exposed with the JupyterHub helm chart. For more detailed information about some specific things you can do with modifications to the helm chart, see the <a class="reference external" href="extending-jupyterhub.html">extending jupyterhub</a> and</p>
+<p><a class="reference external" href="user-experience.html">user experience</a> pages.</p>
 <div class="section" id="hub">
-<h2>hub<a class="headerlink" href="#hub" title="Permalink to this headline">¶</a></h2>
+<span id="hub"></span><h2>hub<a class="headerlink" href="#hub" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="hub-cookiesecret">
-<h3>hub.cookieSecret<a class="headerlink" href="#hub-cookiesecret" title="Permalink to this headline">¶</a></h3>
+<span id="hub-cookiesecret"></span><h3>hub.cookieSecret<a class="headerlink" href="#hub-cookiesecret" title="Permalink to this headline">¶</a></h3>
 <p>A 64-byte cryptographically secure randomly generated string used to sign values of
 secure cookies set by the hub. If unset, jupyterhub will generate one on startup and
-save it in the file <cite>jupyterhub_cookie_secret</cite> in the <cite>/srv/jupyterhub</cite> directory of
-the hub container. Value set here will override the value in <cite>jupyterhub_cookie_secret</cite>.</p>
+save it in the file <code class="docutils literal"><span class="pre">jupyterhub_cookie_secret</span></code> in the <code class="docutils literal"><span class="pre">/srv/jupyterhub</span></code> directory of
+the hub container. Value set here will override the value in <code class="docutils literal"><span class="pre">jupyterhub_cookie_secret</span></code>.</p>
 <p>You do not need to set this at all if you are using the default configuration for
-storing databases - sqlite on a persistent volume (with <cite>hub.db.type</cite> set to the
-default <cite>sqlite-pvc</cite>). If you are using an external database, then you must set this
+storing databases - sqlite on a persistent volume (with <code class="docutils literal"><span class="pre">hub.db.type</span></code> set to the
+default <code class="docutils literal"><span class="pre">sqlite-pvc</span></code>). If you are using an external database, then you must set this
 value explicitly - or your users will keep getting logged out each time the hub pod
 restarts.</p>
-<p>This must be generated with <cite>openssl rand -hex 32</cite>.</p>
+<p>This must be generated with <code class="docutils literal"><span class="pre">openssl</span> <span class="pre">rand</span> <span class="pre">-hex</span> <span class="pre">32</span></code>.</p>
 <p>Changing this value will all user logins to be invalidated. If this secret leaks,
 <em>immediately</em> change it to something else, or user data can be compromised</p>
 </div>
 <div class="section" id="hub-imagepullpolicy">
-<h3>hub.imagePullPolicy<a class="headerlink" href="#hub-imagepullpolicy" title="Permalink to this headline">¶</a></h3>
+<span id="hub-imagepullpolicy"></span><h3>hub.imagePullPolicy<a class="headerlink" href="#hub-imagepullpolicy" title="Permalink to this headline">¶</a></h3>
 <p>Set the imagePullPolicy on the hub pod.</p>
-<p>See [the kubernetes docs](<a class="reference external" href="https://kubernetes.io/docs/concepts/containers/images/#updating-images">https://kubernetes.io/docs/concepts/containers/images/#updating-images</a>)
+<p>See <a class="reference external" href="https://kubernetes.io/docs/concepts/containers/images/#updating-images">the kubernetes docs</a>
 for more info on what the values mean.</p>
 </div>
 <div class="section" id="hub-image">
-<h3>hub.image<a class="headerlink" href="#hub-image" title="Permalink to this headline">¶</a></h3>
+<span id="hub-image"></span><h3>hub.image<a class="headerlink" href="#hub-image" title="Permalink to this headline">¶</a></h3>
 <p>Set custom image name / tag for the hub pod.</p>
 <p>Use this to customize which hub image is used. Note that you must use a version of
 the hub image that was bundled with this particular version of the helm-chart - using
 other images might not work.</p>
 <div class="section" id="hub-image-name">
-<h4>hub.image.name<a class="headerlink" href="#hub-image-name" title="Permalink to this headline">¶</a></h4>
+<span id="hub-image-name"></span><h4>hub.image.name<a class="headerlink" href="#hub-image-name" title="Permalink to this headline">¶</a></h4>
 <p>Name of the image, without the tag.</p>
-<dl class="docutils">
-<dt>Examples:</dt>
-<dd><ul class="first last simple">
+<p>Examples:</p>
+<ul class="simple">
 <li>yuvipanda/wikimedia-hub</li>
 <li>gcr.io/my-project/my-hub</li>
 </ul>
-</dd>
-</dl>
 </div>
 <div class="section" id="hub-image-tag">
-<h4>hub.image.tag<a class="headerlink" href="#hub-image-tag" title="Permalink to this headline">¶</a></h4>
+<span id="hub-image-tag"></span><h4>hub.image.tag<a class="headerlink" href="#hub-image-tag" title="Permalink to this headline">¶</a></h4>
 <p>The tag of the image to pull.</p>
-<p>This is the value after the <cite>:</cite> in your full image name.</p>
+<p>This is the value after the <code class="docutils literal"><span class="pre">:</span></code> in your full image name.</p>
 </div>
 </div>
 <div class="section" id="hub-db">
-<h3>hub.db<a class="headerlink" href="#hub-db" title="Permalink to this headline">¶</a></h3>
+<span id="hub-db"></span><h3>hub.db<a class="headerlink" href="#hub-db" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="hub-db-type">
-<h4>hub.db.type<a class="headerlink" href="#hub-db-type" title="Permalink to this headline">¶</a></h4>
+<span id="hub-db-type"></span><h4>hub.db.type<a class="headerlink" href="#hub-db-type" title="Permalink to this headline">¶</a></h4>
 <p>Type of database backend to use for the hub database.</p>
 <p>The Hub requires a persistent database to function, and this lets you specify
 where it should be stored.</p>
 <p>The various options are:</p>
-<ol class="arabic">
+<ol>
 <li><p class="first"><strong>sqlite-pvc</strong></p>
-<p>Use an <cite>sqlite</cite> database kept on a persistent volume attached to the hub.</p>
+<p>Use an <code class="docutils literal"><span class="pre">sqlite</span></code> database kept on a persistent volume attached to the hub.</p>
 <p>By default, this disk is dynamically created using the default
 [dynamic provisioner]. You can customize how this disk is created / attached
-by setting various properties under <cite>hub.db.pvc</cite>.</p>
+by setting various properties under <code class="docutils literal"><span class="pre">hub.db.pvc</span></code>.</p>
 <p>This is the default setting, and should work well for most cloud provider
 deployments.</p>
 </li>
 <li><p class="first"><strong>sqlite-memory</strong></p>
-<p>Use an in-memory <cite>sqlite</cite> database. This should only be used for testing,
+<p>Use an in-memory <code class="docutils literal"><span class="pre">sqlite</span></code> database. This should only be used for testing,
 since the database is erased whenever the hub pod restarts - causing the hub
 to lose all memory of users who had logged in before.</p>
 <p>When using this for testing, make sure you delete all other objects that the
@@ -128,179 +120,164 @@ Otherwise you might run into errors about duplicate resources.</p>
 <li><p class="first"><strong>mysql</strong></p>
 <p>Use an externaly hosted mysql database.</p>
 <p>You have to specify an sqlalchemy connection string for the mysql database you
-want to connect to in <cite>hub.db.url</cite> if using this option.</p>
-<p>The general format of the connection string is:
-<code class="docutils literal"><span class="pre">`</span>
-<span class="pre">mysql+pymysql://&lt;db-username&gt;:&lt;db-password&gt;&#64;&lt;db-hostname&gt;:&lt;db-port&gt;/&lt;db-name&gt;</span>
-<span class="pre">`</span></code></p>
+want to connect to in <code class="docutils literal"><span class="pre">hub.db.url</span></code> if using this option.</p>
+<p>The general format of the connection string is:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mysql</span><span class="o">+</span><span class="n">pymysql</span><span class="p">:</span><span class="o">//&lt;</span><span class="n">db</span><span class="o">-</span><span class="n">username</span><span class="o">&gt;</span><span class="p">:</span><span class="o">&lt;</span><span class="n">db</span><span class="o">-</span><span class="n">password</span><span class="o">&gt;@&lt;</span><span class="n">db</span><span class="o">-</span><span class="n">hostname</span><span class="o">&gt;</span><span class="p">:</span><span class="o">&lt;</span><span class="n">db</span><span class="o">-</span><span class="n">port</span><span class="o">&gt;/&lt;</span><span class="n">db</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span>
+</pre></div>
+</div>
 <p>The user specified in the connection string must have the rights to create
 tables in the database specified.</p>
-<p>Note that if you use this, you <em>must</em> also set <cite>hub.cookieSecret</cite>.</p>
+<p>Note that if you use this, you <em>must</em> also set <code class="docutils literal"><span class="pre">hub.cookieSecret</span></code>.</p>
 </li>
 <li><p class="first"><strong>postgres</strong></p>
 <p>Use an externaly hosted postgres database.</p>
 <p>You have to specify an sqlalchemy connection string for the postgres database you
-want to connect to in <cite>hub.db.url</cite> if using this option.</p>
-<p>The general format of the connection string is:
-<code class="docutils literal"><span class="pre">`</span>
-<span class="pre">postgres+psycopg2://&lt;db-username&gt;:&lt;db-password&gt;&#64;&lt;db-hostname&gt;:&lt;db-port&gt;/&lt;db-name&gt;</span>
-<span class="pre">`</span></code></p>
+want to connect to in <code class="docutils literal"><span class="pre">hub.db.url</span></code> if using this option.</p>
+<p>The general format of the connection string is:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">postgres</span><span class="o">+</span><span class="n">psycopg2</span><span class="p">:</span><span class="o">//&lt;</span><span class="n">db</span><span class="o">-</span><span class="n">username</span><span class="o">&gt;</span><span class="p">:</span><span class="o">&lt;</span><span class="n">db</span><span class="o">-</span><span class="n">password</span><span class="o">&gt;@&lt;</span><span class="n">db</span><span class="o">-</span><span class="n">hostname</span><span class="o">&gt;</span><span class="p">:</span><span class="o">&lt;</span><span class="n">db</span><span class="o">-</span><span class="n">port</span><span class="o">&gt;/&lt;</span><span class="n">db</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span>
+</pre></div>
+</div>
 <p>The user specified in the connection string must have the rights to create
 tables in the database specified.</p>
-<p>Note that if you use this, you <em>must</em> also set <cite>hub.cookieSecret</cite>.</p>
+<p>Note that if you use this, you <em>must</em> also set <code class="docutils literal"><span class="pre">hub.cookieSecret</span></code>.</p>
 </li>
 </ol>
 </div>
 <div class="section" id="hub-db-pvc">
-<h4>hub.db.pvc<a class="headerlink" href="#hub-db-pvc" title="Permalink to this headline">¶</a></h4>
+<span id="hub-db-pvc"></span><h4>hub.db.pvc<a class="headerlink" href="#hub-db-pvc" title="Permalink to this headline">¶</a></h4>
 <div class="section" id="hub-db-pvc-annotations">
-<h5>hub.db.pvc.annotations<a class="headerlink" href="#hub-db-pvc-annotations" title="Permalink to this headline">¶</a></h5>
+<span id="hub-db-pvc-annotations"></span><h5>hub.db.pvc.annotations<a class="headerlink" href="#hub-db-pvc-annotations" title="Permalink to this headline">¶</a></h5>
 <p>Annotations to apply to the PVC containing the sqlite database.</p>
 <p>TODO: Link to pvc annotations</p>
 </div>
 <div class="section" id="hub-db-pvc-selector">
-<h5>hub.db.pvc.selector<a class="headerlink" href="#hub-db-pvc-selector" title="Permalink to this headline">¶</a></h5>
+<span id="hub-db-pvc-selector"></span><h5>hub.db.pvc.selector<a class="headerlink" href="#hub-db-pvc-selector" title="Permalink to this headline">¶</a></h5>
 <p>Selectors to set for the PVC containing the sqlite database.</p>
 <p>Useful when you are using a static PVC.</p>
 <p>TODO: Link to pvc selector docs.</p>
 </div>
 <div class="section" id="hub-db-pvc-storage">
-<h5>hub.db.pvc.storage<a class="headerlink" href="#hub-db-pvc-storage" title="Permalink to this headline">¶</a></h5>
+<span id="hub-db-pvc-storage"></span><h5>hub.db.pvc.storage<a class="headerlink" href="#hub-db-pvc-storage" title="Permalink to this headline">¶</a></h5>
 <p>Size of disk to request for the database disk.</p>
 </div>
 </div>
 <div class="section" id="hub-db-url">
-<h4>hub.db.url<a class="headerlink" href="#hub-db-url" title="Permalink to this headline">¶</a></h4>
-<p>Connection string when <cite>hub.db.type</cite> is mysql or postgres.</p>
-<p>See documentation for <cite>hub.db.type</cite> for more details on the format of this property.</p>
+<span id="hub-db-url"></span><h4>hub.db.url<a class="headerlink" href="#hub-db-url" title="Permalink to this headline">¶</a></h4>
+<p>Connection string when <code class="docutils literal"><span class="pre">hub.db.type</span></code> is mysql or postgres.</p>
+<p>See documentation for <code class="docutils literal"><span class="pre">hub.db.type</span></code> for more details on the format of this property.</p>
 </div>
 </div>
 <div class="section" id="hub-labels">
-<h3>hub.labels<a class="headerlink" href="#hub-labels" title="Permalink to this headline">¶</a></h3>
+<span id="hub-labels"></span><h3>hub.labels<a class="headerlink" href="#hub-labels" title="Permalink to this headline">¶</a></h3>
 <p>Extra labels to add to the hub pod.</p>
-<p>See [the kubernetes documentation](<a class="reference external" href="https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/">https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/</a>)
+<p>See <a class="reference external" href="https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/">the kubernetes documentation</a>
 to learn more about labels.</p>
 </div>
 <div class="section" id="hub-extraenv">
-<h3>hub.extraEnv<a class="headerlink" href="#hub-extraenv" title="Permalink to this headline">¶</a></h3>
+<span id="hub-extraenv"></span><h3>hub.extraEnv<a class="headerlink" href="#hub-extraenv" title="Permalink to this headline">¶</a></h3>
 <p>Extra environment variables that should be set for the hub pod.</p>
 <p>A dictionary of key value pairs (both strings), where the key is the name of the
 environment value and the value is the value of the environment variable that should
 be set on the hub pod.</p>
-<dl class="docutils">
-<dt>These are usually used in two circumstances:</dt>
-<dd><ul class="first last simple">
-<li>Passing parameters to some custom code specified with <cite>extraConfig</cite></li>
+<p>These are usually used in two circumstances:</p>
+<ul class="simple">
+<li>Passing parameters to some custom code specified with <code class="docutils literal"><span class="pre">extraConfig</span></code></li>
 <li>Passing parameters to an authenticator or spawner that can be directly customized
 by environment variables (rarer)</li>
 </ul>
-</dd>
-</dl>
 </div>
 <div class="section" id="hub-extraconfig">
-<h3>hub.extraConfig<a class="headerlink" href="#hub-extraconfig" title="Permalink to this headline">¶</a></h3>
-<p>Arbitrary extra python based configuration that should be in <cite>jupyterhub_config.py</cite>.</p>
+<span id="hub-extraconfig"></span><h3>hub.extraConfig<a class="headerlink" href="#hub-extraconfig" title="Permalink to this headline">¶</a></h3>
+<p>Arbitrary extra python based configuration that should be in <code class="docutils literal"><span class="pre">jupyterhub_config.py</span></code>.</p>
 <p>This is the <em>escape hatch</em> - if you want to configure JupyterHub to do something specific
 that is not present here as an option, you can just write the raw Python to do it here.</p>
-<dl class="docutils">
-<dt>Non-exhaustive examples of things you can do here:</dt>
-<dd><ul class="first last simple">
+<p>Non-exhaustive examples of things you can do here:</p>
+<ul class="simple">
 <li>Subclass authenticator / spawner to do a custom thing</li>
 <li>Dynamically launch different images for different sets of images</li>
 <li>Inject an auth token from GitHub authenticator into user pod</li>
 <li>Anything else you can think of!</li>
 </ul>
-</dd>
-</dl>
-<p>Since this is usually a multi-line string, you want to format it using YAML’s
-[| operator](<a class="reference external" href="http://www.yaml.org/spec/1.2/spec.html#id2795688">http://www.yaml.org/spec/1.2/spec.html#id2795688</a>).</p>
-<dl class="docutils">
-<dt>For example:</dt>
-<dd><p class="first"><a href="#id2"><span class="problematic" id="id3">``</span></a>`
-hub:</p>
-<blockquote class="last">
-<div><dl class="docutils">
-<dt>extraConfig: |</dt>
-<dd>c.JupyterHub.something = ‘something’
-c.Spawner.somethingelse = ‘something else’</dd>
-</dl>
-</div></blockquote>
-</dd>
-</dl>
+<p>Since this is usually a multi-line string, you want to format it using YAML's
+<a class="reference external" href="http://www.yaml.org/spec/1.2/spec.html#id2795688">| operator</a>.</p>
+<p>For example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">hub</span><span class="p">:</span>
+  <span class="n">extraConfig</span><span class="p">:</span> <span class="o">|</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">JupyterHub</span><span class="o">.</span><span class="n">something</span> <span class="o">=</span> <span class="s1">&#39;something&#39;</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">Spawner</span><span class="o">.</span><span class="n">somethingelse</span> <span class="o">=</span> <span class="s1">&#39;something else&#39;</span>
+</pre></div>
+</div>
 <p>No validation of this python is performed! If you make a mistake here, it will probably
-manifest as either the hub pod going into <cite>Error</cite> or <cite>CrashLoopBackoff</cite> states, or in
-some special cases, the hub running but… just doing very random things. Be careful!</p>
+manifest as either the hub pod going into <code class="docutils literal"><span class="pre">Error</span></code> or <code class="docutils literal"><span class="pre">CrashLoopBackoff</span></code> states, or in
+some special cases, the hub running but... just doing very random things. Be careful!</p>
 </div>
 <div class="section" id="hub-uid">
-<h3>hub.uid<a class="headerlink" href="#hub-uid" title="Permalink to this headline">¶</a></h3>
+<span id="hub-uid"></span><h3>hub.uid<a class="headerlink" href="#hub-uid" title="Permalink to this headline">¶</a></h3>
 <p>The UID the hub process should be running as.
 Use this only if you are building your own image &amp; know that a user with this uid exists inside the hub container! Advanced feature, handle with care!
-Defaults to 1000, which is the uid of the <cite>jovyan</cite> user that is present in the default hub image.</p>
+Defaults to 1000, which is the uid of the <code class="docutils literal"><span class="pre">jovyan</span></code> user that is present in the default hub image.</p>
 </div>
 <div class="section" id="hub-fsgid">
-<h3>hub.fsGid<a class="headerlink" href="#hub-fsgid" title="Permalink to this headline">¶</a></h3>
+<span id="hub-fsgid"></span><h3>hub.fsGid<a class="headerlink" href="#hub-fsgid" title="Permalink to this headline">¶</a></h3>
 <p>The gid the hub process should be using when touching any volumes mounted.
 Use this only if you are building your own image &amp; know that a group with this gid exists inside the hub container! Advanced feature, handle with care!
-Defaults to 1000, which is the uid of the <cite>jovyan</cite> user that is present in the default hub image.</p>
+Defaults to 1000, which is the uid of the <code class="docutils literal"><span class="pre">jovyan</span></code> user that is present in the default hub image.</p>
 </div>
 </div>
 <div class="section" id="proxy">
-<h2>proxy<a class="headerlink" href="#proxy" title="Permalink to this headline">¶</a></h2>
+<span id="proxy"></span><h2>proxy<a class="headerlink" href="#proxy" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="proxy-secrettoken">
-<h3>proxy.secretToken<a class="headerlink" href="#proxy-secrettoken" title="Permalink to this headline">¶</a></h3>
+<span id="proxy-secrettoken"></span><h3>proxy.secretToken<a class="headerlink" href="#proxy-secrettoken" title="Permalink to this headline">¶</a></h3>
 <p>A 64-byte cryptographically secure randomly generated string used to secure communications
 between the hub and the configurable-http-proxy.</p>
-<p>This must be generated with <cite>openssl rand -hex 32</cite>.</p>
+<p>This must be generated with <code class="docutils literal"><span class="pre">openssl</span> <span class="pre">rand</span> <span class="pre">-hex</span> <span class="pre">32</span></code>.</p>
 <p>Changing this value will cause the proxy and hub pods to restart. It is good security
 practice to rotate these values over time. If this secret leaks, <em>immediately</em> change
 it to something else, or user data can be compromised</p>
 </div>
 </div>
 <div class="section" id="singleuser">
-<h2>singleuser<a class="headerlink" href="#singleuser" title="Permalink to this headline">¶</a></h2>
+<span id="singleuser"></span><h2>singleuser<a class="headerlink" href="#singleuser" title="Permalink to this headline">¶</a></h2>
 <p>Options for customizing the environment that is provided to the users after they log in.</p>
 <div class="section" id="singleuser-cpu">
-<h3>singleuser.cpu<a class="headerlink" href="#singleuser-cpu" title="Permalink to this headline">¶</a></h3>
+<span id="singleuser-cpu"></span><h3>singleuser.cpu<a class="headerlink" href="#singleuser-cpu" title="Permalink to this headline">¶</a></h3>
 <p>Set CPU limits &amp; guarantees that are enforced for each user.</p>
 <p>TODO: Link to k8s docs about CPU limits and guarantees.</p>
 <div class="section" id="singleuser-cpu-limit">
-<h4>singleuser.cpu.limit<a class="headerlink" href="#singleuser-cpu-limit" title="Permalink to this headline">¶</a></h4>
+<span id="singleuser-cpu-limit"></span><h4>singleuser.cpu.limit<a class="headerlink" href="#singleuser-cpu-limit" title="Permalink to this headline">¶</a></h4>
 </div>
 <div class="section" id="singleuser-cpu-guarantee">
-<h4>singleuser.cpu.guarantee<a class="headerlink" href="#singleuser-cpu-guarantee" title="Permalink to this headline">¶</a></h4>
+<span id="singleuser-cpu-guarantee"></span><h4>singleuser.cpu.guarantee<a class="headerlink" href="#singleuser-cpu-guarantee" title="Permalink to this headline">¶</a></h4>
 </div>
 </div>
 <div class="section" id="singleuser-memory">
-<h3>singleuser.memory<a class="headerlink" href="#singleuser-memory" title="Permalink to this headline">¶</a></h3>
+<span id="singleuser-memory"></span><h3>singleuser.memory<a class="headerlink" href="#singleuser-memory" title="Permalink to this headline">¶</a></h3>
 <p>Set Memory limits &amp; guarantees that are enforced for each user.</p>
 <p>TODO: Link to k8s docs about Memory limits and guarantees.</p>
 <div class="section" id="singleuser-memory-limit">
-<h4>singleuser.memory.limit<a class="headerlink" href="#singleuser-memory-limit" title="Permalink to this headline">¶</a></h4>
+<span id="singleuser-memory-limit"></span><h4>singleuser.memory.limit<a class="headerlink" href="#singleuser-memory-limit" title="Permalink to this headline">¶</a></h4>
 </div>
 <div class="section" id="singleuser-memory-guarantee">
-<h4>singleuser.memory.guarantee<a class="headerlink" href="#singleuser-memory-guarantee" title="Permalink to this headline">¶</a></h4>
+<span id="singleuser-memory-guarantee"></span><h4>singleuser.memory.guarantee<a class="headerlink" href="#singleuser-memory-guarantee" title="Permalink to this headline">¶</a></h4>
 </div>
 </div>
 <div class="section" id="singleuser-image">
-<h3>singleuser.image<a class="headerlink" href="#singleuser-image" title="Permalink to this headline">¶</a></h3>
+<span id="singleuser-image"></span><h3>singleuser.image<a class="headerlink" href="#singleuser-image" title="Permalink to this headline">¶</a></h3>
 <p>Set custom image name / tag used for spawned users.</p>
 <p>This image is used to launch the pod for each user.</p>
 <div class="section" id="singleuser-image-name">
-<h4>singleuser.image.name<a class="headerlink" href="#singleuser-image-name" title="Permalink to this headline">¶</a></h4>
+<span id="singleuser-image-name"></span><h4>singleuser.image.name<a class="headerlink" href="#singleuser-image-name" title="Permalink to this headline">¶</a></h4>
 <p>Name of the image, without the tag.</p>
-<dl class="docutils">
-<dt>Examples:</dt>
-<dd><ul class="first last simple">
+<p>Examples:</p>
+<ul class="simple">
 <li>yuvipanda/wikimedia-hub-user</li>
 <li>gcr.io/my-project/my-user-image</li>
 </ul>
-</dd>
-</dl>
 </div>
 <div class="section" id="singleuser-image-tag">
-<h4>singleuser.image.tag<a class="headerlink" href="#singleuser-image-tag" title="Permalink to this headline">¶</a></h4>
+<span id="singleuser-image-tag"></span><h4>singleuser.image.tag<a class="headerlink" href="#singleuser-image-tag" title="Permalink to this headline">¶</a></h4>
 <p>The tag of the image to use.</p>
-<p>This is the value after the <cite>:</cite> in your full image name.</p>
+<p>This is the value after the <code class="docutils literal"><span class="pre">:</span></code> in your full image name.</p>
 </div>
 </div>
 </div>
@@ -381,7 +358,7 @@ it to something else, or user data can be compromised</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/schema.rst.txt"
+      <li><a href="_sources/schema.md.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -403,7 +380,7 @@ it to something else, or user data can be compromised</p>
       &copy;2017, Project Jupyter team.
       
       |
-      <a href="_sources/schema.rst.txt"
+      <a href="_sources/schema.md.txt"
           rel="nofollow">Page source</a>
     </div>
 
