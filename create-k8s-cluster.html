@@ -226,8 +226,13 @@ az acs create --orchestrator-type<span class="o">=</span>kubernetes <span class=
 <span id="amazon-aws"></span><h2>Setting up Kubernetes on Amazon Web Services (AWS)<a class="headerlink" href="#setting-up-kubernetes-on-amazon-web-services-aws" title="Permalink to this headline">¶</a></h2>
 <p>AWS does not have native support for Kubernetes, however there are
 many organizations that have put together their own solutions and
-guides for setting up Kubernetes on AWS. We like the <a class="reference external" href="https://s3.amazonaws.com/quickstart-reference/heptio/latest/doc/heptio-kubernetes-on-the-aws-cloud.pdf">Heptio guide</a>,
-and recommend using this for setting up your stack.</p>
+guides for setting up Kubernetes on AWS.</p>
+<p>We like the <a class="reference external" href="https://s3.amazonaws.com/quickstart-reference/heptio/latest/doc/heptio-kubernetes-on-the-aws-cloud.pdf">Heptio guide</a>, and recommend using this for setting up your cluster for clusters
+that span short periods of time (a week long workshop, for example). However, if
+you are setting up a cluster that would need to run for much longer, we recommend you use
+[kops](<a class="reference external" href="https://kubernetes.io/docs/getting-started-guides/kops/">https://kubernetes.io/docs/getting-started-guides/kops/</a>). It is a bit more complex,
+but provides features (such as log collection &amp; cluster upgrades) that are necessary to
+run a longer term cluster.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">The Heptio deployment of Kubernetes on AWS should not be considered
