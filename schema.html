@@ -51,594 +51,298 @@ off of different Docker images, manage security and authentication, and more.</p
 <p>Below is a description of the fields that are exposed with the JupyterHub
 helm chart. For more detailed information about some specific things you can do
 with modifications to the helm chart, see the <a class="reference internal" href="extending-jupyterhub.html#extending-jupyterhub"><span class="std std-ref">Extending your JupyterHub setup</span></a> and
-<a class="reference internal" href="user-experience.html#user-experience"><span class="std std-ref">Customizing the User Experience</span></a> pages.</p>
-<div class="highlight-yaml"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>  1
-  2
-  3
-  4
-  5
-  6
-  7
-  8
-  9
- 10
- 11
- 12
- 13
- 14
- 15
- 16
- 17
- 18
- 19
- 20
- 21
- 22
- 23
- 24
- 25
- 26
- 27
- 28
- 29
- 30
- 31
- 32
- 33
- 34
- 35
- 36
- 37
- 38
- 39
- 40
- 41
- 42
- 43
- 44
- 45
- 46
- 47
- 48
- 49
- 50
- 51
- 52
- 53
- 54
- 55
- 56
- 57
- 58
- 59
- 60
- 61
- 62
- 63
- 64
- 65
- 66
- 67
- 68
- 69
- 70
- 71
- 72
- 73
- 74
- 75
- 76
- 77
- 78
- 79
- 80
- 81
- 82
- 83
- 84
- 85
- 86
- 87
- 88
- 89
- 90
- 91
- 92
- 93
- 94
- 95
- 96
- 97
- 98
- 99
-100
-101
-102
-103
-104
-105
-106
-107
-108
-109
-110
-111
-112
-113
-114
-115
-116
-117
-118
-119
-120
-121
-122
-123
-124
-125
-126
-127
-128
-129
-130
-131
-132
-133
-134
-135
-136
-137
-138
-139
-140
-141
-142
-143
-144
-145
-146
-147
-148
-149
-150
-151
-152
-153
-154
-155
-156
-157
-158
-159
-160
-161
-162
-163
-164
-165
-166
-167
-168
-169
-170
-171
-172
-173
-174
-175
-176
-177
-178
-179
-180
-181
-182
-183
-184
-185
-186
-187
-188
-189
-190
-191
-192
-193
-194
-195
-196
-197
-198
-199
-200
-201
-202
-203
-204
-205
-206
-207
-208
-209
-210
-211
-212
-213
-214
-215
-216
-217
-218
-219
-220
-221
-222
-223
-224
-225
-226
-227
-228
-229
-230
-231
-232
-233
-234
-235
-236
-237
-238
-239
-240
-241
-242
-243
-244
-245
-246
-247
-248
-249
-250
-251
-252
-253
-254
-255
-256
-257
-258
-259
-260
-261
-262
-263
-264
-265
-266
-267
-268
-269
-270
-271
-272
-273
-274
-275
-276
-277
-278
-279
-280
-281
-282
-283
-284
-285
-286
-287
-288
-289
-290
-291
-292
-293</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">title</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Config</span>
-<span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">object</span>
-<span class="l l-Scalar l-Scalar-Plain">properties</span><span class="p p-Indicator">:</span>
-  <span class="l l-Scalar l-Scalar-Plain">hub</span><span class="p p-Indicator">:</span>
-    <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">object</span>
-    <span class="l l-Scalar l-Scalar-Plain">properties</span><span class="p p-Indicator">:</span>
-      <span class="l l-Scalar l-Scalar-Plain">cookieSecret</span><span class="p p-Indicator">:</span>
-        <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">string</span>
-        <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
-          <span class="no">A 64-byte cryptographically secure randomly generated string used to sign values of</span>
-          <span class="no">secure cookies set by the hub. If unset, jupyterhub will generate one on startup and</span>
-          <span class="no">save it in the file `jupyterhub_cookie_secret` in the `/srv/jupyterhub` directory of</span>
-          <span class="no">the hub container. Value set here will override the value in `jupyterhub_cookie_secret`.</span>
-
-          <span class="no">You do not need to set this at all if you are using the default configuration for</span>
-          <span class="no">storing databases - sqlite on a persistent volume (with `hub.db.type` set to the</span>
-          <span class="no">default `sqlite-pvc`). If you are using an external database, then you must set this</span>
-          <span class="no">value explicitly - or your users will keep getting logged out each time the hub pod</span>
-          <span class="no">restarts.</span>
-
-          <span class="no">This must be generated with `openssl rand -hex 32`.</span>
-
-          <span class="no">Changing this value will all user logins to be invalidated. If this secret leaks,</span>
-          <span class="no">*immediately* change it to something else, or user data can be compromised</span>
-      <span class="l l-Scalar l-Scalar-Plain">imagePullPolicy</span><span class="p p-Indicator">:</span>
-        <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">string</span>
-        <span class="l l-Scalar l-Scalar-Plain">enum</span><span class="p p-Indicator">:</span>
-          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">IfNotPresent</span>
-          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">Always</span>
-          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">Never</span>
-        <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
-          <span class="no">Set the imagePullPolicy on the hub pod.</span>
-
-          <span class="no">See [the kubernetes docs](https://kubernetes.io/docs/concepts/containers/images/#updating-images)</span>
-          <span class="no">for more info on what the values mean.</span>
-      <span class="l l-Scalar l-Scalar-Plain">image</span><span class="p p-Indicator">:</span>
-        <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">object</span>
-        <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
-          <span class="no">Set custom image name / tag for the hub pod.</span>
-
-          <span class="no">Use this to customize which hub image is used. Note that you must use a version of</span>
-          <span class="no">the hub image that was bundled with this particular version of the helm-chart - using</span>
-          <span class="no">other images might not work.</span>
-        <span class="l l-Scalar l-Scalar-Plain">properties</span><span class="p p-Indicator">:</span>
-          <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span>
-            <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">string</span>
-            <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
-              <span class="no">Name of the image, without the tag.</span>
-
-              <span class="no">Examples:</span>
-                <span class="no">- yuvipanda/wikimedia-hub</span>
-                <span class="no">- gcr.io/my-project/my-hub</span>
-          <span class="l l-Scalar l-Scalar-Plain">tag</span><span class="p p-Indicator">:</span>
-            <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">string</span>
-            <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
-              <span class="no">The tag of the image to pull.</span>
-
-              <span class="no">This is the value after the `:` in your full image name.</span>
-      <span class="l l-Scalar l-Scalar-Plain">db</span><span class="p p-Indicator">:</span>
-        <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">object</span>
-        <span class="l l-Scalar l-Scalar-Plain">properties</span><span class="p p-Indicator">:</span>
-          <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span>
-            <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">string</span>
-            <span class="l l-Scalar l-Scalar-Plain">enum</span><span class="p p-Indicator">:</span>
-              <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">sqlite-pvc</span>
-              <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">sqlite-memory</span>
-              <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">mysql</span>
-              <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">postgres</span>
-            <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
-              <span class="no">Type of database backend to use for the hub database.</span>
-
-              <span class="no">The Hub requires a persistent database to function, and this lets you specify</span>
-              <span class="no">where it should be stored.</span>
-
-              <span class="no">The various options are:</span>
-
-              <span class="no">1. **sqlite-pvc**</span>
-
-                 <span class="no">Use an `sqlite` database kept on a persistent volume attached to the hub.</span>
-
-                 <span class="no">By default, this disk is dynamically created using the default</span>
-                 <span class="no">[dynamic provisioner]. You can customize how this disk is created / attached</span>
-                 <span class="no">by setting various properties under `hub.db.pvc`.</span>
-
-                 <span class="no">This is the default setting, and should work well for most cloud provider</span>
-                 <span class="no">deployments.</span>
-
-              <span class="no">2. **sqlite-memory**</span>
-
-                 <span class="no">Use an in-memory `sqlite` database. This should only be used for testing,</span>
-                 <span class="no">since the database is erased whenever the hub pod restarts - causing the hub</span>
-                 <span class="no">to lose all memory of users who had logged in before.</span>
-
-                 <span class="no">When using this for testing, make sure you delete all other objects that the</span>
-                 <span class="no">hub has created (such as user pods, user PVCs, etc) every time the hub restarts.</span>
-                 <span class="no">Otherwise you might run into errors about duplicate resources.</span>
-
-              <span class="no">3. **mysql**</span>
-
-                 <span class="no">Use an externaly hosted mysql database.</span>
-
-                 <span class="no">You have to specify an sqlalchemy connection string for the mysql database you</span>
-                 <span class="no">want to connect to in `hub.db.url` if using this option.</span>
-
-                 <span class="no">The general format of the connection string is:</span>
-                 <span class="no">```</span>
-                 <span class="no">mysql+pymysql://&lt;db-username&gt;:&lt;db-password&gt;@&lt;db-hostname&gt;:&lt;db-port&gt;/&lt;db-name&gt;</span>
-                 <span class="no">```</span>
-
-                 <span class="no">The user specified in the connection string must have the rights to create</span>
-                 <span class="no">tables in the database specified.</span>
-
-                 <span class="no">Note that if you use this, you *must* also set `hub.cookieSecret`.</span>
-
-              <span class="no">4. **postgres**</span>
-
-                 <span class="no">Use an externaly hosted postgres database.</span>
-
-                 <span class="no">You have to specify an sqlalchemy connection string for the postgres database you</span>
-                 <span class="no">want to connect to in `hub.db.url` if using this option.</span>
-
-                 <span class="no">The general format of the connection string is:</span>
-                 <span class="no">```</span>
-                 <span class="no">postgres+psycopg2://&lt;db-username&gt;:&lt;db-password&gt;@&lt;db-hostname&gt;:&lt;db-port&gt;/&lt;db-name&gt;</span>
-                 <span class="no">```</span>
-
-                 <span class="no">The user specified in the connection string must have the rights to create</span>
-                 <span class="no">tables in the database specified.</span>
-
-                 <span class="no">Note that if you use this, you *must* also set `hub.cookieSecret`.</span>
-          <span class="l l-Scalar l-Scalar-Plain">pvc</span><span class="p p-Indicator">:</span>
-            <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">object</span>
-            <span class="l l-Scalar l-Scalar-Plain">descripton</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
-              <span class="no">Customize the Persistent Volume Claim used when `hub.db.type` is `sqlite-pvc`.</span>
-            <span class="l l-Scalar l-Scalar-Plain">properties</span><span class="p p-Indicator">:</span>
-              <span class="l l-Scalar l-Scalar-Plain">annotations</span><span class="p p-Indicator">:</span>
-                <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">object</span>
-                <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
-                  <span class="no">Annotations to apply to the PVC containing the sqlite database.</span>
-
-                  <span class="no">TODO: Link to pvc annotations</span>
-              <span class="l l-Scalar l-Scalar-Plain">selector</span><span class="p p-Indicator">:</span>
-                <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">object</span>
-                <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
-                  <span class="no">Selectors to set for the PVC containing the sqlite database.</span>
-
-                  <span class="no">Useful when you are using a static PVC.</span>
-
-                  <span class="no">TODO: Link to pvc selector docs.</span>
-              <span class="l l-Scalar l-Scalar-Plain">storage</span><span class="p p-Indicator">:</span>
-                <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">string</span>
-                <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
-                  <span class="no">Size of disk to request for the database disk.</span>
-          <span class="l l-Scalar l-Scalar-Plain">url</span><span class="p p-Indicator">:</span>
-            <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">string</span>
-            <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
-              <span class="no">Connection string when `hub.db.type` is mysql or postgres.</span>
-
-              <span class="no">See documentation for `hub.db.type` for more details on the format of this property.</span>
-      <span class="l l-Scalar l-Scalar-Plain">labels</span><span class="p p-Indicator">:</span>
-        <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">object</span>
-        <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
-          <span class="no">Extra labels to add to the hub pod.</span>
-
-          <span class="no">See [the kubernetes documentation](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)</span>
-          <span class="no">to learn more about labels.</span>
-      <span class="l l-Scalar l-Scalar-Plain">extraEnv</span><span class="p p-Indicator">:</span>
-        <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">object</span>
-        <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
-          <span class="no">Extra environment variables that should be set for the hub pod.</span>
-
-          <span class="no">A dictionary of key value pairs (both strings), where the key is the name of the</span>
-          <span class="no">environment value and the value is the value of the environment variable that should</span>
-          <span class="no">be set on the hub pod.</span>
-
-          <span class="no">These are usually used in two circumstances:</span>
-            <span class="no">- Passing parameters to some custom code specified with `extraConfig`</span>
-            <span class="no">- Passing parameters to an authenticator or spawner that can be directly customized</span>
-              <span class="no">by environment variables (rarer)</span>
-      <span class="l l-Scalar l-Scalar-Plain">extraConfig</span><span class="p p-Indicator">:</span>
-        <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">string</span>
-        <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
-          <span class="no">Arbitrary extra python based configuration that should be in `jupyterhub_config.py`.</span>
-
-          <span class="no">This is the *escape hatch* - if you want to configure JupyterHub to do something specific</span>
-          <span class="no">that is not present here as an option, you can just write the raw Python to do it here.</span>
-
-          <span class="no">Non-exhaustive examples of things you can do here:</span>
-            <span class="no">- Subclass authenticator / spawner to do a custom thing</span>
-            <span class="no">- Dynamically launch different images for different sets of images</span>
-            <span class="no">- Inject an auth token from GitHub authenticator into user pod</span>
-            <span class="no">- Anything else you can think of!</span>
-
-          <span class="no">Since this is usually a multi-line string, you want to format it using YAML&#39;s</span>
-          <span class="no">[| operator](http://www.yaml.org/spec/1.2/spec.html#id2795688).</span>
-
-          <span class="no">For example:</span>
-            <span class="no">```</span>
-            <span class="no">hub:</span>
-              <span class="no">extraConfig: |</span>
-                <span class="no">c.JupyterHub.something = &#39;something&#39;</span>
-                <span class="no">c.Spawner.somethingelse = &#39;something else&#39;</span>
-
-          <span class="no">No validation of this python is performed! If you make a mistake here, it will probably</span>
-          <span class="no">manifest as either the hub pod going into `Error` or `CrashLoopBackoff` states, or in</span>
-          <span class="no">some special cases, the hub running but... just doing very random things. Be careful!</span>
-      <span class="l l-Scalar l-Scalar-Plain">uid</span><span class="p p-Indicator">:</span>
-        <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">integer</span>
-        <span class="l l-Scalar l-Scalar-Plain">minimum</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">0</span>
-        <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span>
-          <span class="l l-Scalar l-Scalar-Plain">The UID the hub process should be running as.</span>
-
-          <span class="l l-Scalar l-Scalar-Plain">Use this only if you are building your own image &amp; know that a user with this uid</span>
-          <span class="l l-Scalar l-Scalar-Plain">exists inside the hub container! Advanced feature, handle with care!</span>
-
-          <span class="l l-Scalar l-Scalar-Plain">Defaults to 1000, which is the uid of the `jovyan` user that is present in the</span>
-          <span class="l l-Scalar l-Scalar-Plain">default hub image.</span>
-      <span class="l l-Scalar l-Scalar-Plain">fsGid</span><span class="p p-Indicator">:</span>
-        <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">integer</span>
-        <span class="l l-Scalar l-Scalar-Plain">minimum</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">0</span>
-        <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span>
-          <span class="l l-Scalar l-Scalar-Plain">The gid the hub process should be using when touching any volumes mounted.</span>
-
-          <span class="l l-Scalar l-Scalar-Plain">Use this only if you are building your own image &amp; know that a group with this gid</span>
-          <span class="l l-Scalar l-Scalar-Plain">exists inside the hub container! Advanced feature, handle with care!</span>
-
-          <span class="l l-Scalar l-Scalar-Plain">Defaults to 1000, which is the uid of the `jovyan` user that is present in the</span>
-          <span class="l l-Scalar l-Scalar-Plain">default hub image.</span>
-  <span class="l l-Scalar l-Scalar-Plain">proxy</span><span class="p p-Indicator">:</span>
-    <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">object</span>
-    <span class="l l-Scalar l-Scalar-Plain">properties</span><span class="p p-Indicator">:</span>
-      <span class="l l-Scalar l-Scalar-Plain">secretToken</span><span class="p p-Indicator">:</span>
-        <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">string</span>
-        <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
-          <span class="no">A 64-byte cryptographically secure randomly generated string used to secure communications</span>
-          <span class="no">between the hub and the configurable-http-proxy.</span>
-
-          <span class="no">This must be generated with `openssl rand -hex 32`.</span>
-
-          <span class="no">Changing this value will cause the proxy and hub pods to restart. It is good security</span>
-          <span class="no">practice to rotate these values over time. If this secret leaks, *immediately* change</span>
-          <span class="no">it to something else, or user data can be compromised</span>
-    <span class="l l-Scalar l-Scalar-Plain">required</span><span class="p p-Indicator">:</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">secretToken</span>
-
-  <span class="l l-Scalar l-Scalar-Plain">singleuser</span><span class="p p-Indicator">:</span>
-    <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">object</span>
-    <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
-      <span class="no">Options for customizing the environment that is provided to the users after they log in.</span>
-    <span class="l l-Scalar l-Scalar-Plain">properties</span><span class="p p-Indicator">:</span>
-      <span class="l l-Scalar l-Scalar-Plain">cpu</span><span class="p p-Indicator">:</span>
-        <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">object</span>
-        <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
-          <span class="no">Set CPU limits &amp; guarantees that are enforced for each user.</span>
-
-          <span class="no">TODO: Link to k8s docs about CPU limits and guarantees.</span>
-        <span class="l l-Scalar l-Scalar-Plain">properties</span><span class="p p-Indicator">:</span>
-          <span class="l l-Scalar l-Scalar-Plain">limit</span><span class="p p-Indicator">:</span>
-            <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">string</span>
-          <span class="l l-Scalar l-Scalar-Plain">guarantee</span><span class="p p-Indicator">:</span>
-            <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">string</span>
-      <span class="l l-Scalar l-Scalar-Plain">memory</span><span class="p p-Indicator">:</span>
-        <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">object</span>
-        <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
-          <span class="no">Set Memory limits &amp; guarantees that are enforced for each user.</span>
-
-          <span class="no">TODO: Link to k8s docs about Memory limits and guarantees.</span>
-        <span class="l l-Scalar l-Scalar-Plain">properties</span><span class="p p-Indicator">:</span>
-          <span class="l l-Scalar l-Scalar-Plain">limit</span><span class="p p-Indicator">:</span>
-            <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">string</span>
-          <span class="l l-Scalar l-Scalar-Plain">guarantee</span><span class="p p-Indicator">:</span>
-            <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">string</span>
-      <span class="l l-Scalar l-Scalar-Plain">image</span><span class="p p-Indicator">:</span>
-        <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">object</span>
-        <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
-          <span class="no">Set custom image name / tag used for spawned users.</span>
-
-          <span class="no">This image is used to launch the pod for each user.</span>
-        <span class="l l-Scalar l-Scalar-Plain">properties</span><span class="p p-Indicator">:</span>
-          <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span>
-            <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">string</span>
-            <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
-              <span class="no">Name of the image, without the tag.</span>
-
-              <span class="no">Examples:</span>
-                <span class="no">- yuvipanda/wikimedia-hub-user</span>
-                <span class="no">- gcr.io/my-project/my-user-image</span>
-          <span class="l l-Scalar l-Scalar-Plain">tag</span><span class="p p-Indicator">:</span>
-            <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">string</span>
-            <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
-              <span class="no">The tag of the image to use.</span>
-
-              <span class="no">This is the value after the `:` in your full image name.</span>
-</pre></div>
-</td></tr></table></div>
+<a class="reference internal" href="user-experience.html#user-experience"><span class="std std-ref">Customizing the User Experience</span></a>.</p>
+<div class="section" id="hub">
+<h2>hub<a class="headerlink" href="#hub" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="cookiesecret">
+<h3>cookieSecret<a class="headerlink" href="#cookiesecret" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>A 64-byte cryptographically secure randomly generated string used to sign values of
+secure cookies set by the hub. If unset, jupyterhub will generate one on startup and
+save it in the file <cite>jupyterhub_cookie_secret</cite> in the <cite>/srv/jupyterhub</cite> directory of
+the hub container. Value set here will override the value in <cite>jupyterhub_cookie_secret</cite>.</p>
+<p>You do not need to set this at all if you are using the default configuration for
+storing databases - sqlite on a persistent volume (with <cite>hub.db.type</cite> set to the
+default <cite>sqlite-pvc</cite>). If you are using an external database, then you must set this
+value explicitly - or your users will keep getting logged out each time the hub pod
+restarts.</p>
+<p>This must be generated with <cite>openssl rand -hex 32</cite>.</p>
+<p>Changing this value will all user logins to be invalidated. If this secret leaks,
+<em>immediately</em> change it to something else, or user data can be compromised</p>
+</div></blockquote>
+</div>
+<div class="section" id="imagepullpolicy">
+<h3>imagePullPolicy<a class="headerlink" href="#imagepullpolicy" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>Set the imagePullPolicy on the hub pod.</p>
+<p>See [the kubernetes docs](<a class="reference external" href="https://kubernetes.io/docs/concepts/containers/images/#updating-images">https://kubernetes.io/docs/concepts/containers/images/#updating-images</a>)
+for more info on what the values mean.</p>
+</div></blockquote>
+</div>
+<div class="section" id="image">
+<h3>image<a class="headerlink" href="#image" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>Set custom image name / tag for the hub pod.</p>
+<p>Use this to customize which hub image is used. Note that you must use a version of
+the hub image that was bundled with this particular version of the helm-chart - using
+other images might not work.</p>
+</div></blockquote>
+<div class="section" id="name">
+<h4>name<a class="headerlink" href="#name" title="Permalink to this headline">¶</a></h4>
+<blockquote>
+<div><p>Name of the image, without the tag.</p>
+<dl class="docutils">
+<dt>Examples:</dt>
+<dd><ul class="first last simple">
+<li>yuvipanda/wikimedia-hub</li>
+<li>gcr.io/my-project/my-hub</li>
+</ul>
+</dd>
+</dl>
+</div></blockquote>
+</div>
+<div class="section" id="tag">
+<h4>tag<a class="headerlink" href="#tag" title="Permalink to this headline">¶</a></h4>
+<blockquote>
+<div><p>The tag of the image to pull.</p>
+<p>This is the value after the <cite>:</cite> in your full image name.</p>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="db">
+<h3>db<a class="headerlink" href="#db" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="type">
+<h4>type<a class="headerlink" href="#type" title="Permalink to this headline">¶</a></h4>
+<blockquote>
+<div><p>Type of database backend to use for the hub database.</p>
+<p>The Hub requires a persistent database to function, and this lets you specify
+where it should be stored.</p>
+<p>The various options are:</p>
+<ol class="arabic">
+<li><p class="first"><strong>sqlite-pvc</strong></p>
+<p>Use an <cite>sqlite</cite> database kept on a persistent volume attached to the hub.</p>
+<p>By default, this disk is dynamically created using the default
+[dynamic provisioner]. You can customize how this disk is created / attached
+by setting various properties under <cite>hub.db.pvc</cite>.</p>
+<p>This is the default setting, and should work well for most cloud provider
+deployments.</p>
+</li>
+<li><p class="first"><strong>sqlite-memory</strong></p>
+<p>Use an in-memory <cite>sqlite</cite> database. This should only be used for testing,
+since the database is erased whenever the hub pod restarts - causing the hub
+to lose all memory of users who had logged in before.</p>
+<p>When using this for testing, make sure you delete all other objects that the
+hub has created (such as user pods, user PVCs, etc) every time the hub restarts.
+Otherwise you might run into errors about duplicate resources.</p>
+</li>
+<li><p class="first"><strong>mysql</strong></p>
+<p>Use an externaly hosted mysql database.</p>
+<p>You have to specify an sqlalchemy connection string for the mysql database you
+want to connect to in <cite>hub.db.url</cite> if using this option.</p>
+<p>The general format of the connection string is:
+<code class="docutils literal"><span class="pre">`</span>
+<span class="pre">mysql+pymysql://&lt;db-username&gt;:&lt;db-password&gt;&#64;&lt;db-hostname&gt;:&lt;db-port&gt;/&lt;db-name&gt;</span>
+<span class="pre">`</span></code></p>
+<p>The user specified in the connection string must have the rights to create
+tables in the database specified.</p>
+<p>Note that if you use this, you <em>must</em> also set <cite>hub.cookieSecret</cite>.</p>
+</li>
+<li><p class="first"><strong>postgres</strong></p>
+<p>Use an externaly hosted postgres database.</p>
+<p>You have to specify an sqlalchemy connection string for the postgres database you
+want to connect to in <cite>hub.db.url</cite> if using this option.</p>
+<p>The general format of the connection string is:
+<code class="docutils literal"><span class="pre">`</span>
+<span class="pre">postgres+psycopg2://&lt;db-username&gt;:&lt;db-password&gt;&#64;&lt;db-hostname&gt;:&lt;db-port&gt;/&lt;db-name&gt;</span>
+<span class="pre">`</span></code></p>
+<p>The user specified in the connection string must have the rights to create
+tables in the database specified.</p>
+<p>Note that if you use this, you <em>must</em> also set <cite>hub.cookieSecret</cite>.</p>
+</li>
+</ol>
+</div></blockquote>
+</div>
+<div class="section" id="pvc">
+<h4>pvc<a class="headerlink" href="#pvc" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="annotations">
+<h5>annotations<a class="headerlink" href="#annotations" title="Permalink to this headline">¶</a></h5>
+<blockquote>
+<div><p>Annotations to apply to the PVC containing the sqlite database.</p>
+<p>TODO: Link to pvc annotations</p>
+</div></blockquote>
+</div>
+<div class="section" id="selector">
+<h5>selector<a class="headerlink" href="#selector" title="Permalink to this headline">¶</a></h5>
+<blockquote>
+<div><p>Selectors to set for the PVC containing the sqlite database.</p>
+<p>Useful when you are using a static PVC.</p>
+<p>TODO: Link to pvc selector docs.</p>
+</div></blockquote>
+</div>
+<div class="section" id="storage">
+<h5>storage<a class="headerlink" href="#storage" title="Permalink to this headline">¶</a></h5>
+<blockquote>
+<div>Size of disk to request for the database disk.</div></blockquote>
+</div>
+</div>
+<div class="section" id="url">
+<h4>url<a class="headerlink" href="#url" title="Permalink to this headline">¶</a></h4>
+<blockquote>
+<div><p>Connection string when <cite>hub.db.type</cite> is mysql or postgres.</p>
+<p>See documentation for <cite>hub.db.type</cite> for more details on the format of this property.</p>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="labels">
+<h3>labels<a class="headerlink" href="#labels" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>Extra labels to add to the hub pod.</p>
+<p>See [the kubernetes documentation](<a class="reference external" href="https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/">https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/</a>)
+to learn more about labels.</p>
+</div></blockquote>
+</div>
+<div class="section" id="extraenv">
+<h3>extraEnv<a class="headerlink" href="#extraenv" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>Extra environment variables that should be set for the hub pod.</p>
+<p>A dictionary of key value pairs (both strings), where the key is the name of the
+environment value and the value is the value of the environment variable that should
+be set on the hub pod.</p>
+<dl class="docutils">
+<dt>These are usually used in two circumstances:</dt>
+<dd><ul class="first last simple">
+<li>Passing parameters to some custom code specified with <cite>extraConfig</cite></li>
+<li>Passing parameters to an authenticator or spawner that can be directly customized
+by environment variables (rarer)</li>
+</ul>
+</dd>
+</dl>
+</div></blockquote>
+</div>
+<div class="section" id="extraconfig">
+<h3>extraConfig<a class="headerlink" href="#extraconfig" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>Arbitrary extra python based configuration that should be in <cite>jupyterhub_config.py</cite>.</p>
+<p>This is the <em>escape hatch</em> - if you want to configure JupyterHub to do something specific
+that is not present here as an option, you can just write the raw Python to do it here.</p>
+<dl class="docutils">
+<dt>Non-exhaustive examples of things you can do here:</dt>
+<dd><ul class="first last simple">
+<li>Subclass authenticator / spawner to do a custom thing</li>
+<li>Dynamically launch different images for different sets of images</li>
+<li>Inject an auth token from GitHub authenticator into user pod</li>
+<li>Anything else you can think of!</li>
+</ul>
+</dd>
+</dl>
+<p>Since this is usually a multi-line string, you want to format it using YAML’s
+[| operator](<a class="reference external" href="http://www.yaml.org/spec/1.2/spec.html#id2795688">http://www.yaml.org/spec/1.2/spec.html#id2795688</a>).</p>
+<dl class="docutils">
+<dt>For example:</dt>
+<dd><p class="first"><a href="#id2"><span class="problematic" id="id3">``</span></a>`
+hub:</p>
+<blockquote class="last">
+<div><dl class="docutils">
+<dt>extraConfig: |</dt>
+<dd>c.JupyterHub.something = ‘something’
+c.Spawner.somethingelse = ‘something else’</dd>
+</dl>
+</div></blockquote>
+</dd>
+</dl>
+<p>No validation of this python is performed! If you make a mistake here, it will probably
+manifest as either the hub pod going into <cite>Error</cite> or <cite>CrashLoopBackoff</cite> states, or in
+some special cases, the hub running but… just doing very random things. Be careful!</p>
+</div></blockquote>
+</div>
+<div class="section" id="uid">
+<h3>uid<a class="headerlink" href="#uid" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div>The UID the hub process should be running as.
+Use this only if you are building your own image &amp; know that a user with this uid exists inside the hub container! Advanced feature, handle with care!
+Defaults to 1000, which is the uid of the <cite>jovyan</cite> user that is present in the default hub image.</div></blockquote>
+</div>
+<div class="section" id="fsgid">
+<h3>fsGid<a class="headerlink" href="#fsgid" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div>The gid the hub process should be using when touching any volumes mounted.
+Use this only if you are building your own image &amp; know that a group with this gid exists inside the hub container! Advanced feature, handle with care!
+Defaults to 1000, which is the uid of the <cite>jovyan</cite> user that is present in the default hub image.</div></blockquote>
+</div>
+</div>
+<div class="section" id="proxy">
+<h2>proxy<a class="headerlink" href="#proxy" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="secrettoken">
+<h3>secretToken<a class="headerlink" href="#secrettoken" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>A 64-byte cryptographically secure randomly generated string used to secure communications
+between the hub and the configurable-http-proxy.</p>
+<p>This must be generated with <cite>openssl rand -hex 32</cite>.</p>
+<p>Changing this value will cause the proxy and hub pods to restart. It is good security
+practice to rotate these values over time. If this secret leaks, <em>immediately</em> change
+it to something else, or user data can be compromised</p>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="singleuser">
+<h2>singleuser<a class="headerlink" href="#singleuser" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div>Options for customizing the environment that is provided to the users after they log in.</div></blockquote>
+<div class="section" id="cpu">
+<h3>cpu<a class="headerlink" href="#cpu" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>Set CPU limits &amp; guarantees that are enforced for each user.</p>
+<p>TODO: Link to k8s docs about CPU limits and guarantees.</p>
+</div></blockquote>
+<div class="section" id="limit">
+<h4>limit<a class="headerlink" href="#limit" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="guarantee">
+<h4>guarantee<a class="headerlink" href="#guarantee" title="Permalink to this headline">¶</a></h4>
+</div>
+</div>
+<div class="section" id="memory">
+<h3>memory<a class="headerlink" href="#memory" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>Set Memory limits &amp; guarantees that are enforced for each user.</p>
+<p>TODO: Link to k8s docs about Memory limits and guarantees.</p>
+</div></blockquote>
+<div class="section" id="id4">
+<h4>limit<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="id5">
+<h4>guarantee<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h4>
+</div>
+</div>
+<div class="section" id="id6">
+<h3>image<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>Set custom image name / tag used for spawned users.</p>
+<p>This image is used to launch the pod for each user.</p>
+</div></blockquote>
+<div class="section" id="id7">
+<h4>name<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h4>
+<blockquote>
+<div><p>Name of the image, without the tag.</p>
+<dl class="docutils">
+<dt>Examples:</dt>
+<dd><ul class="first last simple">
+<li>yuvipanda/wikimedia-hub-user</li>
+<li>gcr.io/my-project/my-user-image</li>
+</ul>
+</dd>
+</dl>
+</div></blockquote>
+</div>
+<div class="section" id="id8">
+<h4>tag<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h4>
+<blockquote>
+<div><p>The tag of the image to use.</p>
+<p>This is the value after the <cite>:</cite> in your full image name.</p>
+</div></blockquote>
+</div>
+</div>
+</div>
 </div>
 
 
@@ -649,7 +353,62 @@ with modifications to the helm chart, see the <a class="reference internal" href
         <div class="sphinxsidebarwrapper">
             <p class="logo"><a href="index.html">
               <img class="logo" src="_static/logo.png" alt="Logo"/>
-            </a></p><div class="relations">
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Helm Chart Schema</a><ul>
+<li><a class="reference internal" href="#hub">hub</a><ul>
+<li><a class="reference internal" href="#cookiesecret">cookieSecret</a></li>
+<li><a class="reference internal" href="#imagepullpolicy">imagePullPolicy</a></li>
+<li><a class="reference internal" href="#image">image</a><ul>
+<li><a class="reference internal" href="#name">name</a></li>
+<li><a class="reference internal" href="#tag">tag</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#db">db</a><ul>
+<li><a class="reference internal" href="#type">type</a></li>
+<li><a class="reference internal" href="#pvc">pvc</a><ul>
+<li><a class="reference internal" href="#annotations">annotations</a></li>
+<li><a class="reference internal" href="#selector">selector</a></li>
+<li><a class="reference internal" href="#storage">storage</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#url">url</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#labels">labels</a></li>
+<li><a class="reference internal" href="#extraenv">extraEnv</a></li>
+<li><a class="reference internal" href="#extraconfig">extraConfig</a></li>
+<li><a class="reference internal" href="#uid">uid</a></li>
+<li><a class="reference internal" href="#fsgid">fsGid</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#proxy">proxy</a><ul>
+<li><a class="reference internal" href="#secrettoken">secretToken</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#singleuser">singleuser</a><ul>
+<li><a class="reference internal" href="#cpu">cpu</a><ul>
+<li><a class="reference internal" href="#limit">limit</a></li>
+<li><a class="reference internal" href="#guarantee">guarantee</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#memory">memory</a><ul>
+<li><a class="reference internal" href="#id4">limit</a></li>
+<li><a class="reference internal" href="#id5">guarantee</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id6">image</a><ul>
+<li><a class="reference internal" href="#id7">name</a></li>
+<li><a class="reference internal" href="#id8">tag</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
