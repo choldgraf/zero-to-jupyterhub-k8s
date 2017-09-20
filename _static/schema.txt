@@ -1,7 +1,9 @@
 hub
 ~~~
+
 hub.cookieSecret
-````````````````
+^^^^^^^^^^^^^^^^
+
 A 64-byte cryptographically secure randomly generated string used to sign values of
 secure cookies set by the hub. If unset, jupyterhub will generate one on startup and
 save it in the file `jupyterhub_cookie_secret` in the `/srv/jupyterhub` directory of
@@ -18,39 +20,50 @@ This must be generated with `openssl rand -hex 32`.
 Changing this value will all user logins to be invalidated. If this secret leaks,
 *immediately* change it to something else, or user data can be compromised
 
+
 hub.imagePullPolicy
-```````````````````
+^^^^^^^^^^^^^^^^^^^
+
 Set the imagePullPolicy on the hub pod.
 
 See [the kubernetes docs](https://kubernetes.io/docs/concepts/containers/images/#updating-images)
 for more info on what the values mean.
 
+
 hub.image
-`````````
+^^^^^^^^^
+
 Set custom image name / tag for the hub pod.
 
 Use this to customize which hub image is used. Note that you must use a version of
 the hub image that was bundled with this particular version of the helm-chart - using
 other images might not work.
 
+
 hub.image.name
-..............
+""""""""""""""
+
 Name of the image, without the tag.
 
 Examples:
   - yuvipanda/wikimedia-hub
   - gcr.io/my-project/my-hub
 
+
 hub.image.tag
-.............
+"""""""""""""
+
 The tag of the image to pull.
 
 This is the value after the `:` in your full image name.
 
+
 hub.db
-``````
+^^^^^^
+
 hub.db.type
-...........
+"""""""""""
+
 Type of database backend to use for the hub database.
 
 The Hub requires a persistent database to function, and this lets you specify
@@ -113,41 +126,54 @@ The various options are:
 
    Note that if you use this, you *must* also set `hub.cookieSecret`.
 
+
 hub.db.pvc
-..........
+""""""""""
+
 hub.db.pvc.annotations
 ,,,,,,,,,,,,,,,,,,,,,,
+
 Annotations to apply to the PVC containing the sqlite database.
 
 TODO: Link to pvc annotations
 
+
 hub.db.pvc.selector
 ,,,,,,,,,,,,,,,,,,,
+
 Selectors to set for the PVC containing the sqlite database.
 
 Useful when you are using a static PVC.
 
 TODO: Link to pvc selector docs.
 
+
 hub.db.pvc.storage
 ,,,,,,,,,,,,,,,,,,
+
 Size of disk to request for the database disk.
 
+
 hub.db.url
-..........
+""""""""""
+
 Connection string when `hub.db.type` is mysql or postgres.
 
 See documentation for `hub.db.type` for more details on the format of this property.
 
+
 hub.labels
-``````````
+^^^^^^^^^^
+
 Extra labels to add to the hub pod.
 
 See [the kubernetes documentation](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
 to learn more about labels.
 
+
 hub.extraEnv
-````````````
+^^^^^^^^^^^^
+
 Extra environment variables that should be set for the hub pod.
 
 A dictionary of key value pairs (both strings), where the key is the name of the
@@ -159,8 +185,10 @@ These are usually used in two circumstances:
   - Passing parameters to an authenticator or spawner that can be directly customized
     by environment variables (rarer)
 
+
 hub.extraConfig
-```````````````
+^^^^^^^^^^^^^^^
+
 Arbitrary extra python based configuration that should be in `jupyterhub_config.py`.
 
 This is the *escape hatch* - if you want to configure JupyterHub to do something specific
@@ -186,20 +214,27 @@ No validation of this python is performed! If you make a mistake here, it will p
 manifest as either the hub pod going into `Error` or `CrashLoopBackoff` states, or in
 some special cases, the hub running but... just doing very random things. Be careful!
 
+
 hub.uid
-```````
+^^^^^^^
+
 The UID the hub process should be running as.
 Use this only if you are building your own image & know that a user with this uid exists inside the hub container! Advanced feature, handle with care!
 Defaults to 1000, which is the uid of the `jovyan` user that is present in the default hub image.
+
 hub.fsGid
-`````````
+^^^^^^^^^
+
 The gid the hub process should be using when touching any volumes mounted.
 Use this only if you are building your own image & know that a group with this gid exists inside the hub container! Advanced feature, handle with care!
 Defaults to 1000, which is the uid of the `jovyan` user that is present in the default hub image.
+
 proxy
 ~~~~~
+
 proxy.secretToken
-`````````````````
+^^^^^^^^^^^^^^^^^
+
 A 64-byte cryptographically secure randomly generated string used to secure communications
 between the hub and the configurable-http-proxy.
 
@@ -209,46 +244,63 @@ Changing this value will cause the proxy and hub pods to restart. It is good sec
 practice to rotate these values over time. If this secret leaks, *immediately* change
 it to something else, or user data can be compromised
 
+
 singleuser
 ~~~~~~~~~~
+
 Options for customizing the environment that is provided to the users after they log in.
 
+
 singleuser.cpu
-``````````````
+^^^^^^^^^^^^^^
+
 Set CPU limits & guarantees that are enforced for each user.
 
 TODO: Link to k8s docs about CPU limits and guarantees.
 
+
 singleuser.cpu.limit
-....................
+""""""""""""""""""""
+
 singleuser.cpu.guarantee
-........................
+""""""""""""""""""""""""
+
 singleuser.memory
-`````````````````
+^^^^^^^^^^^^^^^^^
+
 Set Memory limits & guarantees that are enforced for each user.
 
 TODO: Link to k8s docs about Memory limits and guarantees.
 
+
 singleuser.memory.limit
-.......................
+"""""""""""""""""""""""
+
 singleuser.memory.guarantee
-...........................
+"""""""""""""""""""""""""""
+
 singleuser.image
-````````````````
+^^^^^^^^^^^^^^^^
+
 Set custom image name / tag used for spawned users.
 
 This image is used to launch the pod for each user.
 
+
 singleuser.image.name
-.....................
+"""""""""""""""""""""
+
 Name of the image, without the tag.
 
 Examples:
   - yuvipanda/wikimedia-hub-user
   - gcr.io/my-project/my-user-image
 
+
 singleuser.image.tag
-....................
+""""""""""""""""""""
+
 The tag of the image to use.
 
 This is the value after the `:` in your full image name.
+

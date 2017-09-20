@@ -235,17 +235,20 @@ some special cases, the hub running but… just doing very random things. Be car
 <h3>hub.uid<a class="headerlink" href="#hub-uid" title="Permalink to this headline">¶</a></h3>
 <p>The UID the hub process should be running as.
 Use this only if you are building your own image &amp; know that a user with this uid exists inside the hub container! Advanced feature, handle with care!
-Defaults to 1000, which is the uid of the <cite>jovyan</cite> user that is present in the default hub image.
-hub.fsGid
-<code class="docutils literal"><span class="pre">`````</span></code>
-The gid the hub process should be using when touching any volumes mounted.
+Defaults to 1000, which is the uid of the <cite>jovyan</cite> user that is present in the default hub image.</p>
+</div>
+<div class="section" id="hub-fsgid">
+<h3>hub.fsGid<a class="headerlink" href="#hub-fsgid" title="Permalink to this headline">¶</a></h3>
+<p>The gid the hub process should be using when touching any volumes mounted.
 Use this only if you are building your own image &amp; know that a group with this gid exists inside the hub container! Advanced feature, handle with care!
-Defaults to 1000, which is the uid of the <cite>jovyan</cite> user that is present in the default hub image.
-proxy
-~~~~~
-proxy.secretToken
-<code class="docutils literal"><span class="pre">`````````````</span></code>
-A 64-byte cryptographically secure randomly generated string used to secure communications
+Defaults to 1000, which is the uid of the <cite>jovyan</cite> user that is present in the default hub image.</p>
+</div>
+</div>
+<div class="section" id="proxy">
+<h2>proxy<a class="headerlink" href="#proxy" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="proxy-secrettoken">
+<h3>proxy.secretToken<a class="headerlink" href="#proxy-secrettoken" title="Permalink to this headline">¶</a></h3>
+<p>A 64-byte cryptographically secure randomly generated string used to secure communications
 between the hub and the configurable-http-proxy.</p>
 <p>This must be generated with <cite>openssl rand -hex 32</cite>.</p>
 <p>Changing this value will cause the proxy and hub pods to restart. It is good security
@@ -338,6 +341,11 @@ it to something else, or user data can be compromised</p>
 <li><a class="reference internal" href="#hub-extraenv">hub.extraEnv</a></li>
 <li><a class="reference internal" href="#hub-extraconfig">hub.extraConfig</a></li>
 <li><a class="reference internal" href="#hub-uid">hub.uid</a></li>
+<li><a class="reference internal" href="#hub-fsgid">hub.fsGid</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#proxy">proxy</a><ul>
+<li><a class="reference internal" href="#proxy-secrettoken">proxy.secretToken</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#singleuser">singleuser</a><ul>
