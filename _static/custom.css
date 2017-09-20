@@ -4,7 +4,6 @@ div#helm-chart-schema h4,
 div#helm-chart-schema h5,
 div#helm-chart-schema h6 {
     font-family: courier new;
-    background-color: #ddd;
 }
 
 h3, h3 ~ * {

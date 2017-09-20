@@ -55,8 +55,8 @@ with modifications to the helm chart, see the <a class="reference internal" href
 <a class="reference internal" href="user-experience.html#user-experience"><span class="std std-ref">Customizing the User Experience</span></a>.</p>
 <div class="section" id="hub">
 <h2>hub<a class="headerlink" href="#hub" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="cookiesecret">
-<h3>cookieSecret<a class="headerlink" href="#cookiesecret" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="hub-cookiesecret">
+<h3>hub.cookieSecret<a class="headerlink" href="#hub-cookiesecret" title="Permalink to this headline">¶</a></h3>
 <p>A 64-byte cryptographically secure randomly generated string used to sign values of
 secure cookies set by the hub. If unset, jupyterhub will generate one on startup and
 save it in the file <cite>jupyterhub_cookie_secret</cite> in the <cite>/srv/jupyterhub</cite> directory of
@@ -70,20 +70,20 @@ restarts.</p>
 <p>Changing this value will all user logins to be invalidated. If this secret leaks,
 <em>immediately</em> change it to something else, or user data can be compromised</p>
 </div>
-<div class="section" id="imagepullpolicy">
-<h3>imagePullPolicy<a class="headerlink" href="#imagepullpolicy" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="hub-imagepullpolicy">
+<h3>hub.imagePullPolicy<a class="headerlink" href="#hub-imagepullpolicy" title="Permalink to this headline">¶</a></h3>
 <p>Set the imagePullPolicy on the hub pod.</p>
 <p>See [the kubernetes docs](<a class="reference external" href="https://kubernetes.io/docs/concepts/containers/images/#updating-images">https://kubernetes.io/docs/concepts/containers/images/#updating-images</a>)
 for more info on what the values mean.</p>
 </div>
-<div class="section" id="image">
-<h3>image<a class="headerlink" href="#image" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="hub-image">
+<h3>hub.image<a class="headerlink" href="#hub-image" title="Permalink to this headline">¶</a></h3>
 <p>Set custom image name / tag for the hub pod.</p>
 <p>Use this to customize which hub image is used. Note that you must use a version of
 the hub image that was bundled with this particular version of the helm-chart - using
 other images might not work.</p>
-<div class="section" id="name">
-<h4>name<a class="headerlink" href="#name" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="hub-image-name">
+<h4>hub.image.name<a class="headerlink" href="#hub-image-name" title="Permalink to this headline">¶</a></h4>
 <p>Name of the image, without the tag.</p>
 <dl class="docutils">
 <dt>Examples:</dt>
@@ -94,16 +94,16 @@ other images might not work.</p>
 </dd>
 </dl>
 </div>
-<div class="section" id="tag">
-<h4>tag<a class="headerlink" href="#tag" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="hub-image-tag">
+<h4>hub.image.tag<a class="headerlink" href="#hub-image-tag" title="Permalink to this headline">¶</a></h4>
 <p>The tag of the image to pull.</p>
 <p>This is the value after the <cite>:</cite> in your full image name.</p>
 </div>
 </div>
-<div class="section" id="db">
-<h3>db<a class="headerlink" href="#db" title="Permalink to this headline">¶</a></h3>
-<div class="section" id="type">
-<h4>type<a class="headerlink" href="#type" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="hub-db">
+<h3>hub.db<a class="headerlink" href="#hub-db" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="hub-db-type">
+<h4>hub.db.type<a class="headerlink" href="#hub-db-type" title="Permalink to this headline">¶</a></h4>
 <p>Type of database backend to use for the hub database.</p>
 <p>The Hub requires a persistent database to function, and this lets you specify
 where it should be stored.</p>
@@ -151,38 +151,38 @@ tables in the database specified.</p>
 </li>
 </ol>
 </div>
-<div class="section" id="pvc">
-<h4>pvc<a class="headerlink" href="#pvc" title="Permalink to this headline">¶</a></h4>
-<div class="section" id="annotations">
-<h5>annotations<a class="headerlink" href="#annotations" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="hub-db-pvc">
+<h4>hub.db.pvc<a class="headerlink" href="#hub-db-pvc" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="hub-db-pvc-annotations">
+<h5>hub.db.pvc.annotations<a class="headerlink" href="#hub-db-pvc-annotations" title="Permalink to this headline">¶</a></h5>
 <p>Annotations to apply to the PVC containing the sqlite database.</p>
 <p>TODO: Link to pvc annotations</p>
 </div>
-<div class="section" id="selector">
-<h5>selector<a class="headerlink" href="#selector" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="hub-db-pvc-selector">
+<h5>hub.db.pvc.selector<a class="headerlink" href="#hub-db-pvc-selector" title="Permalink to this headline">¶</a></h5>
 <p>Selectors to set for the PVC containing the sqlite database.</p>
 <p>Useful when you are using a static PVC.</p>
 <p>TODO: Link to pvc selector docs.</p>
 </div>
-<div class="section" id="storage">
-<h5>storage<a class="headerlink" href="#storage" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="hub-db-pvc-storage">
+<h5>hub.db.pvc.storage<a class="headerlink" href="#hub-db-pvc-storage" title="Permalink to this headline">¶</a></h5>
 <p>Size of disk to request for the database disk.</p>
 </div>
 </div>
-<div class="section" id="url">
-<h4>url<a class="headerlink" href="#url" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="hub-db-url">
+<h4>hub.db.url<a class="headerlink" href="#hub-db-url" title="Permalink to this headline">¶</a></h4>
 <p>Connection string when <cite>hub.db.type</cite> is mysql or postgres.</p>
 <p>See documentation for <cite>hub.db.type</cite> for more details on the format of this property.</p>
 </div>
 </div>
-<div class="section" id="labels">
-<h3>labels<a class="headerlink" href="#labels" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="hub-labels">
+<h3>hub.labels<a class="headerlink" href="#hub-labels" title="Permalink to this headline">¶</a></h3>
 <p>Extra labels to add to the hub pod.</p>
 <p>See [the kubernetes documentation](<a class="reference external" href="https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/">https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/</a>)
 to learn more about labels.</p>
 </div>
-<div class="section" id="extraenv">
-<h3>extraEnv<a class="headerlink" href="#extraenv" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="hub-extraenv">
+<h3>hub.extraEnv<a class="headerlink" href="#hub-extraenv" title="Permalink to this headline">¶</a></h3>
 <p>Extra environment variables that should be set for the hub pod.</p>
 <p>A dictionary of key value pairs (both strings), where the key is the name of the
 environment value and the value is the value of the environment variable that should
@@ -197,8 +197,8 @@ by environment variables (rarer)</li>
 </dd>
 </dl>
 </div>
-<div class="section" id="extraconfig">
-<h3>extraConfig<a class="headerlink" href="#extraconfig" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="hub-extraconfig">
+<h3>hub.extraConfig<a class="headerlink" href="#hub-extraconfig" title="Permalink to this headline">¶</a></h3>
 <p>Arbitrary extra python based configuration that should be in <cite>jupyterhub_config.py</cite>.</p>
 <p>This is the <em>escape hatch</em> - if you want to configure JupyterHub to do something specific
 that is not present here as an option, you can just write the raw Python to do it here.</p>
@@ -231,20 +231,20 @@ c.Spawner.somethingelse = ‘something else’</dd>
 manifest as either the hub pod going into <cite>Error</cite> or <cite>CrashLoopBackoff</cite> states, or in
 some special cases, the hub running but… just doing very random things. Be careful!</p>
 </div>
-<div class="section" id="uid">
-<h3>uid<a class="headerlink" href="#uid" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="hub-uid">
+<h3>hub.uid<a class="headerlink" href="#hub-uid" title="Permalink to this headline">¶</a></h3>
 <p>The UID the hub process should be running as.
 Use this only if you are building your own image &amp; know that a user with this uid exists inside the hub container! Advanced feature, handle with care!
 Defaults to 1000, which is the uid of the <cite>jovyan</cite> user that is present in the default hub image.
-fsGid
-<code class="docutils literal"><span class="pre">`</span></code>
+hub.fsGid
+<code class="docutils literal"><span class="pre">`````</span></code>
 The gid the hub process should be using when touching any volumes mounted.
 Use this only if you are building your own image &amp; know that a group with this gid exists inside the hub container! Advanced feature, handle with care!
 Defaults to 1000, which is the uid of the <cite>jovyan</cite> user that is present in the default hub image.
 proxy
 ~~~~~
-secretToken
-<code class="docutils literal"><span class="pre">```````</span></code>
+proxy.secretToken
+<code class="docutils literal"><span class="pre">`````````````</span></code>
 A 64-byte cryptographically secure randomly generated string used to secure communications
 between the hub and the configurable-http-proxy.</p>
 <p>This must be generated with <cite>openssl rand -hex 32</cite>.</p>
@@ -256,34 +256,34 @@ it to something else, or user data can be compromised</p>
 <div class="section" id="singleuser">
 <h2>singleuser<a class="headerlink" href="#singleuser" title="Permalink to this headline">¶</a></h2>
 <p>Options for customizing the environment that is provided to the users after they log in.</p>
-<div class="section" id="cpu">
-<h3>cpu<a class="headerlink" href="#cpu" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="singleuser-cpu">
+<h3>singleuser.cpu<a class="headerlink" href="#singleuser-cpu" title="Permalink to this headline">¶</a></h3>
 <p>Set CPU limits &amp; guarantees that are enforced for each user.</p>
 <p>TODO: Link to k8s docs about CPU limits and guarantees.</p>
-<div class="section" id="limit">
-<h4>limit<a class="headerlink" href="#limit" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="singleuser-cpu-limit">
+<h4>singleuser.cpu.limit<a class="headerlink" href="#singleuser-cpu-limit" title="Permalink to this headline">¶</a></h4>
 </div>
-<div class="section" id="guarantee">
-<h4>guarantee<a class="headerlink" href="#guarantee" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="singleuser-cpu-guarantee">
+<h4>singleuser.cpu.guarantee<a class="headerlink" href="#singleuser-cpu-guarantee" title="Permalink to this headline">¶</a></h4>
 </div>
 </div>
-<div class="section" id="memory">
-<h3>memory<a class="headerlink" href="#memory" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="singleuser-memory">
+<h3>singleuser.memory<a class="headerlink" href="#singleuser-memory" title="Permalink to this headline">¶</a></h3>
 <p>Set Memory limits &amp; guarantees that are enforced for each user.</p>
 <p>TODO: Link to k8s docs about Memory limits and guarantees.</p>
-<div class="section" id="id4">
-<h4>limit<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="singleuser-memory-limit">
+<h4>singleuser.memory.limit<a class="headerlink" href="#singleuser-memory-limit" title="Permalink to this headline">¶</a></h4>
 </div>
-<div class="section" id="id5">
-<h4>guarantee<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="singleuser-memory-guarantee">
+<h4>singleuser.memory.guarantee<a class="headerlink" href="#singleuser-memory-guarantee" title="Permalink to this headline">¶</a></h4>
 </div>
 </div>
-<div class="section" id="id6">
-<h3>image<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="singleuser-image">
+<h3>singleuser.image<a class="headerlink" href="#singleuser-image" title="Permalink to this headline">¶</a></h3>
 <p>Set custom image name / tag used for spawned users.</p>
 <p>This image is used to launch the pod for each user.</p>
-<div class="section" id="id7">
-<h4>name<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="singleuser-image-name">
+<h4>singleuser.image.name<a class="headerlink" href="#singleuser-image-name" title="Permalink to this headline">¶</a></h4>
 <p>Name of the image, without the tag.</p>
 <dl class="docutils">
 <dt>Examples:</dt>
@@ -294,8 +294,8 @@ it to something else, or user data can be compromised</p>
 </dd>
 </dl>
 </div>
-<div class="section" id="id8">
-<h4>tag<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="singleuser-image-tag">
+<h4>singleuser.image.tag<a class="headerlink" href="#singleuser-image-tag" title="Permalink to this headline">¶</a></h4>
 <p>The tag of the image to use.</p>
 <p>This is the value after the <cite>:</cite> in your full image name.</p>
 </div>
@@ -316,44 +316,44 @@ it to something else, or user data can be compromised</p>
   <ul>
 <li><a class="reference internal" href="#">Helm Chart Schema</a><ul>
 <li><a class="reference internal" href="#hub">hub</a><ul>
-<li><a class="reference internal" href="#cookiesecret">cookieSecret</a></li>
-<li><a class="reference internal" href="#imagepullpolicy">imagePullPolicy</a></li>
-<li><a class="reference internal" href="#image">image</a><ul>
-<li><a class="reference internal" href="#name">name</a></li>
-<li><a class="reference internal" href="#tag">tag</a></li>
+<li><a class="reference internal" href="#hub-cookiesecret">hub.cookieSecret</a></li>
+<li><a class="reference internal" href="#hub-imagepullpolicy">hub.imagePullPolicy</a></li>
+<li><a class="reference internal" href="#hub-image">hub.image</a><ul>
+<li><a class="reference internal" href="#hub-image-name">hub.image.name</a></li>
+<li><a class="reference internal" href="#hub-image-tag">hub.image.tag</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#db">db</a><ul>
-<li><a class="reference internal" href="#type">type</a></li>
-<li><a class="reference internal" href="#pvc">pvc</a><ul>
-<li><a class="reference internal" href="#annotations">annotations</a></li>
-<li><a class="reference internal" href="#selector">selector</a></li>
-<li><a class="reference internal" href="#storage">storage</a></li>
+<li><a class="reference internal" href="#hub-db">hub.db</a><ul>
+<li><a class="reference internal" href="#hub-db-type">hub.db.type</a></li>
+<li><a class="reference internal" href="#hub-db-pvc">hub.db.pvc</a><ul>
+<li><a class="reference internal" href="#hub-db-pvc-annotations">hub.db.pvc.annotations</a></li>
+<li><a class="reference internal" href="#hub-db-pvc-selector">hub.db.pvc.selector</a></li>
+<li><a class="reference internal" href="#hub-db-pvc-storage">hub.db.pvc.storage</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#url">url</a></li>
+<li><a class="reference internal" href="#hub-db-url">hub.db.url</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#labels">labels</a></li>
-<li><a class="reference internal" href="#extraenv">extraEnv</a></li>
-<li><a class="reference internal" href="#extraconfig">extraConfig</a></li>
-<li><a class="reference internal" href="#uid">uid</a></li>
+<li><a class="reference internal" href="#hub-labels">hub.labels</a></li>
+<li><a class="reference internal" href="#hub-extraenv">hub.extraEnv</a></li>
+<li><a class="reference internal" href="#hub-extraconfig">hub.extraConfig</a></li>
+<li><a class="reference internal" href="#hub-uid">hub.uid</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#singleuser">singleuser</a><ul>
-<li><a class="reference internal" href="#cpu">cpu</a><ul>
-<li><a class="reference internal" href="#limit">limit</a></li>
-<li><a class="reference internal" href="#guarantee">guarantee</a></li>
+<li><a class="reference internal" href="#singleuser-cpu">singleuser.cpu</a><ul>
+<li><a class="reference internal" href="#singleuser-cpu-limit">singleuser.cpu.limit</a></li>
+<li><a class="reference internal" href="#singleuser-cpu-guarantee">singleuser.cpu.guarantee</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#memory">memory</a><ul>
-<li><a class="reference internal" href="#id4">limit</a></li>
-<li><a class="reference internal" href="#id5">guarantee</a></li>
+<li><a class="reference internal" href="#singleuser-memory">singleuser.memory</a><ul>
+<li><a class="reference internal" href="#singleuser-memory-limit">singleuser.memory.limit</a></li>
+<li><a class="reference internal" href="#singleuser-memory-guarantee">singleuser.memory.guarantee</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id6">image</a><ul>
-<li><a class="reference internal" href="#id7">name</a></li>
-<li><a class="reference internal" href="#id8">tag</a></li>
+<li><a class="reference internal" href="#singleuser-image">singleuser.image</a><ul>
+<li><a class="reference internal" href="#singleuser-image-name">singleuser.image.name</a></li>
+<li><a class="reference internal" href="#singleuser-image-tag">singleuser.image.tag</a></li>
 </ul>
 </li>
 </ul>
