@@ -8,7 +8,6 @@
     <title>Setting up Helm &#8212; Zero to JupyterHub with Kubernetes 0.4 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/custom.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
@@ -65,9 +64,7 @@ exist if you prefer to install without using the script.</p>
 <p>After installing helm on your machine, initialize helm on your Kubernetes
 cluster. At the terminal, enter:</p>
 <blockquote>
-<div><div class="code bash highlight-default"><div class="highlight"><pre><span></span><span class="n">kubectl</span> <span class="o">--</span><span class="n">namespace</span> <span class="n">kube</span><span class="o">-</span><span class="n">system</span> <span class="n">create</span> <span class="n">sa</span> <span class="n">tiller</span>
-<span class="n">kubectl</span> <span class="n">create</span> <span class="n">clusterrolebinding</span> <span class="n">tiller</span> <span class="o">--</span><span class="n">clusterrole</span> <span class="n">cluster</span><span class="o">-</span><span class="n">admin</span> <span class="o">--</span><span class="n">serviceaccount</span><span class="o">=</span><span class="n">kube</span><span class="o">-</span><span class="n">system</span><span class="p">:</span><span class="n">tiller</span>
-<span class="n">helm</span> <span class="n">init</span> <span class="o">--</span><span class="n">service</span><span class="o">-</span><span class="n">account</span> <span class="n">tiller</span>
+<div><div class="code bash highlight-default"><div class="highlight"><pre><span></span><span class="n">helm</span> <span class="n">init</span>
 </pre></div>
 </div>
 </div></blockquote>

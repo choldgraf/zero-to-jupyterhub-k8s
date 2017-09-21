@@ -8,7 +8,6 @@
     <title>Extending your JupyterHub setup &#8212; Zero to JupyterHub with Kubernetes 0.4 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/custom.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
@@ -26,7 +25,7 @@
     <link rel="shortcut icon" href="_static/favicon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Customizing the User Experience" href="user-experience.html" />
+    <link rel="next" title="Customization of the User Experience" href="user-experience.html" />
     <link rel="prev" title="Turning Off JupyterHub and Computational Resources" href="turn-off.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -46,11 +45,10 @@
   <div class="section" id="extending-your-jupyterhub-setup">
 <span id="extending-jupyterhub"></span><h1>Extending your JupyterHub setup<a class="headerlink" href="#extending-your-jupyterhub-setup" title="Permalink to this headline">¶</a></h1>
 <p>The helm chart used to install JupyterHub has a lot of options for you to tweak.
-For a semi-complete list of the changes you can apply via your helm-chart,
-see the <a class="reference internal" href="schema.html#id1"><span class="std std-ref">Helm Chart Schema</span></a>.</p>
+This page lists some of the most common changes.</p>
 <div class="section" id="applying-configuration-changes">
 <span id="apply-config-changes"></span><h2>Applying configuration changes<a class="headerlink" href="#applying-configuration-changes" title="Permalink to this headline">¶</a></h2>
-<p>The general method to modify your Kubernetes deployment is to:</p>
+<p>The general method is:</p>
 <ol class="arabic">
 <li><p class="first">Make a change to the <code class="docutils literal"><span class="pre">config.yaml</span></code></p>
 </li>
@@ -70,8 +68,6 @@ see the <a class="reference internal" href="schema.html#id1"><span class="std st
 in <code class="docutils literal"><span class="pre">Ready</span></code> state. Your configuration change has been applied!</p>
 </li>
 </ol>
-<p>Below are a few common tasks you can accomplish with modifications to your
-helm chart.</p>
 </div>
 <div class="section" id="authenticating-with-oauth2">
 <h2>Authenticating with OAuth2<a class="headerlink" href="#authenticating-with-oauth2" title="Permalink to this headline">¶</a></h2>
@@ -220,7 +216,7 @@ the workshop day to set up the cluster and JupyterHub.</li>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="turn-off.html" title="previous chapter">Turning Off JupyterHub and Computational Resources</a></li>
-      <li>Next: <a href="user-experience.html" title="next chapter">Customizing the User Experience</a></li>
+      <li>Next: <a href="user-experience.html" title="next chapter">Customization of the User Experience</a></li>
   </ul></li>
 </ul>
 </div>
