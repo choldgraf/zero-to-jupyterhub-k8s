@@ -120,7 +120,7 @@ deployment::
 
 Here we can see one ``hub-deployment`` pod being destroyed, and another (based
 on the upgraded helm chart) being created. We also see our broken user pod,
-which will only be upgrade if it is restarted. To do this, let's delete the
+which will only be upgraded if it is restarted. To do this, let's delete the
 user's pod::
 
     choldgraf@nhw2017-179318:~$ kubectl delete pod jupyter-choldgraf --namespace=jhub

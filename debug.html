@@ -158,7 +158,7 @@ proxy-deployment-1227971824-mn2wd   1/1       Running             0          5h
 </div>
 <p>Here we can see one <code class="docutils literal"><span class="pre">hub-deployment</span></code> pod being destroyed, and another (based
 on the upgraded helm chart) being created. We also see our broken user pod,
-which will only be upgrade if it is restarted. To do this, let’s delete the
+which will only be upgraded if it is restarted. To do this, let’s delete the
 user’s pod:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>choldgraf@nhw2017-179318:~$ kubectl delete pod jupyter-choldgraf --namespace=jhub
 </pre></div>
