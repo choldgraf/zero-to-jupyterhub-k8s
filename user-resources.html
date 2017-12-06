@@ -1,0 +1,323 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>User Resources &#8212; Zero to JupyterHub with Kubernetes 0.4 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="User Management" href="user-management.html" />
+    <link rel="prev" title="Customizing the User Environment" href="user-environment.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class='prev-next-top'>
+    
+     <a class='left-prev' href="user-environment.html" title="previous chapter">Previous</a>
+     <a class='right-next' href="user-management.html" title="next chapter">Next</a>
+  <div style='clear:both;'></div>
+
+  </div>
+
+  
+  <div class="section" id="user-resources">
+<span id="id1"></span><h1>User Resources<a class="headerlink" href="#user-resources" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">For a list of all the options you can configure with your helm
+chart, see the <a class="reference internal" href="reference.html#id1"><span class="std std-ref">Helm Chart Reference</span></a>.</p>
+</div>
+<p>User resources include the CPU, RAM, and Storage which JupyterHub provides to
+users. Most of these can be controlled via modifications to the Helm Chart.
+For information on deploying your modifications to the JupyterHub deployment,
+see <a class="reference internal" href="extending-jupyterhub.html#apply-config-changes"><span class="std std-ref">Applying configuration changes</span></a>.</p>
+<p>Since JupyterHub can serve many different types of users, JupyterHub managers
+and administrators must be able to flexibly <strong>allocate user resources</strong>, like
+memory or compute. For example, the Hub may be serving power users with large
+resource requirements as well as beginning users with more basic resource
+needs. The ability to customize the Hub’s resources to satisfy both user
+groups improves the user experience for all Hub users.</p>
+<div class="section" id="set-user-memory-and-cpu-guarantees-limits">
+<h2>Set user memory and CPU guarantees / limits<a class="headerlink" href="#set-user-memory-and-cpu-guarantees-limits" title="Permalink to this headline">¶</a></h2>
+<p>Each user on your JupyterHub gets a slice of memory and CPU to use. There are
+two ways to specify how much users get to use: resource <em>guarantees</em> and
+resource <em>limits</em>.</p>
+<p>A resource <em>guarantee</em> means that all users will have <em>at least</em> this resource
+available at all times, but they may be given more resources if they’re
+available. For example, if users are <em>guaranteed</em> 1G of RAM, users can
+technically use more than 1G of RAM if these resources aren’t being used by
+other users.</p>
+<p>A resource <em>limit</em> sets a hard limit on the resources available. In the example
+above, if there were a 1G memory limit, it would mean that users could use
+no more than 1G of RAM, no matter what other resources are being used on the
+machines.</p>
+<p>By default, each user is <em>guaranteed</em> 1G of RAM. All users have <em>at least</em> 1G,
+but they can technically use more if it is available. You can easily change the
+amount of these resources, and whether they are a <em>guarantee</em> or a <em>limit</em>, by
+changing your <code class="docutils literal"><span class="pre">config.yaml</span></code> file. This is done with the following structure.</p>
+<blockquote>
+<div><div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">singleuser</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">memory</span><span class="p p-Indicator">:</span>
+       <span class="l l-Scalar l-Scalar-Plain">limit</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">1G</span>
+       <span class="l l-Scalar l-Scalar-Plain">guarantee</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">1G</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This sets a memory limit and guarantee of 1G. Kubernetes will make sure that
+each user will always have access to 1G of RAM, and requests for more RAM will
+fail (your kernel will usually die). You can set the limit to be higher than
+the guarantee to allow some users to use larger amounts of RAM for
+a very short-term time (e.g. when running a single, short-lived function that
+consumes a lot of memory).</p>
+<p>Similarly, you can limit CPU as follows:</p>
+<blockquote>
+<div><div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">singleuser</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">cpu</span><span class="p p-Indicator">:</span>
+       <span class="l l-Scalar l-Scalar-Plain">limit</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">.5</span>
+       <span class="l l-Scalar l-Scalar-Plain">guarantee</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">.5</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This would limit your users to a maximum of .5 of a CPU (so 1/2 of a CPU core), as well as guarantee them that same amount.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Remember to <a class="reference internal" href="extending-jupyterhub.html#apply-config-changes"><span class="std std-ref">apply the change</span></a> after changing your <code class="docutils literal"><span class="pre">config.yaml</span></code> file!</p>
+</div>
+</div>
+<div class="section" id="allocate-user-storage">
+<span id="user-storage"></span><h2>Allocate user storage<a class="headerlink" href="#allocate-user-storage" title="Permalink to this headline">¶</a></h2>
+<p>By default, each user receives their own, 10Gi disk for storage when they log
+in to JupyterHub. This storage can be turned off or changed as described in
+these sections.</p>
+</div>
+<div class="section" id="turn-off-per-user-persistent-storage">
+<h2>Turn off per-user persistent storage<a class="headerlink" href="#turn-off-per-user-persistent-storage" title="Permalink to this headline">¶</a></h2>
+<p>If you do not wish for users to have any persistent storage, it can be
+turned off. Edit the <code class="docutils literal"><span class="pre">config.yaml</span></code> file and set the storage type to
+<code class="docutils literal"><span class="pre">none</span></code>:</p>
+<blockquote>
+<div><div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">singleuser</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">storage</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">none</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Next <a class="reference internal" href="extending-jupyterhub.html#apply-config-changes"><span class="std std-ref">apply the changes</span></a>.</p>
+<p>After the changes are applied, new users will no longer be allocated a
+persistent <code class="docutils literal"><span class="pre">$HOME</span></code> directory. Any currently running users will still have
+access to their storage until their server is restarted.</p>
+</div>
+<div class="section" id="change-per-user-persistent-storage-size">
+<h2>Change per-user persistent storage size<a class="headerlink" href="#change-per-user-persistent-storage-size" title="Permalink to this headline">¶</a></h2>
+<p>By default, storage for user home directories are sized to 10Gi each. To
+increase or decrease this value, edit the <code class="docutils literal"><span class="pre">config.yaml</span></code> file:</p>
+<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">singleuser</span><span class="p p-Indicator">:</span>
+   <span class="l l-Scalar l-Scalar-Plain">storage</span><span class="p p-Indicator">:</span>
+     <span class="l l-Scalar l-Scalar-Plain">capacity</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">5Gi</span>
+</pre></div>
+</div>
+<p>This example will make all <strong>new</strong> user’s home directories be 5Gi each,
+instead of the default 10Gi.</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">The disks of “logged in” users will not change or be decreased in
+this example.</p>
+</div>
+</div>
+<div class="section" id="expanding-and-contracting-the-size-of-your-cluster">
+<h2>Expanding and contracting the size of your cluster<a class="headerlink" href="#expanding-and-contracting-the-size-of-your-cluster" title="Permalink to this headline">¶</a></h2>
+<p>You can easily scale up or down your cluster’s size to meet usage demand or to
+save cost when the cluster is not being used. This is particularly useful
+when you have predictable spikes in usage. For example, if you are
+organizing and running a workshop, resizing a cluster gives you a way
+to save cost and prepare JupyterHub before the event. For example:</p>
+<ul class="simple">
+<li><strong>One week before the workshop:</strong> You can create the cluster, set
+everything up, and then resize the cluster to zero nodes to save cost.</li>
+<li><strong>On the day of the workshop:</strong> You can scale the cluster up to a suitable
+size for the workshop. This workflow also helps you avoid scrambling on
+the workshop day to set up the cluster and JupyterHub.</li>
+<li><strong>After the workshop:</strong> The cluster can be deleted.</li>
+</ul>
+<p>The following sections describe
+how to resize the cluster on various cloud platforms.</p>
+<div class="section" id="google-cloud-platform">
+<h3>Google Cloud Platform<a class="headerlink" href="#google-cloud-platform" title="Permalink to this headline">¶</a></h3>
+<p>Use the <code class="docutils literal"><span class="pre">resize</span></code> command and
+provide a new cluster size (i.e. number of nodes) as a command line option
+<code class="docutils literal"><span class="pre">--size</span></code>:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>gcloud container clusters resize <span class="se">\</span>
+             &lt;YOUR-CLUSTER-NAME&gt; <span class="se">\</span>
+             --size &lt;NEW-SIZE&gt; <span class="se">\</span>
+             --zone &lt;YOUR-CLUSTER-ZONE&gt;
+</pre></div>
+</div>
+<p>To display the cluster’s name, zone, or current size, use the command:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>gcloud container clusters list
+</pre></div>
+</div>
+<p>After resizing the cluster, it may take a couple of minutes for the new cluster
+size to be reported back as the service is adding or removing nodes. You can
+find the true count of currently ‘ready’ nodes using <code class="docutils literal"><span class="pre">kubectl</span> <span class="pre">get</span> <span class="pre">node</span></code> to
+report the current <code class="docutils literal"><span class="pre">Ready/NotReady</span></code> status of all nodes in the cluster.</p>
+</div>
+</div>
+</div>
+
+
+  <div class='prev-next-bottom'>
+    
+     <a class='left-prev' href="user-environment.html" title="previous chapter">Customizing the User Environment</a>
+     <a class='right-next' href="user-management.html" title="next chapter">User Management</a>
+  <div style='clear:both;'></div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+<h1 class="logo"><a href="index.html">Zero to JupyterHub with Kubernetes</a></h1>
+
+
+
+<p class="blurb">A tutorial to help install and manage JupyterHub with Kubernetes</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=jupyterhub&repo=zero-to-jupyterhub-k8s&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+
+<h3>Table of Contents</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started with JupyterHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="create-k8s-cluster.html">Creating a Kubernetes Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup-helm.html">Setting up Helm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup-jupyterhub.html">Setting up JupyterHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="turn-off.html">Turning Off JupyterHub and Computational Resources</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="extending-jupyterhub.html">Extending your JupyterHub setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-environment.html">Customizing the User Environment</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">User Resources</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#set-user-memory-and-cpu-guarantees-limits">Set user memory and CPU guarantees / limits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#allocate-user-storage">Allocate user storage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#turn-off-per-user-persistent-storage">Turn off per-user persistent storage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#change-per-user-persistent-storage-size">Change per-user persistent storage size</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#expanding-and-contracting-the-size-of-your-cluster">Expanding and contracting the size of your cluster</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="user-management.html">User Management</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="debug.html">Debugging Kubernetes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cost.html">Estimating costs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Topics</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Helm Chart Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">Tools used in a JupyterHub Deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="additional-resources.html">Additional resources</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="http://github.com/jupyterhub/zero-to-jupyterhub-k8s">GitHub Repo</a></li>
+    
+    <li class="toctree-l1"><a href="http://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues">Issue Tracker</a></li>
+    
+</ul>
+
+<div class="relations">
+<h3>Navigation</h3>
+<ul>
+  <li><a href="index.html">Documentation Home</a><ul>
+  <li><a href="user-environment.html" title="Previous">Previous topic</a></li>
+  <li><a href="user-management.html" title="Next">Next topic</a></li>
+  </ul>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/user-resources.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Project Jupyter team.
+      
+      |
+      <a href="_sources/user-resources.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

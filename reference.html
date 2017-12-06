@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Helm Chart Schema &#8212; Zero to JupyterHub with Kubernetes 0.4 documentation</title>
+    <title>Helm Chart Reference &#8212; Zero to JupyterHub with Kubernetes 0.4 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -26,6 +26,8 @@
     <link rel="shortcut icon" href="_static/favicon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Tools used in a JupyterHub Deployment" href="tools.html" />
+    <link rel="prev" title="Advanced Topics" href="advanced.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -43,16 +45,18 @@
             
   <div class='prev-next-top'>
     
+     <a class='left-prev' href="advanced.html" title="previous chapter">Previous</a>
+     <a class='right-next' href="tools.html" title="next chapter">Next</a>
   <div style='clear:both;'></div>
 
   </div>
 
   
-  <div class="section" id="helm-chart-schema">
-<span id="helm-chart-schema"></span><span id="id1"></span><h1>Helm Chart Schema<a class="headerlink" href="#helm-chart-schema" title="Permalink to this headline">¶</a></h1>
-<p>The <a class="reference external" href="https://github.com/jupyterhub/helm-chart">JupyterHub helm chart</a>. is configurable so that you can customize your Kubernetes setup however you'd like. You can extend user resources, build off of different Docker images, manage security and authentication, and more.</p>
+  <div class="section" id="helm-chart-reference">
+<span id="helm-chart-reference"></span><span id="id1"></span><h1>Helm Chart Reference<a class="headerlink" href="#helm-chart-reference" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference external" href="https://github.com/jupyterhub/zero-to-jupyterhub-k8s">JupyterHub helm chart</a> is configurable so that you can customize your JupyterHub setup however you'd like. You can extend user resources, build off of different Docker images, manage security and authentication, and more.</p>
 <p>Below is a description of the fields that are exposed with the JupyterHub helm chart.
-For more detailed information about some specific things you can do with
+For more guided information about some specific things you can do with
 modifications to the helm chart, see the <a class="reference external" href="extending-jupyterhub.html">extending jupyterhub</a>
 and <a class="reference external" href="user-experience.html">user experience</a> pages.</p>
 <div class="section" id="hub">
@@ -293,6 +297,8 @@ it to something else, or user data can be compromised</p>
 
   <div class='prev-next-bottom'>
     
+     <a class='left-prev' href="advanced.html" title="previous chapter">Advanced Topics</a>
+     <a class='right-next' href="tools.html" title="next chapter">Tools used in a JupyterHub Deployment</a>
   <div style='clear:both;'></div>
 
   </div>
@@ -325,7 +331,6 @@ it to something else, or user data can be compromised</p>
 
 
 <h3>Table of Contents</h3>
-<p class="caption"><span class="caption-text">Creating your JupyterHub</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started with JupyterHub</a></li>
 <li class="toctree-l1"><a class="reference internal" href="create-k8s-cluster.html">Creating a Kubernetes Cluster</a></li>
@@ -333,27 +338,23 @@ it to something else, or user data can be compromised</p>
 <li class="toctree-l1"><a class="reference internal" href="setup-jupyterhub.html">Setting up JupyterHub</a></li>
 <li class="toctree-l1"><a class="reference internal" href="turn-off.html">Turning Off JupyterHub and Computational Resources</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Customization Guide</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="extending-jupyterhub.html">Extending your JupyterHub setup</a></li>
-<li class="toctree-l1"><a class="reference internal" href="user-experience.html">Customizing the User Experience</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-environment.html">Customizing the User Environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-resources.html">User Resources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user-management.html">User Management</a></li>
-<li class="toctree-l1"><a class="reference internal" href="reference.html">Configuration Reference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tools.html">Tools used in a JupyterHub Deployment</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Administrator Guide</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="resource-mgmt.html">Resource management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication</a></li>
 <li class="toctree-l1"><a class="reference internal" href="debug.html">Debugging Kubernetes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cost.html">Estimating costs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="backups.html">Backups</a></li>
-<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading</a></li>
 <li class="toctree-l1"><a class="reference internal" href="security.html">Security Considerations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Topics</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Reference</span></p>
-<ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Helm Chart Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">Tools used in a JupyterHub Deployment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="additional-resources.html">Additional resources</a></li>
 </ul>
@@ -372,13 +373,15 @@ it to something else, or user data can be compromised</p>
 <h3>Navigation</h3>
 <ul>
   <li><a href="index.html">Documentation Home</a><ul>
+  <li><a href="advanced.html" title="Previous">Previous topic</a></li>
+  <li><a href="tools.html" title="Next">Next topic</a></li>
   </ul>
 </ul>
 </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/schema.md.txt"
+      <li><a href="_sources/reference.md.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -400,7 +403,7 @@ it to something else, or user data can be compromised</p>
       &copy;2017, Project Jupyter team.
       
       |
-      <a href="_sources/schema.md.txt"
+      <a href="_sources/reference.md.txt"
           rel="nofollow">Page source</a>
     </div>
 

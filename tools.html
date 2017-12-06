@@ -8,6 +8,7 @@
     <title>Tools used in a JupyterHub Deployment &#8212; Zero to JupyterHub with Kubernetes 0.4 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/custom.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
@@ -26,7 +27,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Resource management" href="resource-mgmt.html" />
-    <link rel="prev" title="Customization of the User Experience" href="user-experience.html" />
+    <link rel="prev" title="Configuration Reference" href="reference.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -42,6 +43,15 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
+  <div class='prev-next-top'>
+    
+     <a class='left-prev' href="reference.html" title="previous chapter">Previous</a>
+     <a class='right-next' href="resource-mgmt.html" title="next chapter">Next</a>
+  <div style='clear:both;'></div>
+
+  </div>
+
+  
   <div class="section" id="tools-used-in-a-jupyterhub-deployment">
 <span id="tools"></span><h1>Tools used in a JupyterHub Deployment<a class="headerlink" href="#tools-used-in-a-jupyterhub-deployment" title="Permalink to this headline">¶</a></h1>
 <p>JupyterHub is meant to connect with many tools in the world of
@@ -196,7 +206,7 @@ to manage your deployment.</p>
 <p>Finally, a <a class="reference external" href="https://kubernetes.io/docs/admin/namespaces/">namespace</a>
 defines a collection of objects in Kubernetes. It
 is generally the most “high-level” of the groups we’ve discussed thus far.
-For example, a a namespace could be a single class running with JupyterHub.</p>
+For example, a namespace could be a single class running with JupyterHub.</p>
 <p>For more information about namespaces, see the
 <a class="reference external" href="https://kubernetes.io/docs/tasks/administer-cluster/namespaces/">Kubernetes documentation on namespaces</a>.</p>
 </div>
@@ -292,6 +302,14 @@ what kind of usage exists on the cluster.</li>
 </div>
 
 
+  <div class='prev-next-bottom'>
+    
+     <a class='left-prev' href="reference.html" title="previous chapter">Configuration Reference</a>
+     <a class='right-next' href="resource-mgmt.html" title="next chapter">Resource management</a>
+  <div style='clear:both;'></div>
+
+  </div>
+
           </div>
         </div>
       </div>
@@ -300,44 +318,83 @@ what kind of usage exists on the cluster.</li>
             <p class="logo"><a href="index.html">
               <img class="logo" src="_static/logo.png" alt="Logo"/>
             </a></p>
-  <h3><a href="index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Tools used in a JupyterHub Deployment</a><ul>
-<li><a class="reference internal" href="#cloud-computing-providers">Cloud Computing Providers</a></li>
-<li><a class="reference internal" href="#container-technology">Container Technology</a><ul>
-<li><a class="reference internal" href="#container-image">Container Image</a></li>
-<li><a class="reference internal" href="#containers">Containers</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#kubernetes">Kubernetes</a><ul>
-<li><a class="reference internal" href="#processes">Processes</a></li>
-<li><a class="reference internal" href="#pods">Pods</a></li>
-<li><a class="reference internal" href="#deployments">Deployments</a></li>
-<li><a class="reference internal" href="#service">Service</a></li>
-<li><a class="reference internal" href="#namespace">Namespace</a></li>
-<li><a class="reference internal" href="#persistent-volume-claim">Persistent Volume Claim</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#helm">Helm</a><ul>
-<li><a class="reference internal" href="#charts">Charts</a></li>
-<li><a class="reference internal" href="#releases">Releases</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#jupyterhub">JupyterHub</a><ul>
-<li><a class="reference internal" href="#proxy-pod">Proxy Pod</a></li>
-<li><a class="reference internal" href="#hub-pod">Hub Pod</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<div class="relations">
-<h3>Related Topics</h3>
+<h1 class="logo"><a href="index.html">Zero to JupyterHub with Kubernetes</a></h1>
+
+
+
+<p class="blurb">A tutorial to help install and manage JupyterHub with Kubernetes</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=jupyterhub&repo=zero-to-jupyterhub-k8s&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+
+<h3>Table of Contents</h3>
+<p class="caption"><span class="caption-text">Creating your JupyterHub</span></p>
 <ul>
-  <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="user-experience.html" title="previous chapter">Customization of the User Experience</a></li>
-      <li>Next: <a href="resource-mgmt.html" title="next chapter">Resource management</a></li>
-  </ul></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started with JupyterHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="create-k8s-cluster.html">Creating a Kubernetes Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup-helm.html">Setting up Helm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup-jupyterhub.html">Setting up JupyterHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="turn-off.html">Turning Off JupyterHub and Computational Resources</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Customization Guide</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="extending-jupyterhub.html">Extending your JupyterHub setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-experience.html">Customizing the User Experience</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-management.html">User Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Configuration Reference</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Tools used in a JupyterHub Deployment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#cloud-computing-providers">Cloud Computing Providers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#container-technology">Container Technology</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#kubernetes">Kubernetes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#helm">Helm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#jupyterhub">JupyterHub</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Administrator Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="resource-mgmt.html">Resource management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="debug.html">Debugging Kubernetes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cost.html">Estimating costs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="backups.html">Backups</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Topics</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="additional-resources.html">Additional resources</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="http://github.com/jupyterhub/zero-to-jupyterhub-k8s">GitHub Repo</a></li>
+    
+    <li class="toctree-l1"><a href="http://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues">Issue Tracker</a></li>
+    
+</ul>
+
+<div class="relations">
+<h3>Navigation</h3>
+<ul>
+  <li><a href="index.html">Documentation Home</a><ul>
+  <li><a href="reference.html" title="Previous">Previous topic</a></li>
+  <li><a href="resource-mgmt.html" title="Next">Next topic</a></li>
+  </ul>
 </ul>
 </div>
   <div role="note" aria-label="source link">

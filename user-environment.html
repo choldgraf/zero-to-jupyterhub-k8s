@@ -26,6 +26,8 @@
     <link rel="shortcut icon" href="_static/favicon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="User Resources" href="user-resources.html" />
+    <link rel="prev" title="Extending your JupyterHub setup" href="extending-jupyterhub.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -43,6 +45,8 @@
             
   <div class='prev-next-top'>
     
+     <a class='left-prev' href="extending-jupyterhub.html" title="previous chapter">Previous</a>
+     <a class='right-next' href="user-resources.html" title="next chapter">Next</a>
   <div style='clear:both;'></div>
 
   </div>
@@ -265,6 +269,8 @@ reflected. <em>There is work in progress for improving this behavior.</em></p>
 
   <div class='prev-next-bottom'>
     
+     <a class='left-prev' href="extending-jupyterhub.html" title="previous chapter">Extending your JupyterHub setup</a>
+     <a class='right-next' href="user-resources.html" title="next chapter">User Resources</a>
   <div style='clear:both;'></div>
 
   </div>
@@ -304,8 +310,15 @@ reflected. <em>There is work in progress for improving this behavior.</em></p>
 <li class="toctree-l1"><a class="reference internal" href="setup-jupyterhub.html">Setting up JupyterHub</a></li>
 <li class="toctree-l1"><a class="reference internal" href="turn-off.html">Turning Off JupyterHub and Computational Resources</a></li>
 </ul>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="extending-jupyterhub.html">Extending your JupyterHub setup</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Customizing the User Environment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#use-an-existing-docker-image">Use an existing docker image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#build-a-custom-docker-image-with-repo2docker">Build a custom Docker image with <code class="docutils literal"><span class="pre">repo2docker</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#set-environment-variables">Set environment variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pre-populating-user-s-home-directory-with-notebooks">Pre-populating user’s <code class="docutils literal"><span class="pre">$HOME</span></code> directory with notebooks</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="user-resources.html">User Resources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user-management.html">User Management</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference.html">Helm Chart Reference</a></li>
@@ -338,13 +351,15 @@ reflected. <em>There is work in progress for improving this behavior.</em></p>
 <h3>Navigation</h3>
 <ul>
   <li><a href="index.html">Documentation Home</a><ul>
+  <li><a href="extending-jupyterhub.html" title="Previous">Previous topic</a></li>
+  <li><a href="user-resources.html" title="Next">Next topic</a></li>
   </ul>
 </ul>
 </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/user-experience.rst.txt"
+      <li><a href="_sources/user-environment.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -366,7 +381,7 @@ reflected. <em>There is work in progress for improving this behavior.</em></p>
       &copy;2017, Project Jupyter team.
       
       |
-      <a href="_sources/user-experience.rst.txt"
+      <a href="_sources/user-environment.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 

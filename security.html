@@ -1,0 +1,262 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Security Considerations &#8212; Zero to JupyterHub with Kubernetes 0.4 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Troubleshooting" href="troubleshooting.html" />
+    <link rel="prev" title="Estimating costs" href="cost.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class='prev-next-top'>
+    
+     <a class='left-prev' href="cost.html" title="previous chapter">Previous</a>
+     <a class='right-next' href="troubleshooting.html" title="next chapter">Next</a>
+  <div style='clear:both;'></div>
+
+  </div>
+
+  
+  <div class="section" id="security-considerations">
+<span id="security"></span><h1>Security Considerations<a class="headerlink" href="#security-considerations" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="setting-up-https">
+<h2>Setting up HTTPS<a class="headerlink" href="#setting-up-https" title="Permalink to this headline">¶</a></h2>
+<p>Enabling HTTPS is an important part of keeping the internet secure for
+your users &amp; the world at large. Zero to JupyterHub makes doing so quite
+easy since version 0.5, integrating with <a class="reference external" href="https://letsencrypt.org/">Let’s Encrypt</a>
+for free HTTPS certificates.</p>
+<p>You can also purchase your own SSL certificates from a certificate provider.</p>
+<ol class="arabic">
+<li><p class="first">Buy a domain name from a registrar. Pick whichever one you want.</p>
+</li>
+<li><p class="first">Create an <code class="docutils literal"><span class="pre">A</span> <span class="pre">record</span></code> from the domain you want to use, pointing to the
+<code class="docutils literal"><span class="pre">EXTERNAL-IP</span></code> of the <code class="docutils literal"><span class="pre">proxy-public</span></code> service.</p>
+</li>
+<li><p class="first">Wait for the change to propagate. Propagation can take several minutes to
+several hours. Wait until you can type in the name of the domain you bought
+and it shows you the JupyterHub landing page.</p>
+<p>It is important that you wait - prematurely going to the next step might cause problems!</p>
+</li>
+<li><p class="first">Tell JupyterHub to use HTTPS via <code class="docutils literal"><span class="pre">config.yaml</span></code></p>
+</li>
+</ol>
+<blockquote>
+<div><ol class="loweralpha simple">
+<li>For letsencrypt, add your domain name and contact email for letsencrypt renewal to <code class="docutils literal"><span class="pre">config.yaml</span></code>:</li>
+</ol>
+<blockquote>
+<div><div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">proxy</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">https</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">hosts</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">&lt;your-domain-name&gt;</span>
+    <span class="l l-Scalar l-Scalar-Plain">letsencrypt</span><span class="p p-Indicator">:</span>
+      <span class="l l-Scalar l-Scalar-Plain">contactEmail</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;your-email-address&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="loweralpha simple" start="2">
+<li>If you have your own SSL certificate, you can configure SSL manually.
+Add to <code class="docutils literal"><span class="pre">config.yaml</span></code>:</li>
+</ol>
+<blockquote>
+<div><div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">proxy</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">https</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">hosts</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">&lt;your-domain-name&gt;</span>
+    <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">manual</span>
+</pre></div>
+</div>
+<p>and paste the contents of your ssl key and certificate to <code class="docutils literal"><span class="pre">secrets.yaml</span></code>:</p>
+<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">proxy</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">https</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">manual</span><span class="p p-Indicator">:</span>
+      <span class="l l-Scalar l-Scalar-Plain">key</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+        <span class="no">-----BEGIN RSA PRIVATE KEY-----</span>
+        <span class="no">...</span>
+        <span class="no">-----END RSA PRIVATE KEY-----</span>
+      <span class="l l-Scalar l-Scalar-Plain">cert</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+        <span class="no">-----BEGIN CERTIFICATE-----</span>
+        <span class="no">...</span>
+        <span class="no">-----END CERTIFICATE-----</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div></blockquote>
+<ol class="arabic simple" start="5">
+<li>Apply the config changes by running <code class="docutils literal"><span class="pre">helm</span> <span class="pre">upgrade</span> <span class="pre">...</span></code>.</li>
+<li>Wait for about a minute, now your hub is HTTPS enabled! Congratulations, your
+users are now more secure now than they were before!</li>
+</ol>
+</div>
+<div class="section" id="role-based-access-control-rbac">
+<h2>Role Based Access Control (RBAC)<a class="headerlink" href="#role-based-access-control-rbac" title="Permalink to this headline">¶</a></h2>
+<p>Kubernetes supports (and often requires) using
+<a class="reference external" href="https://kubernetes.io/docs/admin/authorization/rbac/">Role Based Access Control (RBAC)</a>
+to secure which pods / users can perform what kinds of actions on the cluster.
+If RBAC is disabled, all pods are given <code class="docutils literal"><span class="pre">root</span></code> equivalent permission on the
+Kubernetes cluster and all the nodes in it, which is bad!</p>
+<p>As of <code class="docutils literal"><span class="pre">v0.5</span></code>, the helm chart can natively work with RBAC enabled clusters. We ship
+appropriate minimal RBAC rules for the various components we use. If you want to
+disable the RBAC rules for whatever reason, you can do so with the following
+snippet in your config.yaml:</p>
+<p>We highly recommend against doing so, however, as this will introduce
+security vulnerabilities to your deployment!</p>
+</div>
+</div>
+
+
+  <div class='prev-next-bottom'>
+    
+     <a class='left-prev' href="cost.html" title="previous chapter">Estimating costs</a>
+     <a class='right-next' href="troubleshooting.html" title="next chapter">Troubleshooting</a>
+  <div style='clear:both;'></div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+<h1 class="logo"><a href="index.html">Zero to JupyterHub with Kubernetes</a></h1>
+
+
+
+<p class="blurb">A tutorial to help install and manage JupyterHub with Kubernetes</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=jupyterhub&repo=zero-to-jupyterhub-k8s&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+
+<h3>Table of Contents</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started with JupyterHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="create-k8s-cluster.html">Creating a Kubernetes Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup-helm.html">Setting up Helm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup-jupyterhub.html">Setting up JupyterHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="turn-off.html">Turning Off JupyterHub and Computational Resources</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="extending-jupyterhub.html">Extending your JupyterHub setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-resources.html">User Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-management.html">User Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Helm Chart Reference</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="debug.html">Debugging Kubernetes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cost.html">Estimating costs</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Security Considerations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#setting-up-https">Setting up HTTPS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#role-based-access-control-rbac">Role Based Access Control (RBAC)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Topics</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">Tools used in a JupyterHub Deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="additional-resources.html">Additional resources</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="http://github.com/jupyterhub/zero-to-jupyterhub-k8s">GitHub Repo</a></li>
+    
+    <li class="toctree-l1"><a href="http://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues">Issue Tracker</a></li>
+    
+</ul>
+
+<div class="relations">
+<h3>Navigation</h3>
+<ul>
+  <li><a href="index.html">Documentation Home</a><ul>
+  <li><a href="cost.html" title="Previous">Previous topic</a></li>
+  <li><a href="troubleshooting.html" title="Next">Next topic</a></li>
+  </ul>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/security.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Project Jupyter team.
+      
+      |
+      <a href="_sources/security.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

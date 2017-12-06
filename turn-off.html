@@ -8,6 +8,7 @@
     <title>Turning Off JupyterHub and Computational Resources &#8212; Zero to JupyterHub with Kubernetes 0.4 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/custom.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
@@ -42,22 +43,57 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
+  <div class='prev-next-top'>
+    
+     <a class='left-prev' href="setup-jupyterhub.html" title="previous chapter">Previous</a>
+     <a class='right-next' href="extending-jupyterhub.html" title="next chapter">Next</a>
+  <div style='clear:both;'></div>
+
+  </div>
+
+  
   <div class="section" id="turning-off-jupyterhub-and-computational-resources">
 <span id="turn-off"></span><h1>Turning Off JupyterHub and Computational Resources<a class="headerlink" href="#turning-off-jupyterhub-and-computational-resources" title="Permalink to this headline">¶</a></h1>
 <p>When you are done with your hub, you should delete it so you are no longer
 paying money for it. The following sections describe how to delete your
 JupyterHub resources on various cloud providers.</p>
-<div class="section" id="google-cloud-engine">
-<h2>Google Cloud Engine<a class="headerlink" href="#google-cloud-engine" title="Permalink to this headline">¶</a></h2>
-<ol class="arabic">
-<li><p class="first">First, delete the namespace the hub was installed in. This deletes any disks
+<p>Tearing down your JupyterHub entails:</p>
+<ol class="arabic simple">
+<li>Deleting your Kubernetes namespace, which deletes all objects created and managed by Kubernetes</li>
+<li>Deleting any computational resources you’ve requested from the cloud provider</li>
+<li>Running a final check to make sure there aren’t any lingering resources that haven’t been deleted
+(e.g., storage volumes in some cloud providers)</li>
+</ol>
+<div class="section" id="for-all-cloud-providers">
+<h2>For all cloud providers<a class="headerlink" href="#for-all-cloud-providers" title="Permalink to this headline">¶</a></h2>
+<p>The steps in this section must be performed for all cloud providers first,
+before doing the cloud provider specific setup.</p>
+<ol class="arabic simple">
+<li>First, delete the helm release. This deletes all resources that were created
+by helm to make your jupyterhub.</li>
+</ol>
+<blockquote>
+<div><div class="highlight-bash"><div class="highlight"><pre><span></span>helm delete &lt;your-helm-release-name&gt; --purge
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic" start="2">
+<li><p class="first">Next, delete the namespace the hub was installed in. This deletes any disks
 that may have been created to store user’s data, and any IP addresses that
 may have been provisioned.</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>kubectl delete namespace &lt;your-namespace&gt;
 </pre></div>
 </div>
 </li>
-<li><p class="first">Next, you should delete the kubernetes cluster. You can list all the clusters
+</ol>
+</div>
+<div class="section" id="google-cloud-platform">
+<h2>Google Cloud Platform<a class="headerlink" href="#google-cloud-platform" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><p class="first">Perform the steps above for all cloud providers. These cloud provider agnostic steps will
+delete the helm chart and delete the hub’s namespace. This must be done before proceeding.</p>
+</li>
+<li><p class="first">You should delete the kubernetes cluster. You can list all the clusters
 you have.</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>gcloud container clusters list
 </pre></div>
@@ -69,29 +105,35 @@ you have.</p>
 </li>
 <li><p class="first">Double check to make sure all the resources are now deleted, since anything you
 have not deleted will cost you money! You can check the <a class="reference external" href="https://console.cloud.google.com">web console</a>
-(make sure you are in the right project and account!) to make sure everything
+(make sure you are in the right project and account) to verify that everything
 has been deleted.</p>
 <p>At a minimum, check the following under the Hamburger (left top corner) menu:</p>
 <ol class="arabic simple">
 <li>Compute Engine -&gt; Disks</li>
-<li>Container Engine</li>
-<li>Networking -&gt; Load Balancing</li>
+<li>Container Engine -&gt; Container Clusters</li>
+<li>Container Registry -&gt; Images</li>
+<li>Networking -&gt; Network Services -&gt; Load Balancing</li>
 </ol>
 <p>These might take several minutes to clear up, but they shouldn’t have anything
 related to your JupyterHub cluster after you have deleted the cluster.</p>
 </li>
 </ol>
 </div>
-<div class="section" id="amazon-aws">
-<h2>Amazon AWS<a class="headerlink" href="#amazon-aws" title="Permalink to this headline">¶</a></h2>
-<p>The easiest way to delete your cloud resources on AWS is to use their
+<div class="section" id="amazon-web-services-aws">
+<h2>Amazon Web Services (AWS)<a class="headerlink" href="#amazon-web-services-aws" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><p class="first">Perform the steps above for all cloud providers. These cloud provider agnostic steps will
+delete the helm chart and delete the hub’s namespace. This must be done before proceeding.</p>
+</li>
+<li><p class="first">The easiest way to delete your cloud resources on AWS is to use their
 website. Go to the <code class="docutils literal"><span class="pre">CloudFormation</span></code> page. This should have a list of all
 running AWS stacks that you’ve created.</p>
-<p>If you followed the JupyterHub guide,
-there should be two items, both containing the name that you chose for this
-stack. For each item, click the checkbox next to it. Then, click <code class="docutils literal"><span class="pre">Actions</span></code>
-and finally <code class="docutils literal"><span class="pre">Delete</span> <span class="pre">Stack</span></code>. Answer “yes” to any confirmation dialogues, and
+<p>If you followed the JupyterHub guide, there should be two items, both containing the name
+that you chose for this stack. For each item, click the checkbox next to it. Then, click
+<code class="docutils literal"><span class="pre">Actions</span></code> and finally <code class="docutils literal"><span class="pre">Delete</span> <span class="pre">Stack</span></code>. Answer “yes” to any confirmation dialogues, and
 this should begin the process of deleting your Kubernetes cluster.</p>
+</li>
+</ol>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Sometimes AWS fails to delete parts of the stack on a first pass. Be sure
@@ -102,6 +144,14 @@ the actions above if needed.</p>
 </div>
 
 
+  <div class='prev-next-bottom'>
+    
+     <a class='left-prev' href="setup-jupyterhub.html" title="previous chapter">Setting up JupyterHub</a>
+     <a class='right-next' href="extending-jupyterhub.html" title="next chapter">Extending your JupyterHub setup</a>
+  <div style='clear:both;'></div>
+
+  </div>
+
           </div>
         </div>
       </div>
@@ -110,21 +160,81 @@ the actions above if needed.</p>
             <p class="logo"><a href="index.html">
               <img class="logo" src="_static/logo.png" alt="Logo"/>
             </a></p>
-  <h3><a href="index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Turning Off JupyterHub and Computational Resources</a><ul>
-<li><a class="reference internal" href="#google-cloud-engine">Google Cloud Engine</a></li>
-<li><a class="reference internal" href="#amazon-aws">Amazon AWS</a></li>
+<h1 class="logo"><a href="index.html">Zero to JupyterHub with Kubernetes</a></h1>
+
+
+
+<p class="blurb">A tutorial to help install and manage JupyterHub with Kubernetes</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=jupyterhub&repo=zero-to-jupyterhub-k8s&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+
+<h3>Table of Contents</h3>
+<p class="caption"><span class="caption-text">Creating your JupyterHub</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started with JupyterHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="create-k8s-cluster.html">Creating a Kubernetes Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup-helm.html">Setting up Helm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup-jupyterhub.html">Setting up JupyterHub</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Turning Off JupyterHub and Computational Resources</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#for-all-cloud-providers">For all cloud providers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#google-cloud-platform">Google Cloud Platform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#amazon-web-services-aws">Amazon Web Services (AWS)</a></li>
 </ul>
 </li>
 </ul>
-<div class="relations">
-<h3>Related Topics</h3>
+<p class="caption"><span class="caption-text">Customization Guide</span></p>
 <ul>
-  <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="setup-jupyterhub.html" title="previous chapter">Setting up JupyterHub</a></li>
-      <li>Next: <a href="extending-jupyterhub.html" title="next chapter">Extending your JupyterHub setup</a></li>
-  </ul></li>
+<li class="toctree-l1"><a class="reference internal" href="extending-jupyterhub.html">Extending your JupyterHub setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-experience.html">Customizing the User Experience</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-management.html">User Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">Tools used in a JupyterHub Deployment</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Administrator Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="resource-mgmt.html">Resource management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="debug.html">Debugging Kubernetes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cost.html">Estimating costs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="backups.html">Backups</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Topics</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="additional-resources.html">Additional resources</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="http://github.com/jupyterhub/zero-to-jupyterhub-k8s">GitHub Repo</a></li>
+    
+    <li class="toctree-l1"><a href="http://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues">Issue Tracker</a></li>
+    
+</ul>
+
+<div class="relations">
+<h3>Navigation</h3>
+<ul>
+  <li><a href="index.html">Documentation Home</a><ul>
+  <li><a href="setup-jupyterhub.html" title="Previous">Previous topic</a></li>
+  <li><a href="extending-jupyterhub.html" title="Next">Next topic</a></li>
+  </ul>
 </ul>
 </div>
   <div role="note" aria-label="source link">

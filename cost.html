@@ -8,6 +8,7 @@
     <title>Estimating costs &#8212; Zero to JupyterHub with Kubernetes 0.4 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/custom.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
@@ -42,6 +43,15 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
+  <div class='prev-next-top'>
+    
+     <a class='left-prev' href="debug.html" title="previous chapter">Previous</a>
+     <a class='right-next' href="backups.html" title="next chapter">Next</a>
+  <div style='clear:both;'></div>
+
+  </div>
+
+  
   <div class="section" id="estimating-costs">
 <span id="cost"></span><h1>Estimating costs<a class="headerlink" href="#estimating-costs" title="Permalink to this headline">¶</a></h1>
 <p>Cost estimates depend highly on your deployment setup. Several factors that
@@ -68,11 +78,11 @@ load times.</p>
 <h2>Interactive Cost Estimator<a class="headerlink" href="#interactive-cost-estimator" title="Permalink to this headline">¶</a></h2>
 <p>We’ve put together a small notebook that can help you estimate your costs
 for a JupyterHub instance. The button below will take you to an interactive
-notebook served with <a class="reference external" href="https://beta.mybinder.org">Binder</a>. Run the cells and
+notebook served with <a class="reference external" href="https://mybinder.org">Binder</a>. Run the cells and
 you’ll be able to choose the computational requirements you have, as well as
 draw a pattern of usage you expect over time. It will estimate the costs for
 you.</p>
-<a target="_blank" href="http://beta.mybinder.org/v2/gh/jupyterhub/zero-to-jupyterhub-k8s/master?filepath=draw_function.ipynb">
+<a target="_blank" href="http://mybinder.org/v2/gh/jupyterhub/zero-to-jupyterhub-k8s/master?filepath=doc/ntbk/draw_function.ipynb">
 <button style="background-color: rgb(235, 119, 55); border: 1px solid; border-color: black; color: white; padding: 15px 32px; text-align: center; text-decoration: none; font-size: 16px; margin: 4px 2px; cursor: pointer; border-radius: 8px;">Launch the Cost Estimator</button></a><div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">These are cost estimates based on Google Cloud Engine instances served from
@@ -116,6 +126,14 @@ needs.</p>
 </div>
 
 
+  <div class='prev-next-bottom'>
+    
+     <a class='left-prev' href="debug.html" title="previous chapter">Debugging Kubernetes</a>
+     <a class='right-next' href="backups.html" title="next chapter">Backups</a>
+  <div style='clear:both;'></div>
+
+  </div>
+
           </div>
         </div>
       </div>
@@ -124,27 +142,83 @@ needs.</p>
             <p class="logo"><a href="index.html">
               <img class="logo" src="_static/logo.png" alt="Logo"/>
             </a></p>
-  <h3><a href="index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Estimating costs</a><ul>
-<li><a class="reference internal" href="#computational-resources">Computational Resources</a></li>
-<li><a class="reference internal" href="#interactive-cost-estimator">Interactive Cost Estimator</a></li>
-<li><a class="reference internal" href="#users">Users</a></li>
-<li><a class="reference internal" href="#user-usage-patterns">User usage patterns</a></li>
-<li><a class="reference internal" href="#examples">Examples</a><ul>
-<li><a class="reference internal" href="#data-8">Data 8</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<div class="relations">
-<h3>Related Topics</h3>
+<h1 class="logo"><a href="index.html">Zero to JupyterHub with Kubernetes</a></h1>
+
+
+
+<p class="blurb">A tutorial to help install and manage JupyterHub with Kubernetes</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=jupyterhub&repo=zero-to-jupyterhub-k8s&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+
+<h3>Table of Contents</h3>
+<p class="caption"><span class="caption-text">Creating your JupyterHub</span></p>
 <ul>
-  <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="debug.html" title="previous chapter">Debugging Kubernetes</a></li>
-      <li>Next: <a href="backups.html" title="next chapter">Backups</a></li>
-  </ul></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started with JupyterHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="create-k8s-cluster.html">Creating a Kubernetes Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup-helm.html">Setting up Helm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup-jupyterhub.html">Setting up JupyterHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="turn-off.html">Turning Off JupyterHub and Computational Resources</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Customization Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="extending-jupyterhub.html">Extending your JupyterHub setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-experience.html">Customizing the User Experience</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-management.html">User Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">Tools used in a JupyterHub Deployment</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Administrator Guide</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="resource-mgmt.html">Resource management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="debug.html">Debugging Kubernetes</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Estimating costs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#computational-resources">Computational Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#interactive-cost-estimator">Interactive Cost Estimator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#users">Users</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#user-usage-patterns">User usage patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="backups.html">Backups</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Topics</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="additional-resources.html">Additional resources</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="http://github.com/jupyterhub/zero-to-jupyterhub-k8s">GitHub Repo</a></li>
+    
+    <li class="toctree-l1"><a href="http://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues">Issue Tracker</a></li>
+    
+</ul>
+
+<div class="relations">
+<h3>Navigation</h3>
+<ul>
+  <li><a href="index.html">Documentation Home</a><ul>
+  <li><a href="debug.html" title="Previous">Previous topic</a></li>
+  <li><a href="backups.html" title="Next">Next topic</a></li>
+  </ul>
 </ul>
 </div>
   <div role="note" aria-label="source link">

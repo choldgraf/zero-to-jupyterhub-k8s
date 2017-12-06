@@ -8,6 +8,7 @@
     <title>Debugging Kubernetes &#8212; Zero to JupyterHub with Kubernetes 0.4 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/custom.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
@@ -26,7 +27,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Estimating costs" href="cost.html" />
-    <link rel="prev" title="Resource management" href="resource-mgmt.html" />
+    <link rel="prev" title="Tools used in a JupyterHub Deployment" href="tools.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -42,14 +43,23 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
+  <div class='prev-next-top'>
+    
+     <a class='left-prev' href="tools.html" title="previous chapter">Previous</a>
+     <a class='right-next' href="cost.html" title="next chapter">Next</a>
+  <div style='clear:both;'></div>
+
+  </div>
+
+  
   <div class="section" id="debugging-kubernetes">
-<h1>Debugging Kubernetes<a class="headerlink" href="#debugging-kubernetes" title="Permalink to this headline">¶</a></h1>
+<span id="debug"></span><h1>Debugging Kubernetes<a class="headerlink" href="#debugging-kubernetes" title="Permalink to this headline">¶</a></h1>
 <p>Sometimes your JupyterHub deployment doesn’t behave the way you’d expect.
 This section provides some tips on debugging and fixing some common problems.</p>
 <div class="section" id="debugging-commands">
 <h2>Debugging commands<a class="headerlink" href="#debugging-commands" title="Permalink to this headline">¶</a></h2>
-<p>In order to debug your Kubernetes deployment, you need to be able to inspect
-the state of the pods being used. The following are a few common commands
+<p>In order to debug your JupyterHub deployment, you need to be able to inspect
+the state of the resources being used. The following are a few common commands
 for debugging.</p>
 <p><strong>Real world scenario:</strong> Let’s say you’ve got a JupyterHub deployed, and a user
 tells you that they are experiencing strange behavior. Let’s take a look
@@ -62,19 +72,19 @@ is called <code class="docutils literal"><span class="pre">jhub</span></code>. Y
 <div class="section" id="kubectl-get-pod">
 <h3><code class="docutils literal"><span class="pre">kubectl</span> <span class="pre">get</span> <span class="pre">pod</span></code><a class="headerlink" href="#kubectl-get-pod" title="Permalink to this headline">¶</a></h3>
 <p>To list all pods in your Kubernetes deployment:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">kubectl</span> <span class="n">get</span> <span class="n">pod</span> <span class="o">--</span><span class="n">namespace</span><span class="o">==</span><span class="n">jhub</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">kubectl</span> <span class="o">--</span><span class="n">namespace</span><span class="o">=</span><span class="n">jhub</span> <span class="n">get</span> <span class="n">pod</span>
 </pre></div>
 </div>
 <p>This will output a list of all pods being used in the deployment.</p>
 <p><strong>Real world scenario:</strong> In our case, we see two pods for the JupyterHub
-infrastructure (<code class="docutils literal"><span class="pre">hub-deployment</span></code> and <code class="docutils literal"><span class="pre">proxy-deployment</span></code>) as well as one user
+infrastructure (<code class="docutils literal"><span class="pre">hub</span></code> and <code class="docutils literal"><span class="pre">proxy</span></code>) as well as one user
 pod that was created when somebody logged in to the JupyterHub.</p>
 <p>Here’s an example of the output:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>$ kubectl --namespace=jhub get pod
 NAME                                READY     STATUS         RESTARTS   AGE
-hub-deployment-3311438805-xnfvp     1/1       Running        0          2m
+hub-3311438805-xnfvp     1/1       Running        0          2m
 jupyter-choldgraf                   0/1       ErrImagePull   0          25s
-proxy-deployment-1227971824-mn2wd   1/1       Running        0          5h
+proxy-1227971824-mn2wd   1/1       Running        0          5h
 </pre></div>
 </div>
 <p>Here we can see the two JupyterHub pods, as well as a single user pod. Note
@@ -83,7 +93,7 @@ that all user pods will begin with <code class="docutils literal"><span class="p
 pod contains something other than <code class="docutils literal"><span class="pre">Running</span></code>, then something may be wrong.</p>
 <p>In this case, we can see that our user’s pod is in the <code class="docutils literal"><span class="pre">ErrImagePull</span></code> state.
 This generally means that there’s something wrong with the Docker image that
-is defined in <code class="docutils literal"><span class="pre">singleuser</span></code> in our helm chart. Let’s dig further…</p>
+is defined in <code class="docutils literal"><span class="pre">singleuser</span></code> in our helm chart config. Let’s dig further…</p>
 </div>
 <div class="section" id="kubectl-describe-pod">
 <h3><code class="docutils literal"><span class="pre">kubectl</span> <span class="pre">describe</span> <span class="pre">pod</span></code><a class="headerlink" href="#kubectl-describe-pod" title="Permalink to this headline">¶</a></h3>
@@ -113,20 +123,20 @@ this by getting another view on the events that have transpired in the pod.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">kubectl</span> <span class="o">--</span><span class="n">namespace</span><span class="o">=</span><span class="n">jhub</span> <span class="n">logs</span> <span class="o">&lt;</span><span class="n">POD_NAME</span><span class="o">&gt;</span>
 </pre></div>
 </div>
-<p>This will output a list of the recent events for the pod. Parse these logs
+<p>This will show you the logs from the pod, which often contain useful
+information about what is going wrong. Parse these logs
 to see if something is generating an error.</p>
 <p><strong>Real world scenario:</strong> In our case, we get this line back:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>$ kubectl --namespace=jhub logs jupyter-choldgraf
 Error from server (BadRequest): container &quot;notebook&quot; in pod &quot;jupyter-choldgraf&quot; is waiting to start: trying and failing to pull image
 </pre></div>
 </div>
-<p>Now we are sure that something is wrong with our Docker file. Let’s check
+<p>Now we are sure that something is wrong with our Dockerfile. Let’s check
 our <code class="docutils literal"><span class="pre">config.yaml</span></code> file for the section where we specify the user’s
 Docker image. Here we see our problem:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">singleuser</span><span class="p">:</span>
 <span class="n">image</span><span class="p">:</span>
-    <span class="n">name</span><span class="p">:</span>
-        <span class="n">jupyter</span><span class="o">/</span><span class="n">scipy</span><span class="o">-</span><span class="n">notebook</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">jupyter</span><span class="o">/</span><span class="n">scipy</span><span class="o">-</span><span class="n">notebook</span>
 </pre></div>
 </div>
 <p>We haven’t specified a <code class="docutils literal"><span class="pre">tag</span></code> for our Docker image! Not specifying a tag
@@ -135,17 +145,15 @@ the pod to fail.</p>
 <p>To fix this, let’s add a tag to our <code class="docutils literal"><span class="pre">config.yaml</span></code> file:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">singleuser</span><span class="p">:</span>
 <span class="n">image</span><span class="p">:</span>
-    <span class="n">name</span><span class="p">:</span>
-        <span class="n">jupyter</span><span class="o">/</span><span class="n">scipy</span><span class="o">-</span><span class="n">notebook</span>
-    <span class="n">tag</span><span class="p">:</span>
-        <span class="n">ae885c0a6226</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">jupyter</span><span class="o">/</span><span class="n">scipy</span><span class="o">-</span><span class="n">notebook</span>
+    <span class="n">tag</span><span class="p">:</span> <span class="n">ae885c0a6226</span>
 </pre></div>
 </div>
 <p>Then run a helm upgrade:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">helm</span> <span class="n">upgrade</span> <span class="n">jhub</span> <span class="n">jupyterhub</span><span class="o">/</span><span class="n">jupyterhub</span> <span class="o">--</span><span class="n">version</span><span class="o">=</span><span class="n">v0</span><span class="o">.</span><span class="mi">4</span> <span class="o">-</span><span class="n">f</span> <span class="n">config</span><span class="o">.</span><span class="n">yaml</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">helm</span> <span class="n">upgrade</span> <span class="n">jhub</span> <span class="n">jupyterhub</span><span class="o">/</span><span class="n">jupyterhub</span> <span class="o">--</span><span class="n">version</span><span class="o">=</span><span class="n">v0</span><span class="o">.</span><span class="mi">5</span> <span class="o">-</span><span class="n">f</span> <span class="n">config</span><span class="o">.</span><span class="n">yaml</span>
 </pre></div>
 </div>
-<p>where <code class="docutils literal"><span class="pre">jhub</span></code> is the Kubernetes namespace (substitute the namespace that you
+<p>where <code class="docutils literal"><span class="pre">jhub</span></code> is the helm release name (substitute the release name that you
 chose during setup).</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -155,16 +163,16 @@ chose during setup).</p>
 deployment:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>$ kubectl --namespace=jhub get pod
 NAME                                READY     STATUS              RESTARTS   AGE
-hub-deployment-2653507799-r7wf8     0/1       ContainerCreating   0          31s
-hub-deployment-3311438805-xnfvp     1/1       Terminating         0          14m
+hub-2653507799-r7wf8     0/1       ContainerCreating   0          31s
+hub-3311438805-xnfvp     1/1       Terminating         0          14m
 jupyter-choldgraf                   0/1       ImagePullBackOff    0          12m
 proxy-deployment-1227971824-mn2wd   1/1       Running             0          5h
 </pre></div>
 </div>
-<p>Here we can see one <code class="docutils literal"><span class="pre">hub-deployment</span></code> pod being destroyed, and another (based
+<p>Here we can see one <code class="docutils literal"><span class="pre">hub</span></code> pod being destroyed, and another (based
 on the upgraded helm chart) being created. We also see our broken user pod,
-which will only be upgraded if it is restarted. To do this, let’s delete the
-user’s pod:</p>
+which will not be deleted automatically. Let’s manually delete it so a newer
+working pod can be started.:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>$ kubectl --namespace=jhub delete pod jupyter-choldgraf
 </pre></div>
 </div>
@@ -172,7 +180,7 @@ user’s pod:</p>
 list our running pods once again:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>$ kubectl --namespace=jhub get pod
 NAME                                READY     STATUS    RESTARTS   AGE
-hub-deployment-2653507799-r7wf8     1/1       Running   0          3m
+hub-2653507799-r7wf8     1/1       Running   0          3m
 jupyter-choldgraf                   1/1       Running   0          18s
 proxy-deployment-1227971824-mn2wd   1/1       Running   0          5h
 </pre></div>
@@ -190,17 +198,17 @@ more common bugs / gotchas that you may experience using JupyterHub with
 Kubernetes.</p>
 <div class="section" id="hub-fails-to-start">
 <h3>Hub fails to start<a class="headerlink" href="#hub-fails-to-start" title="Permalink to this headline">¶</a></h3>
-<p><strong>Symptom:</strong> following <code class="docutils literal"><span class="pre">kubectl</span> <span class="pre">get</span> <span class="pre">pod</span></code>, the <code class="docutils literal"><span class="pre">hub-deployment</span></code> pod is in
+<p><strong>Symptom:</strong> following <code class="docutils literal"><span class="pre">kubectl</span> <span class="pre">get</span> <span class="pre">pod</span></code>, the <code class="docutils literal"><span class="pre">hub</span></code> pod is in
 <code class="docutils literal"><span class="pre">Error</span></code> or <code class="docutils literal"><span class="pre">CrashLoopBackoff</span></code> state, or appears to be running but accessing
 the website for the JupyterHub returns an error message in the browser).</p>
 <p><strong>Investigating:</strong> the output of <code class="docutils literal"><span class="pre">kubectl</span> <span class="pre">--namespace=jhub</span> <span class="pre">logs</span>
-<span class="pre">hub-deployment...</span></code> shows something like:</p>
+<span class="pre">hub...</span></code> shows something like:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">File</span> <span class="s2">&quot;/usr/local/lib/python3.5/dist-packages/jupyterhub/proxy.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">589</span><span class="p">,</span> <span class="ow">in</span> <span class="n">get_all_routes</span>
   <span class="n">resp</span> <span class="o">=</span> <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">)</span>
 <span class="n">tornado</span><span class="o">.</span><span class="n">httpclient</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">:</span> <span class="n">HTTP</span> <span class="mi">403</span><span class="p">:</span> <span class="n">Forbidden</span>
 </pre></div>
 </div>
-<p><strong>Diagnosis:</strong> This is likely because the <code class="docutils literal"><span class="pre">hub-deployment</span></code> pod cannot
+<p><strong>Diagnosis:</strong> This is likely because the <code class="docutils literal"><span class="pre">hub</span></code> pod cannot
 communicate with the proxy pod API, likely because of a problem in the
 <code class="docutils literal"><span class="pre">secretToken</span></code> that was put in <code class="docutils literal"><span class="pre">config.yaml</span></code>.</p>
 <p><strong>Fix:</strong> Follow these steps:</p>
@@ -217,7 +225,7 @@ communicate with the proxy pod API, likely because of a problem in the
 </div>
 </li>
 <li><p class="first">Redeploy the helm chart:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">helm</span> <span class="n">upgrade</span> <span class="n">jhub</span> <span class="n">jupyterhub</span><span class="o">/</span><span class="n">jupyterhub</span> <span class="o">-</span><span class="n">f</span> <span class="n">my</span><span class="o">-</span><span class="n">config</span><span class="o">.</span><span class="n">yaml</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">helm</span> <span class="n">upgrade</span> <span class="n">jhub</span> <span class="n">jupyterhub</span><span class="o">/</span><span class="n">jupyterhub</span> <span class="o">-</span><span class="n">f</span> <span class="n">config</span><span class="o">.</span><span class="n">yaml</span>
 </pre></div>
 </div>
 </li>
@@ -227,6 +235,14 @@ communicate with the proxy pod API, likely because of a problem in the
 </div>
 
 
+  <div class='prev-next-bottom'>
+    
+     <a class='left-prev' href="tools.html" title="previous chapter">Tools used in a JupyterHub Deployment</a>
+     <a class='right-next' href="cost.html" title="next chapter">Estimating costs</a>
+  <div style='clear:both;'></div>
+
+  </div>
+
           </div>
         </div>
       </div>
@@ -235,29 +251,73 @@ communicate with the proxy pod API, likely because of a problem in the
             <p class="logo"><a href="index.html">
               <img class="logo" src="_static/logo.png" alt="Logo"/>
             </a></p>
-  <h3><a href="index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Debugging Kubernetes</a><ul>
-<li><a class="reference internal" href="#debugging-commands">Debugging commands</a><ul>
-<li><a class="reference internal" href="#kubectl-get-pod"><code class="docutils literal"><span class="pre">kubectl</span> <span class="pre">get</span> <span class="pre">pod</span></code></a></li>
-<li><a class="reference internal" href="#kubectl-describe-pod"><code class="docutils literal"><span class="pre">kubectl</span> <span class="pre">describe</span> <span class="pre">pod</span></code></a></li>
-<li><a class="reference internal" href="#kubectl-logs"><code class="docutils literal"><span class="pre">kubectl</span> <span class="pre">logs</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#troubleshooting-examples">Troubleshooting Examples</a><ul>
-<li><a class="reference internal" href="#hub-fails-to-start">Hub fails to start</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<div class="relations">
-<h3>Related Topics</h3>
+<h1 class="logo"><a href="index.html">Zero to JupyterHub with Kubernetes</a></h1>
+
+
+
+<p class="blurb">A tutorial to help install and manage JupyterHub with Kubernetes</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=jupyterhub&repo=zero-to-jupyterhub-k8s&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+
+<h3>Table of Contents</h3>
 <ul>
-  <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="resource-mgmt.html" title="previous chapter">Resource management</a></li>
-      <li>Next: <a href="cost.html" title="next chapter">Estimating costs</a></li>
-  </ul></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started with JupyterHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="create-k8s-cluster.html">Creating a Kubernetes Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup-helm.html">Setting up Helm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup-jupyterhub.html">Setting up JupyterHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="turn-off.html">Turning Off JupyterHub and Computational Resources</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="extending-jupyterhub.html">Extending your JupyterHub setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-experience.html">Customizing the User Experience</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-management.html">User Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">Tools used in a JupyterHub Deployment</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Debugging Kubernetes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#debugging-commands">Debugging commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting-examples">Troubleshooting Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cost.html">Estimating costs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Topics</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="additional-resources.html">Additional resources</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="http://github.com/jupyterhub/zero-to-jupyterhub-k8s">GitHub Repo</a></li>
+    
+    <li class="toctree-l1"><a href="http://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues">Issue Tracker</a></li>
+    
+</ul>
+
+<div class="relations">
+<h3>Navigation</h3>
+<ul>
+  <li><a href="index.html">Documentation Home</a><ul>
+  <li><a href="tools.html" title="Previous">Previous topic</a></li>
+  <li><a href="cost.html" title="Next">Next topic</a></li>
+  </ul>
 </ul>
 </div>
   <div role="note" aria-label="source link">

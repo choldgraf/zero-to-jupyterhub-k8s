@@ -36,16 +36,9 @@ up a Kubernetes Cluster. You may be able to receive `free credits
 <https://cloud.google.com/free/>`_ for trying it out. You will need to
 connect your credit card or other payment method to your google cloud account.
 
-1. Go to ``https://console.cloud.google.com``.
+1. Go to ``https://console.cloud.google.com`` and log in.
 
-2. Click the hamburger icon in the top left (the icon has three horizontal lines
-   in one button). Go to “Billing” then “Payment Methods”, and make sure you
-   have a credit card linked to the account. (You may also receive $300 in trial
-   credits.) And enable the following APIs:
-
-      - Google Compute Engine API
-      - Google Container Engine API
-      - Google Container Registry API
+2. Enable the `Container Engine API <https://console.cloud.google.com/apis/api/container.googleapis.com/overview>`_.
 
 3. Install and initialize the **gcloud command-line tools**. These tools send
    commands to Google Cloud and lets you do things like create and delete
@@ -71,7 +64,7 @@ connect your credit card or other payment method to your google cloud account.
           --num-nodes=3 \
           --machine-type=n1-standard-2 \
           --zone=us-central1-b \
-          --cluster-version=1.7.5
+          --cluster-version=1.8.4-gke.0
 
    where:
 
@@ -86,8 +79,8 @@ connect your credit card or other payment method to your google cloud account.
      be a good fit for all use cases!
    * ``--zone`` specifies which data center to use. Pick something that is not
      too far away from your users. You can find a list of them `here <https://cloud.google.com/compute/docs/regions-zones/regions-zones#available>`_.
-   * ``--cluster-version`` specifies the exact version of Kubernetes we want.
-     This lets us know we are using a known, supported version of Kubernetes.
+   * ``--cluster-version`` specifies the version of kubernetes we want. Here,
+     we specify the minimum that the default configuration will support.
 
 5. To test if your cluster is initialized, run:
 
@@ -96,6 +89,14 @@ connect your credit card or other payment method to your google cloud account.
       kubectl get node
 
    The response should list three running nodes.
+
+6. Give your account super-user permissions, allowing you to perform all
+   the actions needed to set up JupyterHub.
+
+   .. code-block:: bash
+
+      kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=<your-email-address>
+
 
 .. _microsoft-azure:
 
@@ -186,8 +187,14 @@ Setting up Kubernetes on Amazon Web Services (AWS)
 
 AWS does not have native support for Kubernetes, however there are
 many organizations that have put together their own solutions and
-guides for setting up Kubernetes on AWS. We like the `Heptio guide`_,
-and recommend using this for setting up your stack.
+guides for setting up Kubernetes on AWS.
+
+We like the `Heptio guide`_, and recommend using this for setting up your cluster for clusters
+that span short periods of time (a week long workshop, for example). However, if
+you are setting up a cluster that would need to run for much longer, we recommend you use
+[kops](https://kubernetes.io/docs/getting-started-guides/kops/). It is a bit more complex,
+but provides features (such as log collection & cluster upgrades) that are necessary to
+run a longer term cluster.
 
 .. note::
 

@@ -1,0 +1,314 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Authentication &#8212; Zero to JupyterHub with Kubernetes 0.4 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Debugging Kubernetes" href="debug.html" />
+    <link rel="prev" title="Helm Chart Reference" href="reference.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class='prev-next-top'>
+    
+     <a class='left-prev' href="reference.html" title="previous chapter">Previous</a>
+     <a class='right-next' href="debug.html" title="next chapter">Next</a>
+  <div style='clear:both;'></div>
+
+  </div>
+
+  
+  <div class="section" id="authentication">
+<span id="id1"></span><h1>Authentication<a class="headerlink" href="#authentication" title="Permalink to this headline">¶</a></h1>
+<p>Authentication allows you to control who has access to your JupyterHub deployment.
+There are many options available to you in controlling authentication, many of
+which are described below.</p>
+<div class="section" id="authenticating-with-oauth2">
+<h2>Authenticating with OAuth2<a class="headerlink" href="#authenticating-with-oauth2" title="Permalink to this headline">¶</a></h2>
+<p>JupyterHub’s <a class="reference external" href="https://github.com/jupyterhub/oauthenticator">oauthenticator</a>
+has support for enabling your users to authenticate via a third-party OAuth
+provider, including GitHub, Google, and CILogon.</p>
+<p>Follow the service-specific instructions linked on the
+<a class="reference external" href="https://github.com/jupyterhub/oauthenticator">oauthenticator repository</a>
+to generate your JupyterHub instance’s OAuth2 client ID and client secret. Then
+declare the values in the helm chart (<code class="docutils literal"><span class="pre">config.yaml</span></code>).</p>
+<p>Here are example configurations for two common authentication services. Note
+that in each case, you need to get the authentication credential information
+before you can configure the helmchart for authentication.</p>
+<div class="section" id="google">
+<h3>Google<a class="headerlink" href="#google" title="Permalink to this headline">¶</a></h3>
+<p>For more information see the full example of Google OAuth2 in the next section.</p>
+<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">auth</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">google</span>
+  <span class="l l-Scalar l-Scalar-Plain">google</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">clientId</span><span class="p p-Indicator">:</span> <span class="s">&quot;yourlongclientidstring.apps.googleusercontent.com&quot;</span>
+    <span class="l l-Scalar l-Scalar-Plain">clientSecret</span><span class="p p-Indicator">:</span> <span class="s">&quot;adifferentlongstring&quot;</span>
+    <span class="l l-Scalar l-Scalar-Plain">callbackUrl</span><span class="p p-Indicator">:</span> <span class="s">&quot;http://&lt;your_jupyterhub_host&gt;/hub/oauth_callback&quot;</span>
+    <span class="l l-Scalar l-Scalar-Plain">hostedDomain</span><span class="p p-Indicator">:</span> <span class="s">&quot;youruniversity.edu&quot;</span>
+    <span class="l l-Scalar l-Scalar-Plain">loginService</span><span class="p p-Indicator">:</span> <span class="s">&quot;Your</span><span class="nv"> </span><span class="s">University&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="github">
+<h3>GitHub<a class="headerlink" href="#github" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">auth</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">github</span>
+  <span class="l l-Scalar l-Scalar-Plain">github</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">clientId</span><span class="p p-Indicator">:</span> <span class="s">&quot;y0urg1thubc1ient1d&quot;</span>
+    <span class="l l-Scalar l-Scalar-Plain">clientSecret</span><span class="p p-Indicator">:</span> <span class="s">&quot;an0ther1ongs3cretstr1ng&quot;</span>
+    <span class="l l-Scalar l-Scalar-Plain">callbackUrl</span><span class="p p-Indicator">:</span> <span class="s">&quot;http://&lt;your_jupyterhub_host&gt;/hub/oauth_callback&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="cilogon">
+<h3>CILogon<a class="headerlink" href="#cilogon" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">auth</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">cilogon</span>
+  <span class="l l-Scalar l-Scalar-Plain">github</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">clientId</span><span class="p p-Indicator">:</span> <span class="s">&quot;y0urc1logonc1ient1d&quot;</span>
+    <span class="l l-Scalar l-Scalar-Plain">clientSecret</span><span class="p p-Indicator">:</span> <span class="s">&quot;an0ther1ongs3cretstr1ng&quot;</span>
+    <span class="l l-Scalar l-Scalar-Plain">callbackUrl</span><span class="p p-Indicator">:</span> <span class="s">&quot;http://&lt;your_jupyterhub_host&gt;/hub/oauth_callback&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="globus">
+<h3>Globus<a class="headerlink" href="#globus" title="Permalink to this headline">¶</a></h3>
+<p>Globus Auth is a foundational identity and access management platform service
+designed to address unique needs of the science and engineering community.
+Globus provides cloud-based services for reliably moving, sharing, publishing
+and discovering data, whether your files live on a supercomputer, lab cluster,
+tape archive, public cloud, or your own laptop. Start a Globus app
+<a class="reference external" href="https://developers.globus.org/">here</a>!</p>
+<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">auth</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">globus</span>
+  <span class="l l-Scalar l-Scalar-Plain">globus</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">clientId</span><span class="p p-Indicator">:</span> <span class="s">&quot;y0urc1logonc1ient1d&quot;</span>
+    <span class="l l-Scalar l-Scalar-Plain">clientSecret</span><span class="p p-Indicator">:</span> <span class="s">&quot;an0ther1ongs3cretstr1ng&quot;</span>
+    <span class="l l-Scalar l-Scalar-Plain">callbackUrl</span><span class="p p-Indicator">:</span> <span class="s">&quot;https://&lt;your_jupyterhub_host&gt;/hub/oauth_callback&quot;</span>
+    <span class="l l-Scalar l-Scalar-Plain">identityProvider</span><span class="p p-Indicator">:</span> <span class="s">&quot;youruniversity.edu&quot;</span>
+</pre></div>
+</div>
+<p>To add a whitelist of usernames add to the config file under <code class="docutils literal"><span class="pre">auth</span></code>:</p>
+<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">auth</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">whitelist</span><span class="p p-Indicator">:</span>
+        <span class="l l-Scalar l-Scalar-Plain">users</span><span class="p p-Indicator">:</span>
+           <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">user1</span>
+           <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">user2</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="full-example-of-google-oauth2">
+<h2>Full Example of Google OAuth2<a class="headerlink" href="#full-example-of-google-oauth2" title="Permalink to this headline">¶</a></h2>
+<p>If your institution is a <a class="reference external" href="https://gsuite.google.com">G Suite customer</a> that
+integrates with Google services such as Gmail, Calendar, and Drive, you can
+authenticate users to your JupyterHub using Google for authentication.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Google requires that you specify a fully qualified domain name for your
+hub rather than an IP address.</p>
+</div>
+<ol class="arabic simple">
+<li>Log in to the <a class="reference external" href="https://console.developers.google.com">Google API Console</a>.</li>
+<li>Select a project &gt; Create a project… and set ‘Project name’. This is a
+short term that is only displayed in the console. If you have already
+created a project you may skip this step.</li>
+<li>Type “Credentials” in the search field at the top and click to access the
+Credentials API.</li>
+<li>Click “Create credentials”, then “OAuth client ID”. Choose
+“Application type” &gt; “Web application”.</li>
+<li>Enter a name for your JupyterHub instance. You can give it a descriptive
+name or set it to be the hub’s hostname.</li>
+<li>Set “Authorized JavaScript origins” to be your hub’s URL.</li>
+<li>Set “Authorized redirect URIs” to be your hub’s URL followed by
+“/hub/oauth_callback”. For example, <a class="reference external" href="http://example.com/hub/oauth_callback">http://example.com/hub/oauth_callback</a>.</li>
+<li>When you click “Create”, the console will generate and display a Client ID
+and Client Secret. Save these values.</li>
+<li>Type “consent screen” in the search field at the top and click to access the
+OAuth consent screen. Here you will customize what your users see when they
+login to your JupyterHub instance for the first time. Click Save when you
+are done.</li>
+<li>In your helm chart, create a stanza that contains these OAuth fields:</li>
+</ol>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>auth:
+  type: google
+  google:
+    clientId: <span class="s2">&quot;yourlongclientidstring.apps.googleusercontent.com&quot;</span>
+    clientSecret: <span class="s2">&quot;adifferentlongstring&quot;</span>
+    callbackUrl: <span class="s2">&quot;http://&lt;your_jupyterhub_host&gt;/hub/oauth_callback&quot;</span>
+    hostedDomain: <span class="s2">&quot;youruniversity.edu&quot;</span>
+    loginService: <span class="s2">&quot;Your University&quot;</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal"><span class="pre">callbackUrl</span></code> key is set to the authorized redirect URI you specified
+earlier. Set <code class="docutils literal"><span class="pre">hostedDomain</span></code> to your institution’s domain name. The value of
+<code class="docutils literal"><span class="pre">loginService</span></code> is a descriptive term for your institution that reminds your
+users which account they are using to login.</p>
+</div>
+<div class="section" id="adding-a-whitelist">
+<h2>Adding a Whitelist<a class="headerlink" href="#adding-a-whitelist" title="Permalink to this headline">¶</a></h2>
+<p>JupyterHub can be configured to only allow a specified
+<a class="reference external" href="http://jupyterhub.readthedocs.io/en/latest/getting-started/authenticators-users-basics.html#create-a-whitelist-of-users">whitelist</a>
+of users to login. This is especially useful if you are
+using an authenticator with an authentication service open to the general
+public, such as GitHub or Google.</p>
+<p>You can specify this list of usernames in your <code class="docutils literal"><span class="pre">config.yaml</span></code>:</p>
+</div>
+</div>
+
+
+  <div class='prev-next-bottom'>
+    
+     <a class='left-prev' href="reference.html" title="previous chapter">Helm Chart Reference</a>
+     <a class='right-next' href="debug.html" title="next chapter">Debugging Kubernetes</a>
+  <div style='clear:both;'></div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+<h1 class="logo"><a href="index.html">Zero to JupyterHub with Kubernetes</a></h1>
+
+
+
+<p class="blurb">A tutorial to help install and manage JupyterHub with Kubernetes</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=jupyterhub&repo=zero-to-jupyterhub-k8s&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+
+<h3>Table of Contents</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started with JupyterHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="create-k8s-cluster.html">Creating a Kubernetes Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup-helm.html">Setting up Helm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup-jupyterhub.html">Setting up JupyterHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="turn-off.html">Turning Off JupyterHub and Computational Resources</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="extending-jupyterhub.html">Extending your JupyterHub setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-resources.html">User Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-management.html">User Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Helm Chart Reference</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Authentication</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#authenticating-with-oauth2">Authenticating with OAuth2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#full-example-of-google-oauth2">Full Example of Google OAuth2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#adding-a-whitelist">Adding a Whitelist</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="debug.html">Debugging Kubernetes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cost.html">Estimating costs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Topics</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">Tools used in a JupyterHub Deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="additional-resources.html">Additional resources</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="http://github.com/jupyterhub/zero-to-jupyterhub-k8s">GitHub Repo</a></li>
+    
+    <li class="toctree-l1"><a href="http://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues">Issue Tracker</a></li>
+    
+</ul>
+
+<div class="relations">
+<h3>Navigation</h3>
+<ul>
+  <li><a href="index.html">Documentation Home</a><ul>
+  <li><a href="reference.html" title="Previous">Previous topic</a></li>
+  <li><a href="debug.html" title="Next">Next topic</a></li>
+  </ul>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/authentication.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Project Jupyter team.
+      
+      |
+      <a href="_sources/authentication.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

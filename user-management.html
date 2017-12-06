@@ -1,12 +1,11 @@
 
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Index &#8212; Zero to JupyterHub with Kubernetes 0.4 documentation</title>
+    <title>User Management &#8212; Zero to JupyterHub with Kubernetes 0.4 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -25,8 +24,10 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="index" title="Index" href="#" />
+    <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Helm Chart Reference" href="reference.html" />
+    <link rel="prev" title="User Resources" href="user-resources.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -42,71 +43,53 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
+  <div class='prev-next-top'>
+    
+     <a class='left-prev' href="user-resources.html" title="previous chapter">Previous</a>
+     <a class='right-next' href="reference.html" title="next chapter">Next</a>
+  <div style='clear:both;'></div>
 
-<h1 id="index">Index</h1>
+  </div>
 
-<div class="genindex-jumpbox">
- <a href="#A"><strong>A</strong></a>
- | <a href="#C"><strong>C</strong></a>
- | <a href="#D"><strong>D</strong></a>
- | <a href="#E"><strong>E</strong></a>
- | <a href="#P"><strong>P</strong></a>
- | <a href="#R"><strong>R</strong></a>
- 
+  
+  <div class="section" id="user-management">
+<span id="user-management"></span><h1>User Management<a class="headerlink" href="#user-management" title="Permalink to this headline">¶</a></h1>
+<p>This section describes various ways to manage the permissions that users
+have on your JupyterHub.</p>
+<div class="section" id="admin-users">
+<span id="admin-users"></span><h2>Admin Users<a class="headerlink" href="#admin-users" title="Permalink to this headline">¶</a></h2>
+<p>JupyterHub has the concept of
+<a class="reference external" href="http://jupyterhub.readthedocs.io/en/latest/getting-started/authenticators-users-basics.html#configure-admins-admin-users">admin users</a>
+who have special rights. They can start / stop other user's servers, and
+optionally access user's notebooks. They will see a new <strong>Admin</strong> button in
+their Control Panel which will take them to an <strong>Admin Panel</strong> where they can
+perform all these actions.</p>
+<p>You can specify a list of admin users in your <code class="docutils literal"><span class="pre">config.yaml</span></code>:</p>
+<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">auth</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">admin</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">users</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">adminuser1</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">adminuser2</span>
+</pre></div>
 </div>
-<h2 id="A">A</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="glossary.html#term-admin-user"><strong>admin user</strong></a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="glossary.html#term-authenticator"><strong>authenticator</strong></a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="C">C</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="glossary.html#term-culler"><strong>culler</strong></a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="D">D</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="glossary.html#term-docker-image"><strong>docker image</strong></a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="E">E</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="glossary.html#term-environment-variables"><strong>environment variables</strong></a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="P">P</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="glossary.html#term-persistent-storage"><strong>persistent storage</strong></a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="R">R</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="glossary.html#term-repo2docker"><strong>repo2docker</strong></a>
-</li>
-  </ul></td>
-</tr></table>
+<p>By default, admins can access user's notebooks. If you wish to disable this, use
+this in your <code class="docutils literal"><span class="pre">config.yaml</span></code>:</p>
+<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">auth</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">admin</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">access</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+</pre></div>
+</div>
+</div>
+</div>
 
 
+  <div class='prev-next-bottom'>
+    
+     <a class='left-prev' href="user-resources.html" title="previous chapter">User Resources</a>
+     <a class='right-next' href="reference.html" title="next chapter">Helm Chart Reference</a>
+  <div style='clear:both;'></div>
+
+  </div>
 
           </div>
         </div>
@@ -143,11 +126,14 @@
 <li class="toctree-l1"><a class="reference internal" href="setup-jupyterhub.html">Setting up JupyterHub</a></li>
 <li class="toctree-l1"><a class="reference internal" href="turn-off.html">Turning Off JupyterHub and Computational Resources</a></li>
 </ul>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="extending-jupyterhub.html">Extending your JupyterHub setup</a></li>
-<li class="toctree-l1"><a class="reference internal" href="user-environment.html">Customizing the User Environment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user-resources.html">User Resources</a></li>
-<li class="toctree-l1"><a class="reference internal" href="user-management.html">User Management</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">User Management</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#admin-users">Admin Users</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Helm Chart Reference</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication</a></li>
@@ -158,7 +144,6 @@
 <li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Topics</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="reference.html">Helm Chart Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tools.html">Tools used in a JupyterHub Deployment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="additional-resources.html">Additional resources</a></li>
@@ -178,9 +163,18 @@
 <h3>Navigation</h3>
 <ul>
   <li><a href="index.html">Documentation Home</a><ul>
+  <li><a href="user-resources.html" title="Previous">Previous topic</a></li>
+  <li><a href="reference.html" title="Next">Next topic</a></li>
   </ul>
 </ul>
 </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/user-management.md.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
@@ -198,6 +192,9 @@
     <div class="footer">
       &copy;2017, Project Jupyter team.
       
+      |
+      <a href="_sources/user-management.md.txt"
+          rel="nofollow">Page source</a>
     </div>
 
     

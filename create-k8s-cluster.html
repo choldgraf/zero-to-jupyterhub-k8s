@@ -8,6 +8,7 @@
     <title>Creating a Kubernetes Cluster &#8212; Zero to JupyterHub with Kubernetes 0.4 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/custom.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
@@ -42,6 +43,15 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
+  <div class='prev-next-top'>
+    
+     <a class='left-prev' href="getting-started.html" title="previous chapter">Previous</a>
+     <a class='right-next' href="setup-helm.html" title="next chapter">Next</a>
+  <div style='clear:both;'></div>
+
+  </div>
+
+  
   <div class="section" id="creating-a-kubernetes-cluster">
 <span id="create-k8s-cluster"></span><h1>Creating a Kubernetes Cluster<a class="headerlink" href="#creating-a-kubernetes-cluster" title="Permalink to this headline">¶</a></h1>
 <p>Kubernetes’ documentation describes the many <a class="reference external" href="https://kubernetes.io/docs/setup/pick-right-solution/">ways to set up a cluster</a>.
@@ -73,19 +83,9 @@ for information about keeping your Kubernetes infrastruture secure.</p>
 up a Kubernetes Cluster. You may be able to receive <a class="reference external" href="https://cloud.google.com/free/">free credits</a> for trying it out. You will need to
 connect your credit card or other payment method to your google cloud account.</p>
 <ol class="arabic">
-<li><p class="first">Go to <code class="docutils literal"><span class="pre">https://console.cloud.google.com</span></code>.</p>
+<li><p class="first">Go to <code class="docutils literal"><span class="pre">https://console.cloud.google.com</span></code> and log in.</p>
 </li>
-<li><p class="first">Click the hamburger icon in the top left (the icon has three horizontal lines
-in one button). Go to “Billing” then “Payment Methods”, and make sure you
-have a credit card linked to the account. (You may also receive $300 in trial
-credits.) And enable the following APIs:</p>
-<blockquote>
-<div><ul class="simple">
-<li>Google Compute Engine API</li>
-<li>Google Container Engine API</li>
-<li>Google Container Registry API</li>
-</ul>
-</div></blockquote>
+<li><p class="first">Enable the <a class="reference external" href="https://console.cloud.google.com/apis/api/container.googleapis.com/overview">Container Engine API</a>.</p>
 </li>
 <li><p class="first">Install and initialize the <strong>gcloud command-line tools</strong>. These tools send
 commands to Google Cloud and lets you do things like create and delete
@@ -111,7 +111,7 @@ command:</p>
     --num-nodes<span class="o">=</span><span class="m">3</span> <span class="se">\</span>
     --machine-type<span class="o">=</span>n1-standard-2 <span class="se">\</span>
     --zone<span class="o">=</span>us-central1-b <span class="se">\</span>
-    --cluster-version<span class="o">=</span><span class="m">1</span>.7.5
+    --cluster-version<span class="o">=</span><span class="m">1</span>.8.4-gke.0
 </pre></div>
 </div>
 <p>where:</p>
@@ -123,12 +123,12 @@ is a <a class="reference external" href="https://cloud.google.com/compute/docs/m
 to choose from. Picking something appropriate here will have a large effect
 on how much you pay - smaller machines restrict the max amount of RAM each
 user can have access to but allow more fine-grained scaling, reducing cost.
-The default (<cite>n1-standard-2</cite>) has 2CPUs and 7.5G of RAM each, and might not
+The default (<code class="docutils literal"><span class="pre">n1-standard-2</span></code>) has 2CPUs and 7.5G of RAM each, and might not
 be a good fit for all use cases!</li>
 <li><code class="docutils literal"><span class="pre">--zone</span></code> specifies which data center to use. Pick something that is not
 too far away from your users. You can find a list of them <a class="reference external" href="https://cloud.google.com/compute/docs/regions-zones/regions-zones#available">here</a>.</li>
-<li><code class="docutils literal"><span class="pre">--cluster-version</span></code> specifies the exact version of Kubernetes we want.
-This lets us know we are using a known, supported version of Kubernetes.</li>
+<li><code class="docutils literal"><span class="pre">--cluster-version</span></code> specifies the version of kubernetes we want. Here,
+we specify the minimum that the default configuration will support.</li>
 </ul>
 </li>
 <li><p class="first">To test if your cluster is initialized, run:</p>
@@ -136,6 +136,12 @@ This lets us know we are using a known, supported version of Kubernetes.</li>
 </pre></div>
 </div>
 <p>The response should list three running nodes.</p>
+</li>
+<li><p class="first">Give your account super-user permissions, allowing you to perform all
+the actions needed to set up JupyterHub.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>kubectl create clusterrolebinding cluster-admin-binding --clusterrole<span class="o">=</span>cluster-admin --user<span class="o">=</span>&lt;your-email-address&gt;
+</pre></div>
+</div>
 </li>
 </ol>
 </div>
@@ -226,8 +232,13 @@ az acs create --orchestrator-type<span class="o">=</span>kubernetes <span class=
 <span id="amazon-aws"></span><h2>Setting up Kubernetes on Amazon Web Services (AWS)<a class="headerlink" href="#setting-up-kubernetes-on-amazon-web-services-aws" title="Permalink to this headline">¶</a></h2>
 <p>AWS does not have native support for Kubernetes, however there are
 many organizations that have put together their own solutions and
-guides for setting up Kubernetes on AWS. We like the <a class="reference external" href="https://s3.amazonaws.com/quickstart-reference/heptio/latest/doc/heptio-kubernetes-on-the-aws-cloud.pdf">Heptio guide</a>,
-and recommend using this for setting up your stack.</p>
+guides for setting up Kubernetes on AWS.</p>
+<p>We like the <a class="reference external" href="https://s3.amazonaws.com/quickstart-reference/heptio/latest/doc/heptio-kubernetes-on-the-aws-cloud.pdf">Heptio guide</a>, and recommend using this for setting up your cluster for clusters
+that span short periods of time (a week long workshop, for example). However, if
+you are setting up a cluster that would need to run for much longer, we recommend you use
+[kops](<a class="reference external" href="https://kubernetes.io/docs/getting-started-guides/kops/">https://kubernetes.io/docs/getting-started-guides/kops/</a>). It is a bit more complex,
+but provides features (such as log collection &amp; cluster upgrades) that are necessary to
+run a longer term cluster.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">The Heptio deployment of Kubernetes on AWS should not be considered
@@ -385,6 +396,14 @@ and more secure authorization mode is not out of beta yet.</p>
 </div>
 
 
+  <div class='prev-next-bottom'>
+    
+     <a class='left-prev' href="getting-started.html" title="previous chapter">Getting started with JupyterHub</a>
+     <a class='right-next' href="setup-helm.html" title="next chapter">Setting up Helm</a>
+  <div style='clear:both;'></div>
+
+  </div>
+
           </div>
         </div>
       </div>
@@ -393,23 +412,81 @@ and more secure authorization mode is not out of beta yet.</p>
             <p class="logo"><a href="index.html">
               <img class="logo" src="_static/logo.png" alt="Logo"/>
             </a></p>
-  <h3><a href="index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Creating a Kubernetes Cluster</a><ul>
-<li><a class="reference internal" href="#setting-up-kubernetes-on-google-cloud">Setting up Kubernetes on Google Cloud</a></li>
-<li><a class="reference internal" href="#setting-up-kubernetes-on-microsoft-azure-container-service-acs">Setting up Kubernetes on Microsoft Azure Container Service (ACS)</a></li>
-<li><a class="reference internal" href="#setting-up-kubernetes-on-amazon-web-services-aws">Setting up Kubernetes on Amazon Web Services (AWS)</a></li>
-<li><a class="reference internal" href="#next-step">Next Step</a></li>
+<h1 class="logo"><a href="index.html">Zero to JupyterHub with Kubernetes</a></h1>
+
+
+
+<p class="blurb">A tutorial to help install and manage JupyterHub with Kubernetes</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=jupyterhub&repo=zero-to-jupyterhub-k8s&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+
+<h3>Table of Contents</h3>
+<p class="caption"><span class="caption-text">Creating your JupyterHub</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started with JupyterHub</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Creating a Kubernetes Cluster</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#setting-up-kubernetes-on-google-cloud">Setting up Kubernetes on Google Cloud</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#setting-up-kubernetes-on-microsoft-azure-container-service-acs">Setting up Kubernetes on Microsoft Azure Container Service (ACS)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#setting-up-kubernetes-on-amazon-web-services-aws">Setting up Kubernetes on Amazon Web Services (AWS)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#next-step">Next Step</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="setup-helm.html">Setting up Helm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup-jupyterhub.html">Setting up JupyterHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="turn-off.html">Turning Off JupyterHub and Computational Resources</a></li>
 </ul>
-<div class="relations">
-<h3>Related Topics</h3>
+<p class="caption"><span class="caption-text">Customization Guide</span></p>
 <ul>
-  <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="getting-started.html" title="previous chapter">Getting started with JupyterHub</a></li>
-      <li>Next: <a href="setup-helm.html" title="next chapter">Setting up Helm</a></li>
-  </ul></li>
+<li class="toctree-l1"><a class="reference internal" href="extending-jupyterhub.html">Extending your JupyterHub setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-experience.html">Customizing the User Experience</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-management.html">User Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">Tools used in a JupyterHub Deployment</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Administrator Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="debug.html">Debugging Kubernetes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cost.html">Estimating costs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="backups.html">Backups</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Topics</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="additional-resources.html">Additional resources</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="http://github.com/jupyterhub/zero-to-jupyterhub-k8s">GitHub Repo</a></li>
+    
+    <li class="toctree-l1"><a href="http://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues">Issue Tracker</a></li>
+    
+</ul>
+
+<div class="relations">
+<h3>Navigation</h3>
+<ul>
+  <li><a href="index.html">Documentation Home</a><ul>
+  <li><a href="getting-started.html" title="Previous">Previous topic</a></li>
+  <li><a href="setup-helm.html" title="Next">Next topic</a></li>
+  </ul>
 </ul>
 </div>
   <div role="note" aria-label="source link">

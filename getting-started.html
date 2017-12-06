@@ -8,6 +8,7 @@
     <title>Getting started with JupyterHub &#8212; Zero to JupyterHub with Kubernetes 0.4 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/custom.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
@@ -42,13 +43,22 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
+  <div class='prev-next-top'>
+    
+     <a class='left-prev' href="index.html" title="previous chapter">Previous</a>
+     <a class='right-next' href="create-k8s-cluster.html" title="next chapter">Next</a>
+  <div style='clear:both;'></div>
+
+  </div>
+
+  
   <div class="section" id="getting-started-with-jupyterhub">
 <span id="getting-started"></span><h1>Getting started with JupyterHub<a class="headerlink" href="#getting-started-with-jupyterhub" title="Permalink to this headline">¶</a></h1>
-<p>The goal of <strong>JupyterHub</strong> is to create custom computing environments that
+<p><strong>JupyterHub</strong> lets you create custom computing environments that
 can be accessed remotely (e.g., at a specific URL) by multiple users.</p>
 <p>This guide acts as an assistant to guide you through the process of setting
-up your JupyterHub deployment. It helps you connect and configure the
-following things:</p>
+up your JupyterHub deployment using Kubernetes. It helps you connect
+and configure the following things:</p>
 <ul class="simple">
 <li>A <strong>cloud provider</strong> such Google Cloud, Microsoft Azure, Amazon EC2, and
 others</li>
@@ -59,19 +69,6 @@ others</li>
 </ul>
 <p>You already are well on your way to understanding what it means (procedurally)
 to deploy Jupyterhub.</p>
-<div class="section" id="deployment-guide">
-<h2>Deployment Guide<a class="headerlink" href="#deployment-guide" title="Permalink to this headline">¶</a></h2>
-<p>We’ve put together a short walkthrough going from having nothing set up to a
-complete deployment of jupyterhub on Google Cloud. If you want to follow that
-comprehensive walkthrough, the next step on your journey is to <a class="reference internal" href="create-k8s-cluster.html#google-cloud"><span class="std std-ref">create a
-Kubernetes cluster on Google Cloud</span></a>.</p>
-</div>
-<div class="section" id="extending-and-customizing-jupyterhub">
-<h2>Extending and Customizing JupyterHub<a class="headerlink" href="#extending-and-customizing-jupyterhub" title="Permalink to this headline">¶</a></h2>
-<p>If you’d like to know how to expand and customize your jupyterhub setup, such
-as increasing the computational resources available to users or changing authentication
-services, check out <a class="reference internal" href="extending-jupyterhub.html#extending-jupyterhub"><span class="std std-ref">Extending your JupyterHub setup</span></a>.</p>
-</div>
 <div class="section" id="dependencies-for-deploying-a-jupyterhub-instance">
 <h2>Dependencies for Deploying a JupyterHub Instance<a class="headerlink" href="#dependencies-for-deploying-a-jupyterhub-instance" title="Permalink to this headline">¶</a></h2>
 <p>For a more extensive description of the tools and services that JupyterHub
@@ -82,8 +79,21 @@ depends upon, see our <a class="reference internal" href="tools.html#tools"><spa
 <p>If you have questions or suggestions, please reach out at our <a class="reference external" href="https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues">issues page</a>
 on GitHub.</p>
 </div>
+<div class="section" id="next-step">
+<h2>Next Step<a class="headerlink" href="#next-step" title="Permalink to this headline">¶</a></h2>
+<p>To begin deploying your JupyterHub on Kubernetes, please move on
+to <span class="xref std std-ref">_create-k8s-cluster</span>.</p>
+</div>
 </div>
 
+
+  <div class='prev-next-bottom'>
+    
+     <a class='left-prev' href="index.html" title="previous chapter">Zero to JupyterHub</a>
+     <a class='right-next' href="create-k8s-cluster.html" title="next chapter">Creating a Kubernetes Cluster</a>
+  <div style='clear:both;'></div>
+
+  </div>
 
           </div>
         </div>
@@ -93,23 +103,76 @@ on GitHub.</p>
             <p class="logo"><a href="index.html">
               <img class="logo" src="_static/logo.png" alt="Logo"/>
             </a></p>
-  <h3><a href="index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Getting started with JupyterHub</a><ul>
-<li><a class="reference internal" href="#deployment-guide">Deployment Guide</a></li>
-<li><a class="reference internal" href="#extending-and-customizing-jupyterhub">Extending and Customizing JupyterHub</a></li>
-<li><a class="reference internal" href="#dependencies-for-deploying-a-jupyterhub-instance">Dependencies for Deploying a JupyterHub Instance</a></li>
-<li><a class="reference internal" href="#questions-or-suggestions">Questions or Suggestions?</a></li>
+<h1 class="logo"><a href="index.html">Zero to JupyterHub with Kubernetes</a></h1>
+
+
+
+<p class="blurb">A tutorial to help install and manage JupyterHub with Kubernetes</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=jupyterhub&repo=zero-to-jupyterhub-k8s&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+
+<h3>Table of Contents</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting started with JupyterHub</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#dependencies-for-deploying-a-jupyterhub-instance">Dependencies for Deploying a JupyterHub Instance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#questions-or-suggestions">Questions or Suggestions?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#next-step">Next Step</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="create-k8s-cluster.html">Creating a Kubernetes Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup-helm.html">Setting up Helm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup-jupyterhub.html">Setting up JupyterHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="turn-off.html">Turning Off JupyterHub and Computational Resources</a></li>
 </ul>
-<div class="relations">
-<h3>Related Topics</h3>
 <ul>
-  <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="index.html" title="previous chapter">Zero to JupyterHub</a></li>
-      <li>Next: <a href="create-k8s-cluster.html" title="next chapter">Creating a Kubernetes Cluster</a></li>
-  </ul></li>
+<li class="toctree-l1"><a class="reference internal" href="extending-jupyterhub.html">Extending your JupyterHub setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-environment.html">Customizing the User Environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-resources.html">User Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-management.html">User Management</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="debug.html">Debugging Kubernetes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cost.html">Estimating costs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Topics</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Helm Chart Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">Tools used in a JupyterHub Deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="additional-resources.html">Additional resources</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="http://github.com/jupyterhub/zero-to-jupyterhub-k8s">GitHub Repo</a></li>
+    
+    <li class="toctree-l1"><a href="http://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues">Issue Tracker</a></li>
+    
+</ul>
+
+<div class="relations">
+<h3>Navigation</h3>
+<ul>
+  <li><a href="index.html">Documentation Home</a><ul>
+  <li><a href="index.html" title="Previous">Previous topic</a></li>
+  <li><a href="create-k8s-cluster.html" title="Next">Next topic</a></li>
+  </ul>
 </ul>
 </div>
   <div role="note" aria-label="source link">
