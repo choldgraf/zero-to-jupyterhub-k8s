@@ -78,14 +78,14 @@ for information about keeping your Kubernetes infrastruture secure.</p>
 </div>
 <div class="section" id="setting-up-kubernetes-on-google-cloud">
 <span id="google-cloud"></span><h2>Setting up Kubernetes on <a class="reference external" href="https://cloud.google.com/">Google Cloud</a><a class="headerlink" href="#setting-up-kubernetes-on-google-cloud" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference external" href="https://cloud.google.com/container-engine/">Google Container Engine</a>
-(confusingly abbreviated to GKE) is the simplest and most common way of setting
+<p><a class="reference external" href="https://cloud.google.com/kubernetes-engine/">Google Kubernetes Engine</a>
+(GKE) is the simplest and most common way of setting
 up a Kubernetes Cluster. You may be able to receive <a class="reference external" href="https://cloud.google.com/free/">free credits</a> for trying it out. You will need to
 connect your credit card or other payment method to your google cloud account.</p>
 <ol class="arabic">
 <li><p class="first">Go to <code class="docutils literal"><span class="pre">https://console.cloud.google.com</span></code> and log in.</p>
 </li>
-<li><p class="first">Enable the <a class="reference external" href="https://console.cloud.google.com/apis/api/container.googleapis.com/overview">Container Engine API</a>.</p>
+<li><p class="first">Enable the <a class="reference external" href="https://console.cloud.google.com/apis/api/container.googleapis.com/overview">Kubernetes Engine API</a>.</p>
 </li>
 <li><p class="first">Install and initialize the <strong>gcloud command-line tools</strong>. These tools send
 commands to Google Cloud and lets you do things like create and delete
@@ -432,7 +432,6 @@ and more secure authorization mode is not out of beta yet.</p>
 
 
 <h3>Table of Contents</h3>
-<p class="caption"><span class="caption-text">Creating your JupyterHub</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started with JupyterHub</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Creating a Kubernetes Cluster</a><ul>
@@ -446,26 +445,23 @@ and more secure authorization mode is not out of beta yet.</p>
 <li class="toctree-l1"><a class="reference internal" href="setup-jupyterhub.html">Setting up JupyterHub</a></li>
 <li class="toctree-l1"><a class="reference internal" href="turn-off.html">Turning Off JupyterHub and Computational Resources</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Customization Guide</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="extending-jupyterhub.html">Extending your JupyterHub setup</a></li>
-<li class="toctree-l1"><a class="reference internal" href="user-experience.html">Customizing the User Experience</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-environment.html">Customizing the User Environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-resources.html">User Resources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user-management.html">User Management</a></li>
-<li class="toctree-l1"><a class="reference internal" href="reference.html">Configuration Reference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tools.html">Tools used in a JupyterHub Deployment</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Administrator Guide</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication</a></li>
 <li class="toctree-l1"><a class="reference internal" href="debug.html">Debugging Kubernetes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cost.html">Estimating costs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="backups.html">Backups</a></li>
-<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading</a></li>
 <li class="toctree-l1"><a class="reference internal" href="security.html">Security Considerations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Topics</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Reference</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Helm Chart Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">Tools used in a JupyterHub Deployment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="additional-resources.html">Additional resources</a></li>
 </ul>
