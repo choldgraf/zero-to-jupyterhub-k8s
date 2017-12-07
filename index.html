@@ -110,7 +110,7 @@ deployment.</p>
 requirements. If you would like to expand JupyterHub, customize its setup,
 increase the computational resources available for users, or change
 authentication services, this guide will walk you through the steps.
-See the <a class="reference internal" href="reference.html#id1"><span class="std std-ref">Helm Chart Reference</span></a> for a list of frequently used configurable
+See the <a class="reference internal" href="reference.html#id1"><span class="std std-ref">Helm Chart Configuration Reference</span></a> for a list of frequently used configurable
 helm chart fields.</p>
 <div class="toctree-wrapper compound">
 <ul>
@@ -176,6 +176,11 @@ cloud-based deployments and tips for maintaining your deployment.</p>
 <li class="toctree-l2"><a class="reference internal" href="troubleshooting.html#common-error-messages">Common error messages</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading The helm chart</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="upgrading.html#general-upgrade-advice">General upgrade advice</a></li>
+<li class="toctree-l2"><a class="reference internal" href="upgrading.html#v0-4-to-v0-5">v0.4 to v0.5</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Topics</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="advanced.html#ingress">Ingress</a></li>
 <li class="toctree-l2"><a class="reference internal" href="advanced.html#arbitrary-code-in-jupyterhub-config-py">Arbitrary code in <code class="docutils literal"><span class="pre">jupyterhub_config.py</span></code></a></li>
@@ -188,7 +193,7 @@ cloud-based deployments and tips for maintaining your deployment.</p>
 <span id="id4"></span><h2>Reference<a class="headerlink" href="#reference" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="reference.html">Helm Chart Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Helm Chart Configuration Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tools.html">Tools used in a JupyterHub Deployment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="additional-resources.html">Additional resources</a></li>
@@ -264,10 +269,11 @@ organizations (and the organizations that support them!)</p>
 <li class="toctree-l1"><a class="reference internal" href="cost.html">Estimating costs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="security.html">Security Considerations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading The helm chart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Topics</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="reference.html">Helm Chart Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Helm Chart Configuration Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tools.html">Tools used in a JupyterHub Deployment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="additional-resources.html">Additional resources</a></li>
@@ -277,9 +283,9 @@ organizations (and the organizations that support them!)</p>
 <hr />
 <ul>
     
-    <li class="toctree-l1"><a href="http://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues">Issue Tracker</a></li>
-    
     <li class="toctree-l1"><a href="http://github.com/jupyterhub/zero-to-jupyterhub-k8s">GitHub Repo</a></li>
+    
+    <li class="toctree-l1"><a href="http://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues">Issue Tracker</a></li>
     
 </ul>
 
