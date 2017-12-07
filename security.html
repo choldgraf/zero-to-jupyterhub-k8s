@@ -56,28 +56,41 @@
 <span id="security"></span><h1>Security Considerations<a class="headerlink" href="#security-considerations" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="setting-up-https">
 <h2>Setting up HTTPS<a class="headerlink" href="#setting-up-https" title="Permalink to this headline">¶</a></h2>
-<p>Enabling HTTPS is an important part of keeping the internet secure for
-your users &amp; the world at large. Zero to JupyterHub makes doing so quite
+<p>Enabling HTTPS is an important security practice.
+Zero to JupyterHub makes doing so quite
 easy since version 0.5, integrating with <a class="reference external" href="https://letsencrypt.org/">Let’s Encrypt</a>
 for free HTTPS certificates.</p>
-<p>You can also purchase your own SSL certificates from a certificate provider.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Alternatively, you can purchase your own SSL certificates from a certificate provider.</p>
+</div>
+<div class="section" id="set-up-your-domain">
+<h3>Set up your domain<a class="headerlink" href="#set-up-your-domain" title="Permalink to this headline">¶</a></h3>
 <ol class="arabic">
 <li><p class="first">Buy a domain name from a registrar. Pick whichever one you want.</p>
 </li>
 <li><p class="first">Create an <code class="docutils literal"><span class="pre">A</span> <span class="pre">record</span></code> from the domain you want to use, pointing to the
-<code class="docutils literal"><span class="pre">EXTERNAL-IP</span></code> of the <code class="docutils literal"><span class="pre">proxy-public</span></code> service.</p>
+<code class="docutils literal"><span class="pre">EXTERNAL-IP</span></code> of the <code class="docutils literal"><span class="pre">proxy-public</span></code> service. The exact way to do this
+will depend on the DNS provider that you’re using.</p>
 </li>
 <li><p class="first">Wait for the change to propagate. Propagation can take several minutes to
 several hours. Wait until you can type in the name of the domain you bought
 and it shows you the JupyterHub landing page.</p>
 <p>It is important that you wait - prematurely going to the next step might cause problems!</p>
 </li>
-<li><p class="first">Tell JupyterHub to use HTTPS via <code class="docutils literal"><span class="pre">config.yaml</span></code></p>
-</li>
+</ol>
+</div>
+<div class="section" id="configure-jupyterhub-to-use-https">
+<h3>Configure JupyterHub to use HTTPS<a class="headerlink" href="#configure-jupyterhub-to-use-https" title="Permalink to this headline">¶</a></h3>
+<p>Now that your domain is ready, it’s time to configure JupyterHub to use HTTPS
+when connecting to it.</p>
+<ol class="arabic simple">
+<li>Tell JupyterHub to use HTTPS via <code class="docutils literal"><span class="pre">config.yaml</span></code></li>
 </ol>
 <blockquote>
 <div><ol class="loweralpha simple">
-<li>For letsencrypt, add your domain name and contact email for letsencrypt renewal to <code class="docutils literal"><span class="pre">config.yaml</span></code>:</li>
+<li>If you’re using letsencrypt, add your domain name and contact email
+for letsencrypt renewal to <code class="docutils literal"><span class="pre">config.yaml</span></code>:</li>
 </ol>
 <blockquote>
 <div><div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">proxy</span><span class="p p-Indicator">:</span>
@@ -101,7 +114,8 @@ Add to <code class="docutils literal"><span class="pre">config.yaml</span></code
     <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">manual</span>
 </pre></div>
 </div>
-<p>and paste the contents of your ssl key and certificate to <code class="docutils literal"><span class="pre">secrets.yaml</span></code>:</p>
+<p>and paste the contents of your ssl key and certificate into a file
+called <code class="docutils literal"><span class="pre">secrets.yaml</span></code>, like so:</p>
 <div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">proxy</span><span class="p p-Indicator">:</span>
   <span class="l l-Scalar l-Scalar-Plain">https</span><span class="p p-Indicator">:</span>
     <span class="l l-Scalar l-Scalar-Plain">manual</span><span class="p p-Indicator">:</span>
@@ -117,11 +131,11 @@ Add to <code class="docutils literal"><span class="pre">config.yaml</span></code
 </div>
 </div></blockquote>
 </div></blockquote>
-<ol class="arabic simple" start="5">
+<ol class="arabic simple" start="2">
 <li>Apply the config changes by running <code class="docutils literal"><span class="pre">helm</span> <span class="pre">upgrade</span> <span class="pre">...</span></code>.</li>
-<li>Wait for about a minute, now your hub is HTTPS enabled! Congratulations, your
-users are now more secure now than they were before!</li>
+<li>Wait for about a minute, now your hub is HTTPS enabled!</li>
 </ol>
+</div>
 </div>
 <div class="section" id="role-based-access-control-rbac">
 <h2>Role Based Access Control (RBAC)<a class="headerlink" href="#role-based-access-control-rbac" title="Permalink to this headline">¶</a></h2>
@@ -134,8 +148,8 @@ Kubernetes cluster and all the nodes in it, which is bad!</p>
 appropriate minimal RBAC rules for the various components we use. If you want to
 disable the RBAC rules for whatever reason, you can do so with the following
 snippet in your config.yaml:</p>
-<p>We highly recommend against doing so, however, as this will introduce
-security vulnerabilities to your deployment!</p>
+<p>We recommend keeping RBAC enabled. Proceed with caution if disabling RBAC,
+as this introduces security vulnerabilities.</p>
 </div>
 </div>
 
@@ -185,9 +199,9 @@ security vulnerabilities to your deployment!</p>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="extending-jupyterhub.html">Extending your JupyterHub setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-environment.html">Customizing the User Environment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user-resources.html">User Resources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user-management.html">User Management</a></li>
-<li class="toctree-l1"><a class="reference internal" href="reference.html">Helm Chart Reference</a></li>
 </ul>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication</a></li>
@@ -202,6 +216,7 @@ security vulnerabilities to your deployment!</p>
 <li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Topics</a></li>
 </ul>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Helm Chart Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tools.html">Tools used in a JupyterHub Deployment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="additional-resources.html">Additional resources</a></li>
@@ -211,9 +226,9 @@ security vulnerabilities to your deployment!</p>
 <hr />
 <ul>
     
-    <li class="toctree-l1"><a href="http://github.com/jupyterhub/zero-to-jupyterhub-k8s">GitHub Repo</a></li>
-    
     <li class="toctree-l1"><a href="http://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues">Issue Tracker</a></li>
+    
+    <li class="toctree-l1"><a href="http://github.com/jupyterhub/zero-to-jupyterhub-k8s">GitHub Repo</a></li>
     
 </ul>
 

@@ -26,8 +26,8 @@
     <link rel="shortcut icon" href="_static/favicon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Resource management" href="resource-mgmt.html" />
-    <link rel="prev" title="Configuration Reference" href="reference.html" />
+    <link rel="next" title="Glossary" href="glossary.html" />
+    <link rel="prev" title="Helm Chart Reference" href="reference.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -46,7 +46,7 @@
   <div class='prev-next-top'>
     
      <a class='left-prev' href="reference.html" title="previous chapter">Previous</a>
-     <a class='right-next' href="resource-mgmt.html" title="next chapter">Next</a>
+     <a class='right-next' href="glossary.html" title="next chapter">Next</a>
   <div style='clear:both;'></div>
 
   </div>
@@ -304,8 +304,8 @@ what kind of usage exists on the cluster.</li>
 
   <div class='prev-next-bottom'>
     
-     <a class='left-prev' href="reference.html" title="previous chapter">Configuration Reference</a>
-     <a class='right-next' href="resource-mgmt.html" title="next chapter">Resource management</a>
+     <a class='left-prev' href="reference.html" title="previous chapter">Helm Chart Reference</a>
+     <a class='right-next' href="glossary.html" title="next chapter">Glossary</a>
   <div style='clear:both;'></div>
 
   </div>
@@ -338,7 +338,6 @@ what kind of usage exists on the cluster.</li>
 
 
 <h3>Table of Contents</h3>
-<p class="caption"><span class="caption-text">Creating your JupyterHub</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started with JupyterHub</a></li>
 <li class="toctree-l1"><a class="reference internal" href="create-k8s-cluster.html">Creating a Kubernetes Cluster</a></li>
@@ -346,34 +345,23 @@ what kind of usage exists on the cluster.</li>
 <li class="toctree-l1"><a class="reference internal" href="setup-jupyterhub.html">Setting up JupyterHub</a></li>
 <li class="toctree-l1"><a class="reference internal" href="turn-off.html">Turning Off JupyterHub and Computational Resources</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Customization Guide</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="extending-jupyterhub.html">Extending your JupyterHub setup</a></li>
-<li class="toctree-l1"><a class="reference internal" href="user-experience.html">Customizing the User Experience</a></li>
-<li class="toctree-l1"><a class="reference internal" href="user-management.html">User Management</a></li>
-<li class="toctree-l1"><a class="reference internal" href="reference.html">Configuration Reference</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Tools used in a JupyterHub Deployment</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#cloud-computing-providers">Cloud Computing Providers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#container-technology">Container Technology</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#kubernetes">Kubernetes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#helm">Helm</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#jupyterhub">JupyterHub</a></li>
-</ul>
-</li>
-</ul>
-<p class="caption"><span class="caption-text">Administrator Guide</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="resource-mgmt.html">Resource management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending-jupyterhub.html">Extending your JupyterHub setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-environment.html">Customizing the User Environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-resources.html">User Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-management.html">User Management</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication</a></li>
 <li class="toctree-l1"><a class="reference internal" href="debug.html">Debugging Kubernetes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cost.html">Estimating costs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="backups.html">Backups</a></li>
-<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading</a></li>
 <li class="toctree-l1"><a class="reference internal" href="security.html">Security Considerations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Topics</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Reference</span></p>
-<ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Helm Chart Reference</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Tools used in a JupyterHub Deployment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="additional-resources.html">Additional resources</a></li>
 </ul>
@@ -382,9 +370,9 @@ what kind of usage exists on the cluster.</li>
 <hr />
 <ul>
     
-    <li class="toctree-l1"><a href="http://github.com/jupyterhub/zero-to-jupyterhub-k8s">GitHub Repo</a></li>
-    
     <li class="toctree-l1"><a href="http://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues">Issue Tracker</a></li>
+    
+    <li class="toctree-l1"><a href="http://github.com/jupyterhub/zero-to-jupyterhub-k8s">GitHub Repo</a></li>
     
 </ul>
 
@@ -393,7 +381,7 @@ what kind of usage exists on the cluster.</li>
 <ul>
   <li><a href="index.html">Documentation Home</a><ul>
   <li><a href="reference.html" title="Previous">Previous topic</a></li>
-  <li><a href="resource-mgmt.html" title="Next">Next topic</a></li>
+  <li><a href="glossary.html" title="Next">Next topic</a></li>
   </ul>
 </ul>
 </div>

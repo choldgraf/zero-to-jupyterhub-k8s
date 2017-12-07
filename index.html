@@ -65,16 +65,15 @@ tools may change quickly. If you see anything that is incorrect or have any
 questions, feel free to reach out at the <a class="reference external" href="https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues">issues page</a>.</p>
 <div class="section" id="creating-your-jupyterhub">
 <span id="id1"></span><h2>Creating your JupyterHub<a class="headerlink" href="#creating-your-jupyterhub" title="Permalink to this headline">¶</a></h2>
-<p>This is a short walkthrough starting from square one. Go from having
-nothing set up to a complete deployment of JupyterHub in the cloud.
-To begin this comprehensive walkthrough, the next step on your journey is
-to <a class="reference internal" href="create-k8s-cluster.html#google-cloud"><span class="std std-ref">create a Kubernetes cluster on Google Cloud</span></a>.</p>
+<p>This tutorial starts from “step zero” and walks through how to install
+and configure a complete JupyterHub deployment in the cloud. Using Kubernetes
+and the JupyterHub Helm chart provides sensible defaults for an initial
+deployment.</p>
+<p>To get started, go to <a class="reference internal" href="create-k8s-cluster.html#google-cloud"><span class="std std-ref">create a Kubernetes cluster on Google Cloud</span></a>.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started with JupyterHub</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="getting-started.html#dependencies-for-deploying-a-jupyterhub-instance">Dependencies for Deploying a JupyterHub Instance</a></li>
-<li class="toctree-l2"><a class="reference internal" href="getting-started.html#questions-or-suggestions">Questions or Suggestions?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="getting-started.html#next-step">Next Step</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="create-k8s-cluster.html">Creating a Kubernetes Cluster</a><ul>
@@ -108,10 +107,11 @@ to <a class="reference internal" href="create-k8s-cluster.html#google-cloud"><sp
 <div class="section" id="customization-guide">
 <span id="id2"></span><h2>Customization Guide<a class="headerlink" href="#customization-guide" title="Permalink to this headline">¶</a></h2>
 <p>JupyterHub can be configured and customized to fit a variety of deployment
-requirements. If you’d like to know how to expand and customize your jupyterhub setup, such
-as increasing the computational resources available to users or changing authentication
-services, check out the sections below. See the <a class="reference internal" href="reference.html#id1"><span class="std std-ref">Helm Chart Reference</span></a> for a semi-complete
-list of fields you can configure with your helm chart.</p>
+requirements. If you would like to expand JupyterHub, customize its setup,
+increase the computational resources available for users, or change
+authentication services, this guide will walk you through the steps.
+See the <a class="reference internal" href="reference.html#id1"><span class="std std-ref">Helm Chart Reference</span></a> for a list of frequently used configurable
+helm chart fields.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="extending-jupyterhub.html">Extending your JupyterHub setup</a><ul>
@@ -144,7 +144,7 @@ list of fields you can configure with your helm chart.</p>
 <span id="id3"></span><h2>Administrator Guide<a class="headerlink" href="#administrator-guide" title="Permalink to this headline">¶</a></h2>
 <p>This section provides information on managing and maintaining a staging or
 production deployment of JupyterHub. It has considerations for managing
-cloud-based deployments in general and tips for maintaining your deployment.</p>
+cloud-based deployments and tips for maintaining your deployment.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication</a><ul>
@@ -277,9 +277,9 @@ organizations (and the organizations that support them!)</p>
 <hr />
 <ul>
     
-    <li class="toctree-l1"><a href="http://github.com/jupyterhub/zero-to-jupyterhub-k8s">GitHub Repo</a></li>
-    
     <li class="toctree-l1"><a href="http://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues">Issue Tracker</a></li>
+    
+    <li class="toctree-l1"><a href="http://github.com/jupyterhub/zero-to-jupyterhub-k8s">GitHub Repo</a></li>
     
 </ul>
 
