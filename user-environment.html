@@ -71,6 +71,13 @@ how to use existing docker images, how to create custom images, and how to set
 environment variables.</p>
 <div class="section" id="use-an-existing-docker-image">
 <h2>Use an existing docker image<a class="headerlink" href="#use-an-existing-docker-image" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The Docker image you are using must have the <code class="docutils literal"><span class="pre">jupyterhub</span></code> package
+installed in order to work. Moreover, the version of <code class="docutils literal"><span class="pre">jupyterhub</span></code> must
+match the version installed by the helm chart that you’re using. For example,
+<code class="docutils literal"><span class="pre">v0.5</span></code> of the helm chart uses  <code class="docutils literal"><span class="pre">jupyterhub==0.8</span></code>.</p>
+</div>
 <p>Using an existing docker image, that someone else has written and maintained,
 is the simplest approach. For example, Project Jupyter maintains the
 <a class="reference external" href="https://github.com/jupyter/docker-stacks/">jupyter/docker-stacks</a> repo,
