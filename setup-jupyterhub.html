@@ -142,26 +142,25 @@ for now to avoid too much confusion, but advanced users of Kubernetes and
 helm should feel free to use different values.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p>If you get a <code class="docutils literal"><span class="pre">release</span> <span class="pre">named</span> <span class="pre">&lt;YOUR-RELEASE-NAME&gt;</span> <span class="pre">already</span> <span class="pre">exists</span></code> error, then
+<ul class="last">
+<li><p class="first">If you get a <code class="docutils literal"><span class="pre">release</span> <span class="pre">named</span> <span class="pre">&lt;YOUR-RELEASE-NAME&gt;</span> <span class="pre">already</span> <span class="pre">exists</span></code> error, then
 you should delete the release by running
 <code class="docutils literal"><span class="pre">helm</span> <span class="pre">delete</span> <span class="pre">--purge</span> <span class="pre">&lt;YOUR-RELEASE-NAME&gt;</span></code>. Then reinstall by repeating this
 step. If it persists, also do <code class="docutils literal"><span class="pre">kubectl</span> <span class="pre">delete</span> <span class="pre">&lt;YOUR-NAMESPACE&gt;</span></code> and try again.</p>
-<p class="last">If you’re pulling from a large Docker image you may get a
+<p>If you’re pulling from a large Docker image you may get a
 <code class="docutils literal"><span class="pre">Error:</span> <span class="pre">timed</span> <span class="pre">out</span> <span class="pre">waiting</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">condition</span></code> error,
 add a <code class="docutils literal"><span class="pre">--timeout=SOME-LARGE-NUMBER</span></code>
 parameter to the <code class="docutils literal"><span class="pre">helm</span> <span class="pre">install</span></code> command.</p>
-</div>
 </li>
-</ol>
-<blockquote>
-<div><div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">The <code class="docutils literal"><span class="pre">--version</span></code> parameter corresponds to the <em>version of the helm chart</em>,
+<li><p class="first">The <code class="docutils literal"><span class="pre">--version</span></code> parameter corresponds to the <em>version of the helm chart</em>,
 not the version of JupyterHub. Each version of the JupyterHub helm chart
 is paired with a specific version of JupyterHub. E.g., v0.5 of the helm
 chart runs JupyterHub v0.8.</p>
+</li>
+</ul>
 </div>
-</div></blockquote>
+</li>
+</ol>
 <ol class="arabic" start="2">
 <li><p class="first">While Step 1 is running, you can see the pods being created by entering in
 a different terminal:</p>
@@ -235,6 +234,7 @@ authenticators, and more!</p>
 
 
 <h3>Table of Contents</h3>
+<p class="caption"><span class="caption-text">Creating your JupyterHub</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started with JupyterHub</a></li>
 <li class="toctree-l1"><a class="reference internal" href="create-k8s-cluster.html">Creating a Kubernetes Cluster</a></li>
@@ -246,21 +246,25 @@ authenticators, and more!</p>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="turn-off.html">Turning Off JupyterHub and Computational Resources</a></li>
 </ul>
+<p class="caption"><span class="caption-text">Customization Guide</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="extending-jupyterhub.html">Extending your JupyterHub setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user-environment.html">Customizing the User Environment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user-resources.html">User Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-storage.html">User storage in JupyterHub</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user-management.html">User Management</a></li>
 </ul>
+<p class="caption"><span class="caption-text">Administrator Guide</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication</a></li>
 <li class="toctree-l1"><a class="reference internal" href="debug.html">Debugging Kubernetes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cost.html">Estimating costs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="security.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security.html">Security</a></li>
 <li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading The helm chart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Topics</a></li>
 </ul>
+<p class="caption"><span class="caption-text">Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="reference.html">Helm Chart Configuration Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tools.html">Tools used in a JupyterHub Deployment</a></li>

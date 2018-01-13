@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="_static/favicon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="User Management" href="user-management.html" />
+    <link rel="next" title="User storage in JupyterHub" href="user-storage.html" />
     <link rel="prev" title="Customizing the User Environment" href="user-environment.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -46,7 +46,7 @@
   <div class='prev-next-top'>
     
      <a class='left-prev' href="user-environment.html" title="previous chapter">Previous</a>
-     <a class='right-next' href="user-management.html" title="next chapter">Next</a>
+     <a class='right-next' href="user-storage.html" title="next chapter">Next</a>
   <div style='clear:both;'></div>
 
   </div>
@@ -116,45 +116,10 @@ consumes a lot of memory).</p>
 <p class="last">Remember to <a class="reference internal" href="extending-jupyterhub.html#apply-config-changes"><span class="std std-ref">apply the change</span></a> after changing your <code class="docutils literal"><span class="pre">config.yaml</span></code> file!</p>
 </div>
 </div>
-<div class="section" id="allocate-user-storage">
-<span id="user-storage"></span><h2>Allocate user storage<a class="headerlink" href="#allocate-user-storage" title="Permalink to this headline">¶</a></h2>
-<p>By default, each user receives their own, 10Gi disk for storage when they log
-in to JupyterHub. This storage can be turned off or changed as described in
-these sections.</p>
-</div>
-<div class="section" id="turn-off-per-user-persistent-storage">
-<h2>Turn off per-user persistent storage<a class="headerlink" href="#turn-off-per-user-persistent-storage" title="Permalink to this headline">¶</a></h2>
-<p>If you do not wish for users to have any persistent storage, it can be
-turned off. Edit the <code class="docutils literal"><span class="pre">config.yaml</span></code> file and set the storage type to
-<code class="docutils literal"><span class="pre">none</span></code>:</p>
-<blockquote>
-<div><div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">singleuser</span><span class="p p-Indicator">:</span>
-  <span class="l l-Scalar l-Scalar-Plain">storage</span><span class="p p-Indicator">:</span>
-    <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">none</span>
-</pre></div>
-</div>
-</div></blockquote>
-<p>Next <a class="reference internal" href="extending-jupyterhub.html#apply-config-changes"><span class="std std-ref">apply the changes</span></a>.</p>
-<p>After the changes are applied, new users will no longer be allocated a
-persistent <code class="docutils literal"><span class="pre">$HOME</span></code> directory. Any currently running users will still have
-access to their storage until their server is restarted.</p>
-</div>
-<div class="section" id="change-per-user-persistent-storage-size">
-<h2>Change per-user persistent storage size<a class="headerlink" href="#change-per-user-persistent-storage-size" title="Permalink to this headline">¶</a></h2>
-<p>By default, storage for user home directories are sized to 10Gi each. To
-increase or decrease this value, edit the <code class="docutils literal"><span class="pre">config.yaml</span></code> file:</p>
-<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">singleuser</span><span class="p p-Indicator">:</span>
-   <span class="l l-Scalar l-Scalar-Plain">storage</span><span class="p p-Indicator">:</span>
-     <span class="l l-Scalar l-Scalar-Plain">capacity</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">5Gi</span>
-</pre></div>
-</div>
-<p>This example will make all <strong>new</strong> user’s home directories be 5Gi each,
-instead of the default 10Gi.</p>
-<div class="admonition important">
-<p class="first admonition-title">Important</p>
-<p class="last">The disks of “logged in” users will not change or be decreased in
-this example.</p>
-</div>
+<div class="section" id="modifying-user-storage-type-and-size">
+<h2>Modifying user storage type and size<a class="headerlink" href="#modifying-user-storage-type-and-size" title="Permalink to this headline">¶</a></h2>
+<p>See the <a class="reference internal" href="user-storage.html#user-storage"><span class="std std-ref">User storage in JupyterHub</span></a> for information on how to modify the type and
+size of storage that your users have access to.</p>
 </div>
 <div class="section" id="expanding-and-contracting-the-size-of-your-cluster">
 <h2>Expanding and contracting the size of your cluster<a class="headerlink" href="#expanding-and-contracting-the-size-of-your-cluster" title="Permalink to this headline">¶</a></h2>
@@ -200,7 +165,7 @@ report the current <code class="docutils literal"><span class="pre">Ready/NotRea
   <div class='prev-next-bottom'>
     
      <a class='left-prev' href="user-environment.html" title="previous chapter">Customizing the User Environment</a>
-     <a class='right-next' href="user-management.html" title="next chapter">User Management</a>
+     <a class='right-next' href="user-storage.html" title="next chapter">User storage in JupyterHub</a>
   <div style='clear:both;'></div>
 
   </div>
@@ -233,6 +198,7 @@ report the current <code class="docutils literal"><span class="pre">Ready/NotRea
 
 
 <h3>Table of Contents</h3>
+<p class="caption"><span class="caption-text">Creating your JupyterHub</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started with JupyterHub</a></li>
 <li class="toctree-l1"><a class="reference internal" href="create-k8s-cluster.html">Creating a Kubernetes Cluster</a></li>
@@ -240,28 +206,30 @@ report the current <code class="docutils literal"><span class="pre">Ready/NotRea
 <li class="toctree-l1"><a class="reference internal" href="setup-jupyterhub.html">Setting up JupyterHub</a></li>
 <li class="toctree-l1"><a class="reference internal" href="turn-off.html">Turning Off JupyterHub and Computational Resources</a></li>
 </ul>
+<p class="caption"><span class="caption-text">Customization Guide</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="extending-jupyterhub.html">Extending your JupyterHub setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user-environment.html">Customizing the User Environment</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">User Resources</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#set-user-memory-and-cpu-guarantees-limits">Set user memory and CPU guarantees / limits</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#allocate-user-storage">Allocate user storage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#turn-off-per-user-persistent-storage">Turn off per-user persistent storage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#change-per-user-persistent-storage-size">Change per-user persistent storage size</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#modifying-user-storage-type-and-size">Modifying user storage type and size</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#expanding-and-contracting-the-size-of-your-cluster">Expanding and contracting the size of your cluster</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="user-storage.html">User storage in JupyterHub</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user-management.html">User Management</a></li>
 </ul>
+<p class="caption"><span class="caption-text">Administrator Guide</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication</a></li>
 <li class="toctree-l1"><a class="reference internal" href="debug.html">Debugging Kubernetes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cost.html">Estimating costs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="security.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security.html">Security</a></li>
 <li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading The helm chart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Topics</a></li>
 </ul>
+<p class="caption"><span class="caption-text">Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="reference.html">Helm Chart Configuration Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tools.html">Tools used in a JupyterHub Deployment</a></li>
@@ -284,7 +252,7 @@ report the current <code class="docutils literal"><span class="pre">Ready/NotRea
 <ul>
   <li><a href="index.html">Documentation Home</a><ul>
   <li><a href="user-environment.html" title="Previous">Previous topic</a></li>
-  <li><a href="user-management.html" title="Next">Next topic</a></li>
+  <li><a href="user-storage.html" title="Next">Next topic</a></li>
   </ul>
 </ul>
 </div>

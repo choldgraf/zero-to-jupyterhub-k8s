@@ -27,7 +27,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Helm Chart Configuration Reference" href="reference.html" />
-    <link rel="prev" title="Troubleshooting" href="troubleshooting.html" />
+    <link rel="prev" title="Upgrading The helm chart" href="upgrading.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -45,7 +45,7 @@
             
   <div class='prev-next-top'>
     
-     <a class='left-prev' href="troubleshooting.html" title="previous chapter">Previous</a>
+     <a class='left-prev' href="upgrading.html" title="previous chapter">Previous</a>
      <a class='right-next' href="reference.html" title="next chapter">Next</a>
   <div style='clear:both;'></div>
 
@@ -139,14 +139,26 @@ configuration.</li>
 supported in the helm chart</li>
 </ol>
 <p>Unfortunately, you have to write your python <em>in</em> your YAML file. There's no way
-to include a file in <code class="docutils literal"><span class="pre">config.yaml</span></code>. Remember to use a <code class="docutils literal"><span class="pre">|</span></code> for multi-line strings
-in YAML:</p>
+to include a file in <code class="docutils literal"><span class="pre">config.yaml</span></code>.</p>
+<p>You can specify <code class="docutils literal"><span class="pre">hub.extraConfig</span></code> as a raw string (remember to use the <code class="docutils literal"><span class="pre">|</span></code> for multi-line
+YAML strings):</p>
 <div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">hub</span><span class="p p-Indicator">:</span>
   <span class="l l-Scalar l-Scalar-Plain">extraConfig</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
     <span class="no">import time</span>
     <span class="no">c.Spawner.environment += {</span>
        <span class="no">&quot;CURRENT_TIME&quot;: str(time.time())</span>
     <span class="no">}</span>
+</pre></div>
+</div>
+<p>You can also specify <code class="docutils literal"><span class="pre">hub.extraConfig</span></code> as a dictionary, if you want to logically
+split your customizations. The code will be evaluated in alphabetical sorted
+order of the key.</p>
+<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">hub</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">extraConfig</span><span class="p p-Indicator">:</span>
+   <span class="l l-Scalar l-Scalar-Plain">00-first-config</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+     <span class="no"># some code</span>
+   <span class="l l-Scalar l-Scalar-Plain">10-second-config</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+     <span class="no"># some other code</span>
 </pre></div>
 </div>
 </div>
@@ -157,17 +169,17 @@ in <code class="docutils literal"><span class="pre">hub.extraConfig</span></code
 easily separate your code (which goes in <code class="docutils literal"><span class="pre">hub.extraConfig</span></code>) from your config
 (which should go here).</p>
 <p>For example, if you use the following snippet in your config.yaml file:</p>
-<div class="highlight-config.yaml"><div class="highlight"><pre><span></span>hub:
-  extraConfigMap:
-    myString: Hello!
-    myList:
-      - Item1
-      - Item2
-    myDict:
-      key: value
-    myLongString: |
-      Line1
-      Line2
+<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">hub</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">extraConfigMap</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">myString</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Hello!</span>
+    <span class="l l-Scalar l-Scalar-Plain">myList</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">Item1</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">Item2</span>
+    <span class="l l-Scalar l-Scalar-Plain">myDict</span><span class="p p-Indicator">:</span>
+      <span class="l l-Scalar l-Scalar-Plain">key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">value</span>
+    <span class="l l-Scalar l-Scalar-Plain">myLongString</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+      <span class="no">Line1</span>
+      <span class="no">Line2</span>
 </pre></div>
 </div>
 <p>In your <code class="docutils literal"><span class="pre">hub.extraConfig</span></code>,</p>
@@ -206,12 +218,49 @@ configured database
 <a class="reference external" href="https://kubernetes.io/docs/api-reference/v1.8/#container-v1-core">container specifications</a>.</p>
 </div>
 </div>
+<div class="section" id="picking-a-scheduler-strategy">
+<span id="picking-a-scheduler-strategy"></span><h2>Picking a Scheduler Strategy<a class="headerlink" href="#picking-a-scheduler-strategy" title="Permalink to this headline">¶</a></h2>
+<p>Kubernetes offers very flexible ways to determine how it distributes pods on
+your nodes. The JupyterHub helm chart supports two common configurations, see
+below for a brief description of each.</p>
+<div class="section" id="spread">
+<span id="spread"></span><h3>Spread<a class="headerlink" href="#spread" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><strong>Behavior</strong>: This spreads user pods across <strong>as many nodes as possible</strong>.</li>
+<li><strong>Benefits</strong>: A single node going down will not affect too many users. If you do not have explicit memory &amp; cpu
+limits, this strategy also allows your users the most efficient use of RAM &amp; CPU.</li>
+<li><strong>Drawbacks</strong>: This strategy is less efficient when used with autoscaling.</li>
+</ul>
+<p>This is the default strategy. To explicitly specify it, use the following in your
+<code class="docutils literal"><span class="pre">config.yaml</span></code>:</p>
+<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">singleuser</span><span class="p p-Indicator">:</span>
+   <span class="l l-Scalar l-Scalar-Plain">schedulerStrategy</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">spread</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="pack">
+<span id="pack"></span><h3>Pack<a class="headerlink" href="#pack" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><strong>Behavior</strong>: This packs user pods into <strong>as few nodes as possible</strong>.</li>
+<li><strong>Benefits</strong>: This increases your resource utilization, which is useful in conjunction with autoscalers.</li>
+<li><strong>Drawbacks</strong>: A single node going down might affect more user pods than using
+a &quot;spread&quot; strategy (depending on the node).</li>
+</ul>
+<p>When you use this strategy, you should specify limits and guarantees for memory
+and cpu. This will make your users' experience more predictable.</p>
+<p>To explicitly specify this strategy, use the following in your <code class="docutils literal"><span class="pre">config.yaml</span></code>:</p>
+<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">singleuser</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">schedulerStrategy</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">pack</span>
+</pre></div>
+</div>
+</div>
+</div>
 </div>
 
 
   <div class='prev-next-bottom'>
     
-     <a class='left-prev' href="troubleshooting.html" title="previous chapter">Troubleshooting</a>
+     <a class='left-prev' href="upgrading.html" title="previous chapter">Upgrading The helm chart</a>
      <a class='right-next' href="reference.html" title="next chapter">Helm Chart Configuration Reference</a>
   <div style='clear:both;'></div>
 
@@ -245,6 +294,7 @@ configured database
 
 
 <h3>Table of Contents</h3>
+<p class="caption"><span class="caption-text">Creating your JupyterHub</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started with JupyterHub</a></li>
 <li class="toctree-l1"><a class="reference internal" href="create-k8s-cluster.html">Creating a Kubernetes Cluster</a></li>
@@ -252,24 +302,30 @@ configured database
 <li class="toctree-l1"><a class="reference internal" href="setup-jupyterhub.html">Setting up JupyterHub</a></li>
 <li class="toctree-l1"><a class="reference internal" href="turn-off.html">Turning Off JupyterHub and Computational Resources</a></li>
 </ul>
+<p class="caption"><span class="caption-text">Customization Guide</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="extending-jupyterhub.html">Extending your JupyterHub setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user-environment.html">Customizing the User Environment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user-resources.html">User Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-storage.html">User storage in JupyterHub</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user-management.html">User Management</a></li>
 </ul>
+<p class="caption"><span class="caption-text">Administrator Guide</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication</a></li>
 <li class="toctree-l1"><a class="reference internal" href="debug.html">Debugging Kubernetes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cost.html">Estimating costs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="security.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security.html">Security</a></li>
 <li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading The helm chart</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Advanced Topics</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#ingress">Ingress</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#arbitrary-code-in-jupyterhub-config-py">Arbitrary code in <code class="docutils literal"><span class="pre">jupyterhub_config.py</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#picking-a-scheduler-strategy">Picking a Scheduler Strategy</a></li>
 </ul>
 </li>
 </ul>
+<p class="caption"><span class="caption-text">Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="reference.html">Helm Chart Configuration Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tools.html">Tools used in a JupyterHub Deployment</a></li>
@@ -291,7 +347,7 @@ configured database
 <h3>Navigation</h3>
 <ul>
   <li><a href="index.html">Documentation Home</a><ul>
-  <li><a href="troubleshooting.html" title="Previous">Previous topic</a></li>
+  <li><a href="upgrading.html" title="Previous">Previous topic</a></li>
   <li><a href="reference.html" title="Next">Next topic</a></li>
   </ul>
 </ul>

@@ -66,15 +66,14 @@ popular ways of getting setup in various cloud providers:</p>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">During the process of setting up JupyterHub, you’ll be creating some
+<ul class="last simple">
+<li>During the process of setting up JupyterHub, you’ll be creating some
 files for configuration purposes. It may be helpful to create a folder
-for your JuypterHub deployment to keep track of these files.</p>
-</div>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">If you are concerned at all about security (you probably should be), see
+for your JuypterHub deployment to keep track of these files.</li>
+<li>If you are concerned at all about security (you probably should be), see
 the <a class="reference external" href="http://blog.kubernetes.io/2016/08/security-best-practices-kubernetes-deployment.html">Kubernetes best-practices guide</a>
-for information about keeping your Kubernetes infrastruture secure.</p>
+for information about keeping your Kubernetes infrastructure secure.</li>
+</ul>
 </div>
 <div class="section" id="setting-up-kubernetes-on-google-cloud">
 <span id="google-cloud"></span><h2>Setting up Kubernetes on <a class="reference external" href="https://cloud.google.com/">Google Cloud</a><a class="headerlink" href="#setting-up-kubernetes-on-google-cloud" title="Permalink to this headline">¶</a></h2>
@@ -111,7 +110,7 @@ command:</p>
     --num-nodes<span class="o">=</span><span class="m">3</span> <span class="se">\</span>
     --machine-type<span class="o">=</span>n1-standard-2 <span class="se">\</span>
     --zone<span class="o">=</span>us-central1-b <span class="se">\</span>
-    --cluster-version<span class="o">=</span><span class="m">1</span>.8.4-gke.0
+    --cluster-version<span class="o">=</span><span class="m">1</span>.8.4-gke.1
 </pre></div>
 </div>
 <p>where:</p>
@@ -145,8 +144,8 @@ the actions needed to set up JupyterHub.</p>
 </li>
 </ol>
 </div>
-<div class="section" id="setting-up-kubernetes-on-microsoft-azure-container-service-acs">
-<span id="microsoft-azure"></span><h2>Setting up Kubernetes on Microsoft Azure Container Service (ACS)<a class="headerlink" href="#setting-up-kubernetes-on-microsoft-azure-container-service-acs" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="setting-up-kubernetes-on-microsoft-azure-container-service-aks">
+<span id="microsoft-azure"></span><h2>Setting up Kubernetes on Microsoft Azure Container Service (AKS)<a class="headerlink" href="#setting-up-kubernetes-on-microsoft-azure-container-service-aks" title="Permalink to this headline">¶</a></h2>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">This is an alpha work-in-progress - please do not use in production! Help from
@@ -168,7 +167,28 @@ Service.</li>
 </pre></div>
 </div>
 </li>
-<li><p class="first">Specify a <a class="reference external" href="https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-overview#resource-groups">Azure resource group</a>, and create one if it doesn’t already
+<li><p class="first">Set your Azure account context:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>az account <span class="nb">set</span> -s &lt;YOUR CHOSEN SUBSCRIPTION&gt;
+</pre></div>
+</div>
+</li>
+<li><p class="first">Manually preserve the subscription ID (“.id” in the previous command’s output) in SUBSCRIPTION_ID, or obtain it with <a class="reference external" href="https://stedolan.github.io/jq/">jq</a>:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">SUBSCRIPTION_ID</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>az account show <span class="p">|</span> jq -r .id<span class="k">)</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Create a service principal:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>az ad sp create-for-rbac --role<span class="o">=</span>Contributor --scopes<span class="o">=</span>/subscriptions/<span class="si">${</span><span class="nv">SUBSCRIPTION_ID</span><span class="si">}</span> &gt; sp.json
+</pre></div>
+</div>
+</li>
+<li><p class="first">Manually preserve the service principal and password by looking them up in sp.json, or obtain them with jq:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">SERVICE_PRINCIPAL</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>jq -r .appId sp.json<span class="k">)</span><span class="s2">&quot;</span>
+<span class="nb">export</span> <span class="nv">CLIENT_SECRET</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>jq -r .password sp.json<span class="k">)</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Specify an <a class="reference external" href="https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-overview#resource-groups">Azure resource group</a>, and create one if it doesn’t already
 exist:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">RESOURCE_GROUP</span><span class="o">=</span>&lt;YOUR_RESOURCE_GROUP&gt;
 <span class="nb">export</span> <span class="nv">LOCATION</span><span class="o">=</span>&lt;YOUR_LOCATION&gt;
@@ -182,31 +202,17 @@ az group create --name<span class="o">=</span><span class="si">${</span><span cl
 <ul class="simple">
 <li><code class="docutils literal"><span class="pre">--name</span></code> specifies your Azure resource group. If a group doesn’t exist,
 az will create it for you.</li>
-<li><code class="docutils literal"><span class="pre">--location</span></code> specifies which computer center to use.  To reduce latency,
-choose a zone closest to whoever is sending the commands. View available
-zones via <code class="docutils literal"><span class="pre">az</span> <span class="pre">account</span> <span class="pre">list-locations</span></code>.</li>
+<li><code class="docutils literal"><span class="pre">--location</span></code> specifies your Azure region. To reduce latency, choose a region closest to those using the cluster. AKS is only available in <a class="reference external" href="https://github.com/Azure/AKS/blob/master/preview_regions.md">preview regions</a> at the moment. You may view all available zones via <code class="docutils literal"><span class="pre">az</span> <span class="pre">account</span> <span class="pre">list-locations</span></code>.</li>
 </ul>
 </div></blockquote>
-<ol class="arabic" start="5">
-<li><p class="first">Install <code class="docutils literal"><span class="pre">kubectl</span></code>, a tool for controlling Kubernetes:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>az acs kubernetes install-cli
-</pre></div>
-</div>
-</li>
-<li><p class="first">Create a Kubernetes cluster on Azure, by typing in the following commands:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">CLUSTER_NAME</span><span class="o">=</span>&lt;YOUR_CLUSTER_NAME&gt;
-<span class="nb">export</span> <span class="nv">DNS_PREFIX</span><span class="o">=</span>&lt;YOUR_PREFIX&gt;
-az acs create --orchestrator-type<span class="o">=</span>kubernetes <span class="se">\</span>
-    --resource-group<span class="o">=</span><span class="si">${</span><span class="nv">RESOURCE_GROUP</span><span class="si">}</span> <span class="se">\</span>
-    --name<span class="o">=</span><span class="si">${</span><span class="nv">CLUSTER_NAME</span><span class="si">}</span> <span class="se">\</span>
-    --dns-prefix<span class="o">=</span><span class="si">${</span><span class="nv">DNS_PREFIX</span><span class="si">}</span>
-</pre></div>
-</div>
-</li>
-<li><p class="first">Authenticate kubectl:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>az acs kubernetes get-credentials <span class="se">\</span>
-    --resource-group<span class="o">=</span><span class="si">${</span><span class="nv">RESOURCE_GROUP</span><span class="si">}</span> <span class="se">\</span>
-    --name<span class="o">=</span><span class="si">${</span><span class="nv">CLUSTER_NAME</span><span class="si">}</span>
+<ol class="arabic" start="8">
+<li><p class="first">Create a Kubernetes cluster on Azure:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">CLUSTER</span><span class="o">=</span>&lt;YOUR_CLUSTER_NAME&gt;
+az aks create -n <span class="si">${</span><span class="nv">CLUSTER</span><span class="si">}</span> -g <span class="si">${</span><span class="nv">RESOURCE_GROUP</span><span class="si">}</span> <span class="se">\</span>
+    --location <span class="si">${</span><span class="nv">LOCATION</span><span class="si">}</span> <span class="se">\</span>
+    --service-principal <span class="si">${</span><span class="nv">SERVICE_PRINCIPAL</span><span class="si">}</span> <span class="se">\</span>
+    --client-secret <span class="si">${</span><span class="nv">CLIENT_SECRET</span><span class="si">}</span> <span class="se">\</span>
+    --kubernetes-version <span class="m">1</span>.8.2
 </pre></div>
 </div>
 </li>
@@ -214,19 +220,43 @@ az acs create --orchestrator-type<span class="o">=</span>kubernetes <span class=
 <blockquote>
 <div><p>where:</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">--resource-group</span></code> specifies your Azure resource group.</li>
-<li><code class="docutils literal"><span class="pre">--name</span></code> is your ACS cluster name.</li>
-<li><code class="docutils literal"><span class="pre">--dns-prefix</span></code> is the domain name prefix for the cluster.</li>
+<li><code class="docutils literal"><span class="pre">-n</span></code> is your ACS cluster name.</li>
+<li><code class="docutils literal"><span class="pre">-g</span></code> is your Azure resource group.</li>
+<li><code class="docutils literal"><span class="pre">--location</span></code> is your Azure region.</li>
+<li>–service-principal and –client-secrets are set to the values you created earlier.</li>
+<li>–kubernetes-version is the the version of kubernetes your cluster will run. We recommend at least 1.8.x.</li>
 </ul>
 </div></blockquote>
-<ol class="arabic" start="8">
-<li><p class="first">To test if your cluster is initialized, run:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>kubectl get node
+<ol class="arabic" start="9">
+<li><p class="first">Install <code class="docutils literal"><span class="pre">kubectl</span></code>, a tool for controlling Kubernetes:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>az aks install-cli
+</pre></div>
+</div>
+</li>
+<li><p class="first">Authenticate kubectl:</p>
+</li>
+</ol>
+<blockquote>
+<div><blockquote>
+<div><div class="highlight-bash"><div class="highlight"><pre><span></span>az aks get-credentials -n <span class="si">${</span><span class="nv">CLUSTER</span><span class="si">}</span> -g <span class="si">${</span><span class="nv">RESOURCE_GROUP</span><span class="si">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>where:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">-n</span></code> is your ACS cluster name.</li>
+<li><code class="docutils literal"><span class="pre">-g</span></code> specifies your Azure resource group.</li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="11">
+<li>To test if your cluster is initialized, run:</li>
+</ol>
+<blockquote>
+<div><div class="highlight-bash"><div class="highlight"><pre><span></span>kubectl get node
 </pre></div>
 </div>
 <p>The response should list three running nodes.</p>
-</li>
-</ol>
+</div></blockquote>
 </div>
 <div class="section" id="setting-up-kubernetes-on-amazon-web-services-aws">
 <span id="amazon-aws"></span><h2>Setting up Kubernetes on Amazon Web Services (AWS)<a class="headerlink" href="#setting-up-kubernetes-on-amazon-web-services-aws" title="Permalink to this headline">¶</a></h2>
@@ -250,16 +280,15 @@ for information about what to expect.</p>
 <p>This sets up your Amazon account with the credentials needed to run Kubernetes.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Make sure that you keep the file downloaded when you create the SSH
+<ul class="last simple">
+<li>Make sure that you keep the file downloaded when you create the SSH
 key. This will be needed later to allow <code class="docutils literal"><span class="pre">kubectl</span></code> to interact with
-your Kubernetes cluster.</p>
-</div>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">You may find it helpful to “pin” the services we’ll be using to your AWS
+your Kubernetes cluster.</li>
+<li>You may find it helpful to “pin” the services we’ll be using to your AWS
 navbar. This makes it easier to navigate in subsequent sessions.
 Click the “pin” icon at the top, then drag <code class="docutils literal"><span class="pre">CloudFormation</span></code> and
-<code class="docutils literal"><span class="pre">EC2</span></code> into your navbar.</p>
+<code class="docutils literal"><span class="pre">EC2</span></code> into your navbar.</li>
+</ul>
 </div>
 </li>
 <li><p class="first">Deploy a Kubernetes template from Heptio.</p>
@@ -432,11 +461,12 @@ and more secure authorization mode is not out of beta yet.</p>
 
 
 <h3>Table of Contents</h3>
+<p class="caption"><span class="caption-text">Creating your JupyterHub</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started with JupyterHub</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Creating a Kubernetes Cluster</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#setting-up-kubernetes-on-google-cloud">Setting up Kubernetes on Google Cloud</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#setting-up-kubernetes-on-microsoft-azure-container-service-acs">Setting up Kubernetes on Microsoft Azure Container Service (ACS)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#setting-up-kubernetes-on-microsoft-azure-container-service-aks">Setting up Kubernetes on Microsoft Azure Container Service (AKS)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#setting-up-kubernetes-on-amazon-web-services-aws">Setting up Kubernetes on Amazon Web Services (AWS)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#next-step">Next Step</a></li>
 </ul>
@@ -445,21 +475,25 @@ and more secure authorization mode is not out of beta yet.</p>
 <li class="toctree-l1"><a class="reference internal" href="setup-jupyterhub.html">Setting up JupyterHub</a></li>
 <li class="toctree-l1"><a class="reference internal" href="turn-off.html">Turning Off JupyterHub and Computational Resources</a></li>
 </ul>
+<p class="caption"><span class="caption-text">Customization Guide</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="extending-jupyterhub.html">Extending your JupyterHub setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user-environment.html">Customizing the User Environment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user-resources.html">User Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-storage.html">User storage in JupyterHub</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user-management.html">User Management</a></li>
 </ul>
+<p class="caption"><span class="caption-text">Administrator Guide</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication</a></li>
 <li class="toctree-l1"><a class="reference internal" href="debug.html">Debugging Kubernetes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cost.html">Estimating costs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="security.html">Security Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security.html">Security</a></li>
 <li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading The helm chart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Topics</a></li>
 </ul>
+<p class="caption"><span class="caption-text">Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="reference.html">Helm Chart Configuration Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tools.html">Tools used in a JupyterHub Deployment</a></li>

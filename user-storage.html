@@ -1,0 +1,360 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>User storage in JupyterHub &#8212; Zero to JupyterHub with Kubernetes 0.4 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="User Management" href="user-management.html" />
+    <link rel="prev" title="User Resources" href="user-resources.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class='prev-next-top'>
+    
+     <a class='left-prev' href="user-resources.html" title="previous chapter">Previous</a>
+     <a class='right-next' href="user-management.html" title="next chapter">Next</a>
+  <div style='clear:both;'></div>
+
+  </div>
+
+  
+  <div class="section" id="user-storage-in-jupyterhub">
+<span id="user-storage-in-jupyterhub"></span><span id="user-storage"></span><h1>User storage in JupyterHub<a class="headerlink" href="#user-storage-in-jupyterhub" title="Permalink to this headline">¶</a></h1>
+<p>JupyterHub uses Kubernetes to manage user storage,
+however there are still some cloud-provider-specific considerations
+that must be taken. This document describes the persistent
+storage at a conceptual level, then gives details about
+how to customize persistent storage for some major cloud
+providers.</p>
+<div class="section" id="how-does-jupyterhub-manage-storage">
+<span id="how-does-jupyterhub-manage-storage"></span><h2>How does JupyterHub manage storage?<a class="headerlink" href="#how-does-jupyterhub-manage-storage" title="Permalink to this headline">¶</a></h2>
+<p>For the purposes of this guide, we'll describe &quot;storage&quot; as
+a &quot;volume&quot; - a location on a disk where a user's data resides.
+Kubernetes handles the creation and allocation of persistent
+volumes, under-the-hood it uses the cloud provider's API to
+issue the proper commands. To that extent most of our discussion
+around volumes will describe Kubernetes objects.</p>
+<p>There are two primary Kubernetes objects involved in allocating
+storage to pods:</p>
+<ul class="simple">
+<li>A <code class="docutils literal"><span class="pre">PersistentVolumeClaim</span></code> (<code class="docutils literal"><span class="pre">PVC</span></code>) specifies what kind of storage is required. It is specified in your <code class="docutils literal"><span class="pre">config.yaml</span></code> file.</li>
+<li>A <code class="docutils literal"><span class="pre">PersistentVolume</span></code> (<code class="docutils literal"><span class="pre">PV</span></code>) is the actual volume where the user's data resides. It is created by Kubernetes using a <code class="docutils literal"><span class="pre">PVC</span></code>.</li>
+</ul>
+<p>As these are both Kubernetes objects, they can be queried
+with the standard <code class="docutils literal"><span class="pre">kubectl</span></code> commands (e.g., <code class="docutils literal"><span class="pre">kubectl</span> <span class="pre">get</span> <span class="pre">pvc</span></code>)</p>
+<p>In JupyterHub, each user gets their own <code class="docutils literal"><span class="pre">PersistentVolumeClaim</span></code>
+object, representing the data attached to their account.
+When a new user starts their JupyterHub server, a
+<code class="docutils literal"><span class="pre">PersistentVolumeClaim</span></code> is created for that user. This claim
+tells Kubernetes what kind of storage (e.g., ssd vs. hd) as
+well as how much storage is needed. Kubernetes checks to see
+whether a <code class="docutils literal"><span class="pre">PersistentVolume</span></code> object for that user exists (since
+this is a new user, none will exist). If no <code class="docutils literal"><span class="pre">PV</span></code> object exists,
+then Kubernetes will use the <code class="docutils literal"><span class="pre">PVC</span></code> to create a new <code class="docutils literal"><span class="pre">PV</span></code> object
+for the user.</p>
+<p>Now that a <code class="docutils literal"><span class="pre">PV</span></code> exists for the user, Kubernetes next must
+attach (or &quot;mount&quot;) that <code class="docutils literal"><span class="pre">PV</span></code> to the user's pod (which runs
+user code). Once this is accomplished, the user will have
+access to their <code class="docutils literal"><span class="pre">PV</span></code> within JupyterHub. Note that this all happens
+under-the-hood and automatically when a user logs in.</p>
+<p><code class="docutils literal"><span class="pre">PersistentVolumeClaim</span></code>s and <code class="docutils literal"><span class="pre">PersistentVolume</span></code>s are not
+deleted unless the <code class="docutils literal"><span class="pre">PersistentVolumeClaim</span></code> is explicitly deleted
+by the JupyterHub administrator. When a user shuts down their
+server, their user pod is deleted and their volume is
+detached from the pod, <em>but the <code class="docutils literal"><span class="pre">PVC</span></code> and <code class="docutils literal"><span class="pre">PV</span></code> objects still exist</em>. This means that
+in the future, when the user logs back in, JupyterHub will
+detect that the user has a pre-existing <code class="docutils literal"><span class="pre">PVC</span></code> and will simply
+attach it to their new pod, rather than creating a new <code class="docutils literal"><span class="pre">PVC</span></code>.</p>
+<div class="section" id="how-can-this-process-break-down">
+<span id="how-can-this-process-break-down"></span><h3>How can this process break down?<a class="headerlink" href="#how-can-this-process-break-down" title="Permalink to this headline">¶</a></h3>
+<p>When Kubernetes uses the <code class="docutils literal"><span class="pre">PVC</span></code> to create a new user<code class="docutils literal"><span class="pre">PV</span></code>, it
+is sending a command to the underlying API of whatever cloud
+provider Kubernetes is running on. Occasionally, the request
+for a specific <code class="docutils literal"><span class="pre">PV</span></code> might fail - for example, if your account
+has reached the limit in the amount of disk space available.
+Another common issue is limits on the number of volumes that
+may be simultaneously attached to a node in your cluster. Check
+your cloud provider for details on the limits of storage
+resources you request.</p>
+</div>
+</div>
+<div class="section" id="configuration">
+<span id="configuration"></span><h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
+<p>Most configuration for storage is done at the cluster level and
+is not unique to JupyterHub. However, some bits are, and we will
+demonstrate here how to configure those.</p>
+<p>Note that new <code class="docutils literal"><span class="pre">PVC</span></code>s for pre-existing users will <strong>not</strong> be
+created unless the old ones are destroyed. If you update your
+users' <code class="docutils literal"><span class="pre">PVC</span></code>  config via <code class="docutils literal"><span class="pre">config.yaml</span></code>, then any <strong>new</strong> users will
+have the new <code class="docutils literal"><span class="pre">PVC</span></code> created for them, but <strong>old</strong> users will not.
+To force an upgrade of the storage type for old users, you will
+need to manually delete their <code class="docutils literal"><span class="pre">PVC</span></code> (e.g.
+<code class="docutils literal"><span class="pre">kubectl</span> <span class="pre">--namespace=&lt;your-namespace&gt;</span> <span class="pre">delete</span> <span class="pre">pvc</span> <span class="pre">&lt;pvc-name&gt;</span></code>).
+<strong>This will delete all of the user's data</strong> so we recommend
+backing up their filesystem first if you want to retain their data.</p>
+<p>After you delete the user's <code class="docutils literal"><span class="pre">PVC</span></code>, upon their next log-in a new
+<code class="docutils literal"><span class="pre">PVC</span></code> will be created for them according to your updated <code class="docutils literal"><span class="pre">PVC</span></code>
+specification.</p>
+<div class="section" id="type-of-storage-provisioned">
+<span id="type-of-storage-provisioned"></span><h3>Type of storage provisioned<a class="headerlink" href="#type-of-storage-provisioned" title="Permalink to this headline">¶</a></h3>
+<p>A <a class="reference external" href="https://kubernetes.io/docs/concepts/storage/storage-classes/">StorageClass</a> object
+is used to determine what kind of <code class="docutils literal"><span class="pre">PersistentVolume</span></code>s are provisioned for your
+users. Most popular cloud providers have a <code class="docutils literal"><span class="pre">StorageClass</span></code> marked as default. You
+can find out your default <code class="docutils literal"><span class="pre">StorageClass</span></code> by doing:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>kubectl get storageclass
+</pre></div>
+</div>
+<p>and looking for the object with <code class="docutils literal"><span class="pre">(default)</span></code> next to its name.</p>
+<p>To change the kind of <code class="docutils literal"><span class="pre">PersistentVolume</span></code>s provisioned for your users,</p>
+<ol>
+<li><p class="first">Create a new <code class="docutils literal"><span class="pre">StorageClass</span></code> object following the
+<a class="reference external" href="https://kubernetes.io/docs/concepts/storage/storage-classes/">kubernetes documentation</a></p>
+</li>
+<li><p class="first">Specify the name of the <code class="docutils literal"><span class="pre">StorageClass</span></code> you just created in <code class="docutils literal"><span class="pre">config.yaml</span></code></p>
+<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">singleuser</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">storage</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">dynamic</span><span class="p p-Indicator">:</span>
+      <span class="l l-Scalar l-Scalar-Plain">storageClass</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;storageclass-name&gt;</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Do a <code class="docutils literal"><span class="pre">helm</span> <span class="pre">upgrade</span></code></p>
+</li>
+</ol>
+<p>Note that this will only affect new users who are logging in. We recommend
+you do this before users start heavily using your cluster.</p>
+<p>We will provide examples for popular cloud providers here, but will generally
+defer to the Kubernetes documentation.</p>
+<div class="section" id="google-cloud">
+<span id="google-cloud"></span><h4>Google Cloud<a class="headerlink" href="#google-cloud" title="Permalink to this headline">¶</a></h4>
+<p>On Google Cloud, the default <code class="docutils literal"><span class="pre">StorageClass</span></code> will provision
+Standard <a class="reference external" href="https://cloud.google.com/compute/docs/disks/#pdspecs">Google Persistent Disk</a>s.
+These run on Hard Disks, and are not very fast. If you want to use SSDs, you
+can create a new <code class="docutils literal"><span class="pre">StorageClass</span></code> by first putting the following <code class="docutils literal"><span class="pre">yaml</span></code> into a new file:</p>
+<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">kind</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">StorageClass</span>
+<span class="l l-Scalar l-Scalar-Plain">apiVersion</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">storage.k8s.io/v1</span>
+<span class="l l-Scalar l-Scalar-Plain">metadata</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">jupyterhub-user-ssd</span>
+<span class="l l-Scalar l-Scalar-Plain">provisioner</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">kubernetes.io/gce-pd</span>
+<span class="l l-Scalar l-Scalar-Plain">parameters</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">pd-ssd</span>
+  <span class="l l-Scalar l-Scalar-Plain">zones</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;your-cluster-zone&gt;</span>
+</pre></div>
+</div>
+<p>Replace <code class="docutils literal"><span class="pre">&lt;your-cluster-zone&gt;</span></code> with the Zone in which you created your cluster (you can find
+this with <code class="docutils literal"><span class="pre">gcloud</span> <span class="pre">container</span> <span class="pre">clusters</span> <span class="pre">list</span></code>).</p>
+<p>Next, create this object by running <code class="docutils literal"><span class="pre">kubectl</span> <span class="pre">apply</span> <span class="pre">-f</span> <span class="pre">&lt;filename&gt;</span></code>
+from the commandline. The <a class="reference external" href="https://kubernetes.io/docs/concepts/storage/storage-classes/#gce">Kubernetes Docs</a>
+have more information on what the various fields mean. The most important field is <code class="docutils literal"><span class="pre">parameters.type</span></code>,
+which specifies the type of storage you wish to use. For example:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">pd-ssd</span></code> makes this <code class="docutils literal"><span class="pre">StorageClass</span></code> provision SSDs.</li>
+<li><code class="docutils literal"><span class="pre">pd-standard</span></code> will provision non-SSD disks.</li>
+</ul>
+<p>Once you have created this <code class="docutils literal"><span class="pre">StorageClass</span></code>, you can configure your JupyterHub's <code class="docutils literal"><span class="pre">PVC</span></code>
+template with the following in your <code class="docutils literal"><span class="pre">config.yaml</span></code>:</p>
+<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">singleuser</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">storage</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">dynamic</span><span class="p p-Indicator">:</span>
+      <span class="l l-Scalar l-Scalar-Plain">storageClass</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">jupyterhub-user-ssd</span>
+</pre></div>
+</div>
+<p>Note that for <code class="docutils literal"><span class="pre">storageClass:</span></code> we use the name that we specified
+above in <code class="docutils literal"><span class="pre">metadata:</span> <span class="pre">name:</span></code>.</p>
+</div>
+<div class="section" id="size-of-storage-provisioned">
+<span id="size-of-storage-provisioned"></span><h4>Size of storage provisioned<a class="headerlink" href="#size-of-storage-provisioned" title="Permalink to this headline">¶</a></h4>
+<p>You can set the size of storage requested by JupyterHub in the <code class="docutils literal"><span class="pre">PVC</span></code> in
+your <code class="docutils literal"><span class="pre">config.yaml</span></code>.</p>
+<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">storage</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">capacity</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">2Gi</span>
+</pre></div>
+</div>
+<p>This will request a <code class="docutils literal"><span class="pre">2Gi</span></code> volume per user. The default requests a <code class="docutils literal"><span class="pre">10Gi</span></code>
+volume per user.</p>
+<p>We recommend you use the <a class="reference external" href="https://physics.nist.gov/cuu/Units/binary.html">IEC Prefixes</a>
+(Ki, Mi, Gi, etc) for specifying how much storage you want. <code class="docutils literal"><span class="pre">2Gi</span></code> (IEC Prefix) is
+<code class="docutils literal"><span class="pre">(2</span> <span class="pre">*</span> <span class="pre">1024</span> <span class="pre">*</span> <span class="pre">1024</span> <span class="pre">*</span> <span class="pre">1024)</span></code> bytes, while <code class="docutils literal"><span class="pre">2G</span></code> (SI Prefix) is <code class="docutils literal"><span class="pre">(2</span> <span class="pre">*</span> <span class="pre">1000</span> <span class="pre">*</span> <span class="pre">1000</span> <span class="pre">*</span> <span class="pre">1000)</span></code> bytes.</p>
+</div>
+</div>
+</div>
+<div class="section" id="turn-off-per-user-persistent-storage">
+<span id="turn-off-per-user-persistent-storage"></span><h2>Turn off per-user persistent storage<a class="headerlink" href="#turn-off-per-user-persistent-storage" title="Permalink to this headline">¶</a></h2>
+<p>If you do not wish for users to have any persistent storage, it can be
+turned off. Edit the <code class="docutils literal"><span class="pre">config.yaml</span></code> file and set the storage type to
+<code class="docutils literal"><span class="pre">none</span></code>:</p>
+<div class="highlight-yaml"><div class="highlight"><pre><span></span>      <span class="l l-Scalar l-Scalar-Plain">singleuser</span><span class="p p-Indicator">:</span>
+        <span class="l l-Scalar l-Scalar-Plain">storage</span><span class="p p-Indicator">:</span>
+          <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">none</span>
+</pre></div>
+</div>
+<p>Next <a class="reference internal" href="extending-jupyterhub.html#apply-config-changes"><span class="std std-ref">apply the changes</span></a>.</p>
+<p>After the changes are applied, new users will no longer be allocated a
+persistent <code class="docutils literal"><span class="pre">$HOME</span></code> directory. Any currently running users will still have
+access to their storage until their server is restarted.</p>
+</div>
+</div>
+
+
+  <div class='prev-next-bottom'>
+    
+     <a class='left-prev' href="user-resources.html" title="previous chapter">User Resources</a>
+     <a class='right-next' href="user-management.html" title="next chapter">User Management</a>
+  <div style='clear:both;'></div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+<h1 class="logo"><a href="index.html">Zero to JupyterHub with Kubernetes</a></h1>
+
+
+
+<p class="blurb">A tutorial to help install and manage JupyterHub with Kubernetes</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=jupyterhub&repo=zero-to-jupyterhub-k8s&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+
+<h3>Table of Contents</h3>
+<p class="caption"><span class="caption-text">Creating your JupyterHub</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started with JupyterHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="create-k8s-cluster.html">Creating a Kubernetes Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup-helm.html">Setting up Helm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup-jupyterhub.html">Setting up JupyterHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="turn-off.html">Turning Off JupyterHub and Computational Resources</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Customization Guide</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="extending-jupyterhub.html">Extending your JupyterHub setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-environment.html">Customizing the User Environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-resources.html">User Resources</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">User storage in JupyterHub</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#how-does-jupyterhub-manage-storage">How does JupyterHub manage storage?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configuration">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#turn-off-per-user-persistent-storage">Turn off per-user persistent storage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="user-management.html">User Management</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Administrator Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="debug.html">Debugging Kubernetes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cost.html">Estimating costs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security.html">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading The helm chart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Topics</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Helm Chart Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">Tools used in a JupyterHub Deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="additional-resources.html">Additional resources</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="http://github.com/jupyterhub/zero-to-jupyterhub-k8s">GitHub Repo</a></li>
+    
+    <li class="toctree-l1"><a href="http://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues">Issue Tracker</a></li>
+    
+</ul>
+
+<div class="relations">
+<h3>Navigation</h3>
+<ul>
+  <li><a href="index.html">Documentation Home</a><ul>
+  <li><a href="user-resources.html" title="Previous">Previous topic</a></li>
+  <li><a href="user-management.html" title="Next">Next topic</a></li>
+  </ul>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/user-storage.md.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Project Jupyter team.
+      
+      |
+      <a href="_sources/user-storage.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

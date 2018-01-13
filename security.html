@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Security Considerations &#8212; Zero to JupyterHub with Kubernetes 0.4 documentation</title>
+    <title>Security &#8212; Zero to JupyterHub with Kubernetes 0.4 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -52,48 +52,31 @@
   </div>
 
   
-  <div class="section" id="security-considerations">
-<span id="security"></span><h1>Security Considerations<a class="headerlink" href="#security-considerations" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="setting-up-https">
-<h2>Setting up HTTPS<a class="headerlink" href="#setting-up-https" title="Permalink to this headline">¶</a></h2>
-<p>Enabling HTTPS is an important security practice.
-Zero to JupyterHub makes doing so quite
-easy since version 0.5, integrating with <a class="reference external" href="https://letsencrypt.org/">Let’s Encrypt</a>
-for free HTTPS certificates.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Alternatively, you can purchase your own SSL certificates from a certificate provider.</p>
-</div>
+  <div class="section" id="security">
+<span id="security"></span><h1>Security<a class="headerlink" href="#security" title="Permalink to this headline">¶</a></h1>
+<p>The information in this document focuses primarily on cloud based deployments. For on-premise deployments, additional security work that is specific to your installation method would also be required. Note that your specific installation's security needs might be more or less stringent than what we can offer you here.</p>
+<p>Brad Geesamen gave a wonderful talk titled <a class="reference external" href="https://kccncna17.sched.com/event/CU6z/hacking-and-hardening-kubernetes-clusters-by-example-i-brad-geesaman-symantec">Hacking and Hardening Kubernetes by Example</a> at Kubecon NA 2017. You can <a class="reference external" href="https://www.youtube.com/watch?v=vTgQLzeBfRU">watch the talk</a> or <a class="reference external" href="https://schd.ws/hosted_files/kccncna17/47/Hacking%20and%20Hardening%20Kubernetes%20By%20Example%20v1.pdf">read the slides</a>. Highly recommended that you do so to understand the security issues you are up against when using Kubernetes to run JupyterHub.</p>
+<div class="section" id="https">
+<span id="https"></span><h2>HTTPS<a class="headerlink" href="#https" title="Permalink to this headline">¶</a></h2>
+<p>This section describes how to enable HTTPS on your JupyterHub. The easiest way to do so is by using <a class="reference external" href="https://letsencrypt.org/">Let's Encrypt</a>, though we'll also cover how to set up your own HTTPS credentials. For more information
+on HTTPS security see the certificates section of <a class="reference external" href="https://blog.hartleybrody.com/https-certificates/">this blog post</a>.</p>
 <div class="section" id="set-up-your-domain">
-<h3>Set up your domain<a class="headerlink" href="#set-up-your-domain" title="Permalink to this headline">¶</a></h3>
-<ol class="arabic">
+<span id="set-up-your-domain"></span><h3>Set up your domain<a class="headerlink" href="#set-up-your-domain" title="Permalink to this headline">¶</a></h3>
+<ol>
 <li><p class="first">Buy a domain name from a registrar. Pick whichever one you want.</p>
 </li>
-<li><p class="first">Create an <code class="docutils literal"><span class="pre">A</span> <span class="pre">record</span></code> from the domain you want to use, pointing to the
-<code class="docutils literal"><span class="pre">EXTERNAL-IP</span></code> of the <code class="docutils literal"><span class="pre">proxy-public</span></code> service. The exact way to do this
-will depend on the DNS provider that you’re using.</p>
+<li><p class="first">Create an A record from the domain you want to use, pointing to the EXTERNAL-IP of the proxy-public service. The exact way to do this will depend on the DNS provider that you’re using.</p>
 </li>
-<li><p class="first">Wait for the change to propagate. Propagation can take several minutes to
-several hours. Wait until you can type in the name of the domain you bought
-and it shows you the JupyterHub landing page.</p>
+<li><p class="first">Wait for the change to propagate. Propagation can take several minutes to several hours. Wait until you can type in the name of the domain you bought and it shows you the JupyterHub landing page.</p>
 <p>It is important that you wait - prematurely going to the next step might cause problems!</p>
 </li>
 </ol>
 </div>
-<div class="section" id="configure-jupyterhub-to-use-https">
-<h3>Configure JupyterHub to use HTTPS<a class="headerlink" href="#configure-jupyterhub-to-use-https" title="Permalink to this headline">¶</a></h3>
-<p>Now that your domain is ready, it’s time to configure JupyterHub to use HTTPS
-when connecting to it.</p>
-<ol class="arabic simple">
-<li>Tell JupyterHub to use HTTPS via <code class="docutils literal"><span class="pre">config.yaml</span></code></li>
-</ol>
-<blockquote>
-<div><ol class="loweralpha simple">
-<li>If you’re using letsencrypt, add your domain name and contact email
-for letsencrypt renewal to <code class="docutils literal"><span class="pre">config.yaml</span></code>:</li>
-</ol>
-<blockquote>
-<div><div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">proxy</span><span class="p p-Indicator">:</span>
+<div class="section" id="set-up-automatic-https">
+<span id="set-up-automatic-https"></span><h3>Set up automatic HTTPS<a class="headerlink" href="#set-up-automatic-https" title="Permalink to this headline">¶</a></h3>
+<ol>
+<li><p class="first">Specify the two bits of information that we need to automatically provision HTTPS certificates - your domain name &amp; a contact email address.</p>
+<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">proxy</span><span class="p p-Indicator">:</span>
   <span class="l l-Scalar l-Scalar-Plain">https</span><span class="p p-Indicator">:</span>
     <span class="l l-Scalar l-Scalar-Plain">hosts</span><span class="p p-Indicator">:</span>
       <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">&lt;your-domain-name&gt;</span>
@@ -101,23 +84,23 @@ for letsencrypt renewal to <code class="docutils literal"><span class="pre">conf
       <span class="l l-Scalar l-Scalar-Plain">contactEmail</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;your-email-address&gt;</span>
 </pre></div>
 </div>
-</div></blockquote>
-<ol class="loweralpha simple" start="2">
-<li>If you have your own SSL certificate, you can configure SSL manually.
-Add to <code class="docutils literal"><span class="pre">config.yaml</span></code>:</li>
+</li>
+<li><p class="first">Apply the config changes by running helm upgrade ....</p>
+</li>
+<li><p class="first">Wait for about a minute, now your hub should be HTTPS enabled!</p>
+</li>
 </ol>
-<blockquote>
-<div><div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">proxy</span><span class="p p-Indicator">:</span>
+</div>
+<div class="section" id="set-up-manual-https">
+<span id="set-up-manual-https"></span><h3>Set up manual HTTPS<a class="headerlink" href="#set-up-manual-https" title="Permalink to this headline">¶</a></h3>
+<p>If you have your own HTTPS certificates &amp; want to use those instead of the automatically provisioned Let's Encrypt ones, that's also possible. Note that this is considered an advanced option, so we recommend not doing it unless you have good reasons.</p>
+<ol>
+<li><p class="first">Add your domain name &amp; HTTPS certificate info to your <code class="docutils literal"><span class="pre">config.yaml</span></code></p>
+<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">proxy</span><span class="p p-Indicator">:</span>
   <span class="l l-Scalar l-Scalar-Plain">https</span><span class="p p-Indicator">:</span>
     <span class="l l-Scalar l-Scalar-Plain">hosts</span><span class="p p-Indicator">:</span>
       <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">&lt;your-domain-name&gt;</span>
     <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">manual</span>
-</pre></div>
-</div>
-<p>and paste the contents of your ssl key and certificate into a file
-called <code class="docutils literal"><span class="pre">secrets.yaml</span></code>, like so:</p>
-<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">proxy</span><span class="p p-Indicator">:</span>
-  <span class="l l-Scalar l-Scalar-Plain">https</span><span class="p p-Indicator">:</span>
     <span class="l l-Scalar l-Scalar-Plain">manual</span><span class="p p-Indicator">:</span>
       <span class="l l-Scalar l-Scalar-Plain">key</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
         <span class="no">-----BEGIN RSA PRIVATE KEY-----</span>
@@ -129,27 +112,94 @@ called <code class="docutils literal"><span class="pre">secrets.yaml</span></cod
         <span class="no">-----END CERTIFICATE-----</span>
 </pre></div>
 </div>
-</div></blockquote>
-</div></blockquote>
-<ol class="arabic simple" start="2">
-<li>Apply the config changes by running <code class="docutils literal"><span class="pre">helm</span> <span class="pre">upgrade</span> <span class="pre">...</span></code>.</li>
-<li>Wait for about a minute, now your hub is HTTPS enabled!</li>
+</li>
+<li><p class="first">Apply the config changes by running helm upgrade ....</p>
+</li>
+<li><p class="first">Wait for about a minute, now your hub should be HTTPS enabled!</p>
+</li>
 </ol>
 </div>
 </div>
-<div class="section" id="role-based-access-control-rbac">
-<h2>Role Based Access Control (RBAC)<a class="headerlink" href="#role-based-access-control-rbac" title="Permalink to this headline">¶</a></h2>
-<p>Kubernetes supports (and often requires) using
-<a class="reference external" href="https://kubernetes.io/docs/admin/authorization/rbac/">Role Based Access Control (RBAC)</a>
-to secure which pods / users can perform what kinds of actions on the cluster.
-If RBAC is disabled, all pods are given <code class="docutils literal"><span class="pre">root</span></code> equivalent permission on the
-Kubernetes cluster and all the nodes in it, which is bad!</p>
-<p>As of <code class="docutils literal"><span class="pre">v0.5</span></code>, the helm chart can natively work with RBAC enabled clusters. We ship
-appropriate minimal RBAC rules for the various components we use. If you want to
-disable the RBAC rules for whatever reason, you can do so with the following
-snippet in your config.yaml:</p>
-<p>We recommend keeping RBAC enabled. Proceed with caution if disabling RBAC,
-as this introduces security vulnerabilities.</p>
+<div class="section" id="secure-access-to-helm">
+<span id="secure-access-to-helm"></span><h2>Secure access to Helm<a class="headerlink" href="#secure-access-to-helm" title="Permalink to this headline">¶</a></h2>
+<p>In its default configuration, helm pretty much allows root access to all other
+pods running in your cluster. See this <a class="reference external" href="https://engineering.bitnami.com/articles/helm-security.html">Bitnami Helm security article</a>
+for more information. As a consequence, the default allows all users in your cluster to pretty much have root access to your whole cluster!</p>
+<p>You can mitigate this by limiting public access to the Tiller API. To do so, use the following command:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>kubectl --namespace<span class="o">=</span>kube-system patch deployment tiller-deploy --type<span class="o">=</span>json --patch<span class="o">=</span><span class="s1">&#39;[{&quot;op&quot;: &quot;add&quot;, &quot;path&quot;: &quot;/spec/template/spec/containers/0/command&quot;, &quot;value&quot;: [&quot;/tiller&quot;, &quot;--listen=localhost:44134&quot;]}]&#39;</span>
+</pre></div>
+</div>
+<p>This limit shouldn't affect helm functionality in any form.</p>
+</div>
+<div class="section" id="audit-cloud-metadata-server-security">
+<span id="audit-cloud-metadata-server-security"></span><h2>Audit Cloud Metadata server security<a class="headerlink" href="#audit-cloud-metadata-server-security" title="Permalink to this headline">¶</a></h2>
+<p>Most cloud providers have a static IP you can hit from any of the compute nodes, including the user pod, to get metadata about the cloud. This metadata can contain very sensitive info, and this metadata, in the wrong hands, can allow attackers to take full control of your cluster and cloud resources. It is <strong>critical</strong> to secure the metadata service.</p>
+<p>The slides beginning at <a class="reference external" href="https://schd.ws/hosted_files/kccncna17/d8/Hacking%20and%20Hardening%20Kubernetes%20By%20Example%20v2.pdf"><em>Slide 38</em></a> provides more information on the dangers presented by this attack.</p>
+<p>The easiest way to mitigate it is to add an <a class="reference external" href="https://en.wikipedia.org/wiki/Iptables">iptables</a> rule in an <a class="reference external" href="https://kubernetes.io/docs/concepts/workloads/pods/init-containers/">init-container</a>. This allows setting up firewall rules specific to the user pod in a secure way that the user can not undo. Here is how you could do it on the most popular clouds:</p>
+<div class="section" id="google-cloud-aws-azure">
+<span id="google-cloud-aws-azure"></span><h3>Google Cloud / AWS / Azure<a class="headerlink" href="#google-cloud-aws-azure" title="Permalink to this headline">¶</a></h3>
+<p>In all these clouds you can access the metadata service via the IP <code class="docutils literal"><span class="pre">169.254.169.254</span></code>. Blocking all outgoing packets to that IP should protect you.</p>
+<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">singleuser</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">initContainers</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">block-metadata</span>
+        <span class="l l-Scalar l-Scalar-Plain">image</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">minrk/tc-init:0.0.4</span>
+        <span class="c1"># Block access to GCE Metadata Service from user pods</span>
+        <span class="l l-Scalar l-Scalar-Plain">command</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;iptables&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;-A&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;OUTPUT&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;-p&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;tcp&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;-d&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;169.254.169.254&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;-j&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;DROP&quot;</span><span class="p p-Indicator">]</span>
+        <span class="l l-Scalar l-Scalar-Plain">securityContext</span><span class="p p-Indicator">:</span>
+          <span class="l l-Scalar l-Scalar-Plain">runAsUser</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">0</span>
+          <span class="l l-Scalar l-Scalar-Plain">capabilities</span><span class="p p-Indicator">:</span>
+            <span class="l l-Scalar l-Scalar-Plain">add</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span> <span class="s">&quot;NET_ADMIN&quot;</span> <span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="delete-the-kubernetes-dashboard">
+<span id="delete-the-kubernetes-dashboard"></span><h2>Delete the Kubernetes Dashboard<a class="headerlink" href="#delete-the-kubernetes-dashboard" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference external" href="https://github.com/kubernetes/dashboard">Kubernetes Dashboard</a> gets created by default in many installations. Although the Dashboard contains useful information, the Dashboard also poses a security risk. We <strong>recommend</strong> deleting it and not using it for the time being until the Dashboard becomes properly securable.</p>
+<p>You can mitigate this by deleting the Kubernetes Dashboard deployment from your cluster. This can be most likely performed with:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>kubectl --namespace<span class="o">=</span>kube-system delete deployment kubernetes-dashboard
+</pre></div>
+</div>
+<p>In older clusters, you might have to do:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>kubectl --namespace<span class="o">=</span>kube-system delete rc kubernetes-dashboard
+</pre></div>
+</div>
+</div>
+<div class="section" id="use-role-based-access-control-rbac">
+<span id="use-role-based-access-control-rbac"></span><h2>Use Role Based Access Control (RBAC)<a class="headerlink" href="#use-role-based-access-control-rbac" title="Permalink to this headline">¶</a></h2>
+<p>Kubernetes supports, and often requires, using <a class="reference external" href="https://kubernetes.io/docs/admin/authorization/rbac/">Role Based Access Control (RBAC)</a>
+to secure which pods / users can perform what kinds of actions on the cluster. RBAC rules can be set to provide users with minimal necessary access based on their administrative needs.</p>
+<p>It is <strong>critical</strong> to understand that if RBAC is disabled, all pods are given <code class="docutils literal"><span class="pre">root</span></code> equivalent permission on the Kubernetes cluster and all the nodes in it. This opens up very bad vulnerabilites for your security.</p>
+<p>As of the Helm chart v0.5 used with JupyterHub and BinderHub, the helm chart can natively work with RBAC enabled clusters. To provide sensible security defaults, we ship appropriate minimal RBAC rules for the various components we use. We <strong>highly recommend</strong> using these minimal or more restrictive RBAC rules.</p>
+<p>If you want to disable the RBAC rules, for whatever reason, you can do so with the following snippet in your <code class="docutils literal"><span class="pre">config.yaml</span></code>:</p>
+<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">rbac</span><span class="p p-Indicator">:</span>
+   <span class="l l-Scalar l-Scalar-Plain">enabled</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+</pre></div>
+</div>
+<p>We strongly <strong>discourage disabling</strong> the RBAC rules and remind you that this action will open up security vulnerabilities. Proceed with caution!</p>
+</div>
+<div class="section" id="kubernetes-api-access">
+<span id="kubernetes-api-access"></span><h2>Kubernetes API Access<a class="headerlink" href="#kubernetes-api-access" title="Permalink to this headline">¶</a></h2>
+<p>Allowing direct user access to the Kubernetes API can be dangerous. It allows
+users to grant themselves more privileges, access other users' content without
+permission, run (unprofitable) bitcoin mining operations &amp; various other
+not-legitimate activities. By default, we do not allow access to the <a class="reference external" href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/">service
+account credentials</a> needed
+to access the kubernetes API from user servers for this reason.</p>
+<p>If you want to (carefully!) give access to the Kubernetes API to your users, you
+can do so with the following in your <code class="docutils literal"><span class="pre">config.yaml</span></code>:</p>
+<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">singleuser</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">serviceAccountName</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;service-account-name&gt;</span>
+</pre></div>
+</div>
+<p>You can either manually create a service account for use by your users and
+specify the name of that here (recommended) or use <code class="docutils literal"><span class="pre">default</span></code> to give them access
+to the default service account for the namespace. You should ideally also
+(manually) set up <a class="reference external" href="https://kubernetes.io/docs/admin/authorization/rbac/">RBAC</a>
+rules for this service account to specify what permissions users will have.</p>
+<p>This is a sensitive security issue (similar to writing sudo rules in a
+traditional computing environment), so be very careful.</p>
+<p>There's ongoing work on making this easier!</p>
 </div>
 </div>
 
@@ -190,6 +240,7 @@ as this introduces security vulnerabilities.</p>
 
 
 <h3>Table of Contents</h3>
+<p class="caption"><span class="caption-text">Creating your JupyterHub</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started with JupyterHub</a></li>
 <li class="toctree-l1"><a class="reference internal" href="create-k8s-cluster.html">Creating a Kubernetes Cluster</a></li>
@@ -197,25 +248,33 @@ as this introduces security vulnerabilities.</p>
 <li class="toctree-l1"><a class="reference internal" href="setup-jupyterhub.html">Setting up JupyterHub</a></li>
 <li class="toctree-l1"><a class="reference internal" href="turn-off.html">Turning Off JupyterHub and Computational Resources</a></li>
 </ul>
+<p class="caption"><span class="caption-text">Customization Guide</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="extending-jupyterhub.html">Extending your JupyterHub setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user-environment.html">Customizing the User Environment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user-resources.html">User Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-storage.html">User storage in JupyterHub</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user-management.html">User Management</a></li>
 </ul>
+<p class="caption"><span class="caption-text">Administrator Guide</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication</a></li>
 <li class="toctree-l1"><a class="reference internal" href="debug.html">Debugging Kubernetes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cost.html">Estimating costs</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Security Considerations</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#setting-up-https">Setting up HTTPS</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#role-based-access-control-rbac">Role Based Access Control (RBAC)</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Security</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#https">HTTPS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#secure-access-to-helm">Secure access to Helm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#audit-cloud-metadata-server-security">Audit Cloud Metadata server security</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#delete-the-kubernetes-dashboard">Delete the Kubernetes Dashboard</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#use-role-based-access-control-rbac">Use Role Based Access Control (RBAC)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#kubernetes-api-access">Kubernetes API Access</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading The helm chart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Topics</a></li>
 </ul>
+<p class="caption"><span class="caption-text">Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="reference.html">Helm Chart Configuration Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tools.html">Tools used in a JupyterHub Deployment</a></li>
@@ -245,7 +304,7 @@ as this introduces security vulnerabilities.</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/security.rst.txt"
+      <li><a href="_sources/security.md.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -267,7 +326,7 @@ as this introduces security vulnerabilities.</p>
       &copy;2017, Project Jupyter team.
       
       |
-      <a href="_sources/security.rst.txt"
+      <a href="_sources/security.md.txt"
           rel="nofollow">Page source</a>
     </div>
 
