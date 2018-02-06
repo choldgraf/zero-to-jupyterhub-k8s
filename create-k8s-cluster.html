@@ -86,31 +86,49 @@ connect your credit card or other payment method to your google cloud account.</
 </li>
 <li><p class="first">Enable the <a class="reference external" href="https://console.cloud.google.com/apis/api/container.googleapis.com/overview">Kubernetes Engine API</a>.</p>
 </li>
-<li><p class="first">Install and initialize the <strong>gcloud command-line tools</strong>. These tools send
-commands to Google Cloud and lets you do things like create and delete
-clusters.</p>
-<ul>
-<li><p class="first">Go to the <a class="reference external" href="https://cloud.google.com/sdk/downloads">gcloud downloads page</a>
-to <strong>download and install the gcloud SDK</strong>.</p>
-</li>
-<li><p class="first">See the <a class="reference external" href="https://cloud.google.com/sdk/">gcloud documentation</a> for
-more information on the gcloud SDK.</p>
-</li>
-<li><p class="first">Install <code class="docutils literal"><span class="pre">kubectl</span></code>, which is a tool for controlling kubernetes. From
-the terminal, enter:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>gcloud components install kubectl
-</pre></div>
-</div>
+<li><p class="first">Use your preferred command line interface.</p>
+<p>You have two options: a) use the Google Cloud Shell (no installation needed)
+or b) install and use the gcloud command-line tool.
+If you are unsure which to choose, we recommend beginning with option
+“a” and using the Google Cloud Shell. Instructions
+for each are detailed below:</p>
+<ol class="loweralpha simple">
+<li><strong>Use the Google Cloud Shell</strong>. Start the Google Cloud Shell</li>
+</ol>
+<blockquote>
+<div><p>by clicking the button shown below. This will start an interactive shell
+session within Google Cloud.</p>
+</div></blockquote>
+<img alt="_images/start_interactive_cli.png" class="align-center" src="_images/start_interactive_cli.png" />
+<p>See the <a class="reference external" href="https://cloud.google.com/shell/docs/">Google Cloud Shell docs</a>
+for more information.</p>
+<ul class="simple">
+<li><strong>Install and use the gcloud command line tool</strong>.
+This tool sends commands to Google Cloud and lets you do things like create
+and delete clusters.<ul>
+<li>Go to the <a class="reference external" href="https://cloud.google.com/sdk/downloads">gcloud command line tool downloads page</a>
+to <strong>download and install the gcloud command line tool</strong>.</li>
+<li>See the <a class="reference external" href="https://cloud.google.com/pubsub/docs/quickstart-cli">gcloud documentation</a> for
+more information on the gcloud command line tool.</li>
+</ul>
 </li>
 </ul>
 </li>
-<li><p class="first">Create a Kubernetes cluster on Google Cloud, by typing in the following
-command:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>gcloud container clusters create &lt;YOUR_CLUSTER&gt; <span class="se">\</span>
+<li><p class="first">Install <code class="docutils literal"><span class="pre">kubectl</span></code>, which is a tool for controlling kubernetes. From
+the terminal, enter:</p>
+<blockquote>
+<div><div class="highlight-bash"><div class="highlight"><pre><span></span>gcloud components install kubectl
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">Create a Kubernetes cluster on Google Cloud, by typing the following
+command into either the Google Cloud shell or the gcloud command-line tool:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>gcloud container clusters create &lt;YOUR-CLUSTER&gt; <span class="se">\</span>
     --num-nodes<span class="o">=</span><span class="m">3</span> <span class="se">\</span>
     --machine-type<span class="o">=</span>n1-standard-2 <span class="se">\</span>
     --zone<span class="o">=</span>us-central1-b <span class="se">\</span>
-    --cluster-version<span class="o">=</span><span class="m">1</span>.8.4-gke.1
+    --cluster-version<span class="o">=</span><span class="m">1</span>.8.6-gke.0
 </pre></div>
 </div>
 <p>where:</p>
@@ -138,7 +156,9 @@ we specify the minimum that the default configuration will support.</li>
 </li>
 <li><p class="first">Give your account super-user permissions, allowing you to perform all
 the actions needed to set up JupyterHub.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>kubectl create clusterrolebinding cluster-admin-binding --clusterrole<span class="o">=</span>cluster-admin --user<span class="o">=</span>&lt;your-email-address&gt;
+<div class="highlight-bash"><div class="highlight"><pre><span></span>kubectl create clusterrolebinding cluster-admin-binding <span class="se">\</span>
+    --clusterrole<span class="o">=</span>cluster-admin <span class="se">\</span>
+    --user<span class="o">=</span>&lt;YOUR-EMAIL-ADDRESS&gt;
 </pre></div>
 </div>
 </li>
@@ -146,53 +166,63 @@ the actions needed to set up JupyterHub.</p>
 </div>
 <div class="section" id="setting-up-kubernetes-on-microsoft-azure-container-service-aks">
 <span id="microsoft-azure"></span><h2>Setting up Kubernetes on Microsoft Azure Container Service (AKS)<a class="headerlink" href="#setting-up-kubernetes-on-microsoft-azure-container-service-aks" title="Permalink to this headline">¶</a></h2>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This is an alpha work-in-progress - please do not use in production! Help from
-people with more Azure experience would be highly welcome :)</p>
-</div>
 <ol class="arabic">
-<li><p class="first">Install and initialize the <strong>Azure command-line tools</strong>, which send commands
-to Azure and let you do things like create and delete clusters.</p>
-<ul class="simple">
-<li>Go to the <a class="reference external" href="https://github.com/Azure/azure-cli">azure-cli github repo</a>
-to download and install the <strong>azure-cli</strong> tools.</li>
-<li>See the <a class="reference external" href="https://docs.microsoft.com/en-us/cli/azure/acs">az documentation</a>
-for more information on using the <code class="docutils literal"><span class="pre">az</span></code> tool with the Azure Container
-Service.</li>
-</ul>
+<li><p class="first">Prepare your Azure shell environment. You have two options, one is to use
+the Azure interactive shell, the other is to install the Azure command-line
+tools locally. Instructions for each are below.</p>
+<ul>
+<li><p class="first"><strong>Using the Azure interactive shell</strong>. The <a class="reference external" href="https://portal.azure.com">Azure Portal</a>
+contains an interactive shell that you can use to communicate with your
+Kubernetes cluster. To access this shell, go to <a class="reference external" href="https://portal.azure.com">portal.azure.com</a>
+and click on the button below.</p>
+<img alt="_images/cli_start.png" class="align-center" src="_images/cli_start.png" />
 </li>
-<li><p class="first">Authenticate the <code class="docutils literal"><span class="pre">az</span></code> tool so it may access your Azure account:</p>
+</ul>
+<blockquote>
+<div><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>If you get errors like <code class="docutils literal"><span class="pre">could</span> <span class="pre">not</span> <span class="pre">retrieve</span> <span class="pre">token</span> <span class="pre">from</span> <span class="pre">local</span> <span class="pre">cache</span></code>,
+try refreshing your browser window.</li>
+<li>The first time you do this, you’ll be asked to create a storage
+account where your shell filesystem will live.</li>
+</ul>
+</div>
+</div></blockquote>
+<ul>
+<li><p class="first"><strong>Install command-line tools locally</strong>. You can access the Azure CLI via
+a package that you can install locally.</p>
+<p>To do so, first follow the <a class="reference external" href="https://docs.microsoft.com/en-us/cli/azure/install-azure-cli">installation instructions</a> in the
+Azure documentation. Then run the following command to connect your local
+CLI with your account:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>az login
 </pre></div>
 </div>
+<p>You’ll need to open a browser and follow the instructions in your terminal
+to log in.</p>
 </li>
-<li><p class="first">Set your Azure account context:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>az account <span class="nb">set</span> -s &lt;YOUR CHOSEN SUBSCRIPTION&gt;
+</ul>
+</li>
+<li><p class="first">Activate the correct subscription. Azure uses the concept
+of <strong>subscriptions</strong> to manage spending. You can
+get a list of subscriptions your account has access to by running:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>az account list --refresh --output table
+</pre></div>
+</div>
+<p>Pick the subscription you want to use for creating the cluster, and set that
+as your default.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>az account <span class="nb">set</span> -s &lt;YOUR-CHOSEN-SUBSCRIPTION-NAME&gt;
 </pre></div>
 </div>
 </li>
-<li><p class="first">Manually preserve the subscription ID (“.id” in the previous command’s output) in SUBSCRIPTION_ID, or obtain it with <a class="reference external" href="https://stedolan.github.io/jq/">jq</a>:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">SUBSCRIPTION_ID</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>az account show <span class="p">|</span> jq -r .id<span class="k">)</span><span class="s2">&quot;</span>
-</pre></div>
-</div>
-</li>
-<li><p class="first">Create a service principal:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>az ad sp create-for-rbac --role<span class="o">=</span>Contributor --scopes<span class="o">=</span>/subscriptions/<span class="si">${</span><span class="nv">SUBSCRIPTION_ID</span><span class="si">}</span> &gt; sp.json
-</pre></div>
-</div>
-</li>
-<li><p class="first">Manually preserve the service principal and password by looking them up in sp.json, or obtain them with jq:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">SERVICE_PRINCIPAL</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>jq -r .appId sp.json<span class="k">)</span><span class="s2">&quot;</span>
-<span class="nb">export</span> <span class="nv">CLIENT_SECRET</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>jq -r .password sp.json<span class="k">)</span><span class="s2">&quot;</span>
-</pre></div>
-</div>
-</li>
-<li><p class="first">Specify an <a class="reference external" href="https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-overview#resource-groups">Azure resource group</a>, and create one if it doesn’t already
-exist:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">RESOURCE_GROUP</span><span class="o">=</span>&lt;YOUR_RESOURCE_GROUP&gt;
-<span class="nb">export</span> <span class="nv">LOCATION</span><span class="o">=</span>&lt;YOUR_LOCATION&gt;
-az group create --name<span class="o">=</span><span class="si">${</span><span class="nv">RESOURCE_GROUP</span><span class="si">}</span> --location<span class="o">=</span><span class="si">${</span><span class="nv">LOCATION</span><span class="si">}</span>
+<li><p class="first">Create a resource group. Azure uses the concept of
+<strong>resource groups</strong> to group related resources together.
+We need to create a resource group in a given data center location. We will create
+computational resources <em>within</em> this resource group.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>az group create <span class="se">\</span>
+              --name<span class="o">=</span>&lt;RESOURCE-GROUP-NAME&gt; <span class="se">\</span>
+              --location<span class="o">=</span>centralus <span class="se">\</span>
+              --output table
 </pre></div>
 </div>
 </li>
@@ -200,63 +230,129 @@ az group create --name<span class="o">=</span><span class="si">${</span><span cl
 <blockquote>
 <div><p>where:</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">--name</span></code> specifies your Azure resource group. If a group doesn’t exist,
-az will create it for you.</li>
-<li><code class="docutils literal"><span class="pre">--location</span></code> specifies your Azure region. To reduce latency, choose a region closest to those using the cluster. AKS is only available in <a class="reference external" href="https://github.com/Azure/AKS/blob/master/preview_regions.md">preview regions</a> at the moment. You may view all available zones via <code class="docutils literal"><span class="pre">az</span> <span class="pre">account</span> <span class="pre">list-locations</span></code>.</li>
+<li><code class="docutils literal"><span class="pre">--name</span></code> specifies the name of your resource group. We recommend using something
+that uniquely identifies this hub. For example, if you are creating a resource group
+for UC Berkeley’s 2018 Spring Data100 Course, you may give it a
+<code class="docutils literal"><span class="pre">&lt;RESOURCE-GROUP-NAME&gt;</span></code> of <code class="docutils literal"><span class="pre">ucb_2018sp_data100_hub</span></code>.</li>
+<li><code class="docutils literal"><span class="pre">--location</span></code> specifies the location of the data center you want your resource to be in.
+In this case, we used the <code class="docutils literal"><span class="pre">centralus</span></code> location. For other options, see the
+<a class="reference external" href="https://github.com/Azure/AKS/blob/master/preview_regions.md">Azure list of locations that support AKS</a>.</li>
+<li><code class="docutils literal"><span class="pre">--output</span> <span class="pre">table</span></code> specifies that the output should be in human readable
+format, rather than the default JSON output. We shall use this with most
+commands when executing them by hand.</li>
 </ul>
 </div></blockquote>
-<ol class="arabic" start="8">
-<li><p class="first">Create a Kubernetes cluster on Azure:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">CLUSTER</span><span class="o">=</span>&lt;YOUR_CLUSTER_NAME&gt;
-az aks create -n <span class="si">${</span><span class="nv">CLUSTER</span><span class="si">}</span> -g <span class="si">${</span><span class="nv">RESOURCE_GROUP</span><span class="si">}</span> <span class="se">\</span>
-    --location <span class="si">${</span><span class="nv">LOCATION</span><span class="si">}</span> <span class="se">\</span>
-    --service-principal <span class="si">${</span><span class="nv">SERVICE_PRINCIPAL</span><span class="si">}</span> <span class="se">\</span>
-    --client-secret <span class="si">${</span><span class="nv">CLIENT_SECRET</span><span class="si">}</span> <span class="se">\</span>
-    --kubernetes-version <span class="m">1</span>.8.2
+<ol class="arabic" start="4">
+<li><p class="first">Enable the cloud APIs required before creating a cluster.</p>
+<p>The following commands enable various Azure tools that we’ll need in
+creating and managing the JupyterHub.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>az provider register --name Microsoft.Network --wait
+az provider register --name Microsoft.Compute --wait
+az provider register --name Microsoft.Storage --wait
+az provider register --name Microsoft.ContainerService --wait
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Each of these commands may take up to several minutes to complete.</p>
+</div>
+</li>
+<li><p class="first">Choose a cluster name.</p>
+<p>In the following steps we’ll run commands that ask you to input a cluster
+name. We recommend using something descriptive and short. We’ll refer to
+this as <code class="docutils literal"><span class="pre">&lt;CLUSTER-NAME&gt;</span></code> for the remainder of this section.</p>
+<p>The next step will create a few files on your filesystem, so first create
+a folder in which these files will go. We recommend giving it the same
+name as your cluster:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="o">&lt;</span><span class="n">CLUSTER</span><span class="o">-</span><span class="n">NAME</span><span class="o">&gt;</span>
+<span class="n">cd</span> <span class="o">&lt;</span><span class="n">CLUSTER</span><span class="o">-</span><span class="n">NAME</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 </li>
-</ol>
-<blockquote>
-<div><p>where:</p>
+<li><p class="first">Create an ssh key to secure your cluster.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>ssh-keygen -f ssh-key-&lt;CLUSTER-NAME&gt;
+</pre></div>
+</div>
+<p>It will prompt you to add a password, which you can leave empty if you wish.
+This will create a public key named <code class="docutils literal"><span class="pre">ssh-key-&lt;CLUSTER-NAME&gt;.pub</span></code> and a private key named
+<code class="docutils literal"><span class="pre">ssh-key-&lt;CLUSTER-NAME&gt;</span></code>. Make sure both go into the folder we created earlier,
+and keep both of them safe!</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This command will also print out something to your terminal screen. You
+don’t need to do anything with this text.</p>
+</div>
+</li>
+<li><p class="first">Create an AKS cluster.</p>
+<p>The following command will request a Kubernetes cluster within the resource
+group that we created earlier.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>az aks create --name &lt;CLUSTER-NAME&gt; <span class="se">\</span>
+              --resource-group &lt;RESOURCE-GROUP-NAME&gt; <span class="se">\</span>
+              --ssh-key-value ssh-key-&lt;CLUSTER-NAME&gt;.pub <span class="se">\</span>
+              --node-count <span class="m">3</span> <span class="se">\</span>
+              --node-vm-size Standard_D2s_v3 <span class="se">\</span>
+              --kubernetes-version <span class="m">1</span>.8.2 <span class="se">\</span>
+              --output table
+</pre></div>
+</div>
+<p>where:</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">-n</span></code> is your ACS cluster name.</li>
-<li><code class="docutils literal"><span class="pre">-g</span></code> is your Azure resource group.</li>
-<li><code class="docutils literal"><span class="pre">--location</span></code> is your Azure region.</li>
-<li>–service-principal and –client-secrets are set to the values you created earlier.</li>
-<li>–kubernetes-version is the the version of kubernetes your cluster will run. We recommend at least 1.8.x.</li>
+<li><code class="docutils literal"><span class="pre">--name</span></code> is the name you want to use to refer to your cluster</li>
+<li><code class="docutils literal"><span class="pre">--resource-group</span></code> is the ResourceGroup you created in step 4</li>
+<li><code class="docutils literal"><span class="pre">--ssh-key-value</span></code> is the ssh public key created in step 7</li>
+<li><code class="docutils literal"><span class="pre">--node-count</span></code> is the number of nodes you want in your kubernetes cluster</li>
+<li><code class="docutils literal"><span class="pre">--node-vm-size</span></code> is the size of the nodes you want to use, which varies based on
+what you are using your cluster for and how much RAM/CPU each of your users need.
+There is a <a class="reference external" href="https://docs.microsoft.com/en-us/azure/cloud-services/cloud-services-sizes-specs">list of all possible node sizes</a>
+for you to choose from, but not all might be available in your location.</li>
+<li><code class="docutils literal"><span class="pre">--kubernetes-version</span></code> is the version of Kubernetes we want to use.</li>
 </ul>
-</div></blockquote>
-<ol class="arabic" start="9">
-<li><p class="first">Install <code class="docutils literal"><span class="pre">kubectl</span></code>, a tool for controlling Kubernetes:</p>
+<p>This should take a few minutes and provide you with a working Kubernetes cluster!</p>
+</li>
+<li><p class="first">Install <a class="reference external" href="https://kubernetes.io/docs/reference/kubectl/overview/">kubectl</a>, a tool
+for accessing the Kubernetes API from the commandline:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>az aks install-cli
 </pre></div>
 </div>
 </li>
-<li><p class="first">Authenticate kubectl:</p>
+<li><p class="first">Get credentials from Azure for <code class="docutils literal"><span class="pre">kubectl</span></code> to work:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>az aks get-credentials <span class="se">\</span>
+             --name &lt;CLUSTER-NAME&gt; <span class="se">\</span>
+             --resource-group &lt;RESOURCE-GROUP-NAME&gt; <span class="se">\</span>
+             --output table
+</pre></div>
+</div>
 </li>
 </ol>
 <blockquote>
-<div><blockquote>
-<div><div class="highlight-bash"><div class="highlight"><pre><span></span>az aks get-credentials -n <span class="si">${</span><span class="nv">CLUSTER</span><span class="si">}</span> -g <span class="si">${</span><span class="nv">RESOURCE_GROUP</span><span class="si">}</span>
-</pre></div>
-</div>
-</div></blockquote>
-<p>where:</p>
+<div><p>where:</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">-n</span></code> is your ACS cluster name.</li>
-<li><code class="docutils literal"><span class="pre">-g</span></code> specifies your Azure resource group.</li>
+<li><code class="docutils literal"><span class="pre">--name</span></code> is the name you gave your cluster in step 7</li>
+<li><code class="docutils literal"><span class="pre">--resource-group</span></code> is the ResourceGroup you created in step 4</li>
 </ul>
 </div></blockquote>
-<ol class="arabic simple" start="11">
-<li>To test if your cluster is initialized, run:</li>
+<ol class="arabic simple" start="10">
+<li>Check if your cluster is fully functional</li>
 </ol>
 <blockquote>
 <div><div class="highlight-bash"><div class="highlight"><pre><span></span>kubectl get node
 </pre></div>
 </div>
-<p>The response should list three running nodes.</p>
+<p>The response should list three running nodes and their kubernetes versions!
+Each node should have the status of <code class="docutils literal"><span class="pre">Ready</span></code>, note that this may take a
+few moments.</p>
 </div></blockquote>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Azure AKS is still in <strong>preview</strong>, and not all features might work as
+intended. In particular,</p>
+<ol class="last arabic simple">
+<li>You have to <a class="reference external" href="security.html#use-role-based-access-control-rbac">not use RBAC</a>, since AKS does not support it
+yet.</li>
+<li>You should skip step 2 (granting RBAC rights) with the “initialization”
+section <a class="reference internal" href="setup-helm.html#helm-rbac"><span class="std std-ref">when setting up helm</span></a>.</li>
+</ol>
+</div>
 </div>
 <div class="section" id="setting-up-kubernetes-on-amazon-web-services-aws">
 <span id="amazon-aws"></span><h2>Setting up Kubernetes on Amazon Web Services (AWS)<a class="headerlink" href="#setting-up-kubernetes-on-amazon-web-services-aws" title="Permalink to this headline">¶</a></h2>
@@ -460,6 +556,16 @@ and more secure authorization mode is not out of beta yet.</p>
 
 
 
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
 <h3>Table of Contents</h3>
 <p class="caption"><span class="caption-text">Creating your JupyterHub</span></p>
 <ul class="current">
@@ -489,8 +595,7 @@ and more secure authorization mode is not out of beta yet.</p>
 <li class="toctree-l1"><a class="reference internal" href="debug.html">Debugging Kubernetes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cost.html">Estimating costs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="security.html">Security</a></li>
-<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
-<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading The helm chart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading the helm chart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Topics</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Reference</span></p>
@@ -527,16 +632,6 @@ and more secure authorization mode is not out of beta yet.</p>
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
-    <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>

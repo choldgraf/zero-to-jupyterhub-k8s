@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Search &#8212; Zero to JupyterHub with Kubernetes 0.4 documentation</title>
+    <title>The JupyterHub Architecture &#8212; Zero to JupyterHub with Kubernetes 0.4 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -23,22 +23,16 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/javascript" src="_static/searchtools.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="#" />
-  <script type="text/javascript">
-    jQuery(function() { Search.loadIndex("searchindex.js"); });
-  </script>
-  
-  <script type="text/javascript" id="searchindexloader"></script>
-  
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Authentication" href="authentication.html" />
+    <link rel="prev" title="User Management" href="user-management.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
-
 
   </head>
   <body>
@@ -49,28 +43,33 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <h1 id="search-documentation">Search</h1>
-  <div id="fallback" class="admonition warning">
-  <script type="text/javascript">$('#fallback').hide();</script>
-  <p>
-    Please activate JavaScript to enable the search
-    functionality.
-  </p>
+  <div class='prev-next-top'>
+    
+     <a class='left-prev' href="user-management.html" title="previous chapter">Previous</a>
+     <a class='right-next' href="authentication.html" title="next chapter">Next</a>
+  <div style='clear:both;'></div>
+
   </div>
-  <p>
-    From here you can search these documents. Enter your search
-    words into the box below and click "search". Note that the search
-    function will automatically search for all of the words. Pages
-    containing fewer words won't appear in the result list.
-  </p>
-  <form action="" method="get">
-    <input type="text" name="q" value="" />
-    <input type="submit" value="search" />
-    <span id="search-progress" style="padding-left: 10px"></span>
-  </form>
+
   
-  <div id="search-results">
-  
+  <div class="section" id="the-jupyterhub-architecture">
+<h1>The JupyterHub Architecture<a class="headerlink" href="#the-jupyterhub-architecture" title="Permalink to this headline">¶</a></h1>
+<p>The JupyterHub Helm Chart manages resources in the cloud using Kubernetes.
+There are several moving pieces that, together, handle authenticating users,
+pulling a Docker image specified by the administrator, generating the user
+pods in which users will work, and connecting users with those pods.</p>
+<p>The following diagram gives a high-level overview of the many pieces of
+JupyterHub, and how they fit together in this process:</p>
+<img alt="_images/diagram.png" class="align-center" src="_images/diagram.png" />
+</div>
+
+
+  <div class='prev-next-bottom'>
+    
+     <a class='left-prev' href="user-management.html" title="previous chapter">User Management</a>
+     <a class='right-next' href="authentication.html" title="next chapter">Authentication</a>
+  <div style='clear:both;'></div>
+
   </div>
 
           </div>
@@ -118,7 +117,8 @@
 <li class="toctree-l1"><a class="reference internal" href="user-management.html">User Management</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Administrator Guide</span></p>
-<ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">The JupyterHub Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication</a></li>
 <li class="toctree-l1"><a class="reference internal" href="debug.html">Debugging Kubernetes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cost.html">Estimating costs</a></li>
@@ -148,9 +148,28 @@
 <h3>Navigation</h3>
 <ul>
   <li><a href="index.html">Documentation Home</a><ul>
+  <li><a href="user-management.html" title="Previous">Previous topic</a></li>
+  <li><a href="authentication.html" title="Next">Next topic</a></li>
   </ul>
 </ul>
 </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/architecture.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -158,6 +177,9 @@
     <div class="footer">
       &copy;2017, Project Jupyter team.
       
+      |
+      <a href="_sources/architecture.rst.txt"
+          rel="nofollow">Page source</a>
     </div>
 
     

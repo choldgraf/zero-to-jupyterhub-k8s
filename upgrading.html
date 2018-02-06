@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Upgrading The helm chart &#8212; Zero to JupyterHub with Kubernetes 0.4 documentation</title>
+    <title>Upgrading the helm chart &#8212; Zero to JupyterHub with Kubernetes 0.4 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -27,7 +27,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Advanced Topics" href="advanced.html" />
-    <link rel="prev" title="Troubleshooting" href="troubleshooting.html" />
+    <link rel="prev" title="Security" href="security.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -45,7 +45,7 @@
             
   <div class='prev-next-top'>
     
-     <a class='left-prev' href="troubleshooting.html" title="previous chapter">Previous</a>
+     <a class='left-prev' href="security.html" title="previous chapter">Previous</a>
      <a class='right-next' href="advanced.html" title="next chapter">Next</a>
   <div style='clear:both;'></div>
 
@@ -53,35 +53,72 @@
 
   
   <div class="section" id="upgrading-the-helm-chart">
-<span id="upgrading-the-helm-chart"></span><h1>Upgrading The helm chart<a class="headerlink" href="#upgrading-the-helm-chart" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="general-upgrade-advice">
-<span id="general-upgrade-advice"></span><h2>General upgrade advice<a class="headerlink" href="#general-upgrade-advice" title="Permalink to this headline">¶</a></h2>
-<p>In general, it should be safe to upgrade a minor revision of the chart to
-receive bugfixes and improvements. A major chart upgrade (e.g. v0.4 to v0.5)
-can be more challenging, but is possible. We still recommend a full fresh
-installation if you can, but recognize it is not possible all the time. We've
-provided and tested the following upgrade instructions. If you are planning an
-upgrade of a critical major installation, we recommend you test it out on a
-staging cluster first before applying it to production. Feel free to reach out
-to us on <a class="reference external" href="http://gitter.im/jupyterhub/jupyterhub">gitter</a> or the <a class="reference external" href="https://groups.google.com/forum/#!forum/jupyter">mailing
-list</a> for upgrade help!</p>
-<p>General helm-chart upgrade considerations:</p>
+<span id="upgrading-the-helm-chart"></span><h1>Upgrading the helm chart<a class="headerlink" href="#upgrading-the-helm-chart" title="Permalink to this headline">¶</a></h1>
+<p>This page covers best-practices in upgrading your JupyterHub deployment via updates
+to the Helm Chart.</p>
+<p>Upgrading from one version of the Helm Chart to the
+next should be as seamless as possible, and generally shouldn't require major
+changes to your deployment. Check the <a class="reference external" href="https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/CHANGELOG.md">CHANGELOG</a>
+for each release to find out if there are any breaking changes in the newest version.</p>
+<p>For additional help, feel free to reach out to us on <a class="reference external" href="http://gitter.im/jupyterhub/jupyterhub">gitter</a>
+or the <a class="reference external" href="https://groups.google.com/forum/#!forum/jupyter">mailing list</a>!</p>
+<div class="section" id="major-helm-chart-upgrades">
+<span id="major-helm-chart-upgrades"></span><h2>Major helm-chart upgrades<a class="headerlink" href="#major-helm-chart-upgrades" title="Permalink to this headline">¶</a></h2>
+<p>These steps are <strong>critical</strong> before performing a major upgrade.</p>
 <ol class="simple">
 <li>Always backup your database!</li>
-<li>Review incompatible changes for your upgrade (most should be on this page)
-and update your configuration accordingly.</li>
-<li>For major upgrades, user servers may need be stopped prior to the upgrade,
+<li>Review the <a class="reference external" href="https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/CHANGELOG.md">CHANGELOG</a> for incompatible changes and upgrade instructions.</li>
+<li>Update your configuration accordingly.</li>
+<li>User servers may need be stopped prior to the upgrade,
 or restarted after it.</li>
+<li>If you are planning an upgrade of a critical major installation,
+we recommend you test the upgrade out on a staging cluster first
+before applying it to production.</li>
 </ol>
+<div class="section" id="v0-5-to-v0-6">
+<span id="v0-5-to-v0-6"></span><h3>v0.5 to v0.6<a class="headerlink" href="#v0-5-to-v0-6" title="Permalink to this headline">¶</a></h3>
+<p>See the <a class="reference external" href="https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/d1b2804d887033f5d0e1f5315cfe8d3c7bbf41d2/CHANGELOG.md#06---ellyse-perry---2017-01-29">CHANGELOG</a>.</p>
 </div>
 <div class="section" id="v0-4-to-v0-5">
-<span id="v0-4-to-v0-5"></span><h2>v0.4 to v0.5<a class="headerlink" href="#v0-4-to-v0-5" title="Permalink to this headline">¶</a></h2>
+<span id="v0-4-to-v0-5"></span><h3>v0.4 to v0.5<a class="headerlink" href="#v0-4-to-v0-5" title="Permalink to this headline">¶</a></h3>
 <p>Release 0.5 contains a major JupyterHub version bump (from 0.7.2 to 0.8).
 Since it is a major upgrade of JupyterHub that changes how authentication is
 implemented, user servers must be stopped during the upgrade.
 The database schema has also changed, so a database upgrade must be performed.</p>
-<div class="section" id="database-upgrade">
-<span id="database-upgrade"></span><h3>Database upgrade<a class="headerlink" href="#database-upgrade" title="Permalink to this headline">¶</a></h3>
+<p>See the <a class="reference external" href="https://zero-to-jupyterhub.readthedocs.io/en/v0.5-doc/upgrading.html">documentation for v0.5 for the upgrade process</a>
+as well as the <a class="reference external" href="https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/CHANGELOG.md#05---hamid-hassan---2017-12-05">CHANGELOG</a>
+for this release for more information about changes.</p>
+</div>
+</div>
+<div class="section" id="subtopics">
+<span id="subtopics"></span><h2>Subtopics<a class="headerlink" href="#subtopics" title="Permalink to this headline">¶</a></h2>
+<p>This section covers upgrade information specific to the following:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">helm</span> <span class="pre">upgrade</span></code> command</li>
+<li>Databases</li>
+<li>RBAC (Role Based Access Control)</li>
+<li>Custom Docker images</li>
+</ul>
+<div class="section" id="helm-upgrade-command">
+<span id="helm-upgrade-command"></span><h3><code class="docutils literal"><span class="pre">helm</span> <span class="pre">upgrade</span></code> command<a class="headerlink" href="#helm-upgrade-command" title="Permalink to this headline">¶</a></h3>
+<p>After modifying your <code class="docutils literal"><span class="pre">config.yaml</span></code> file according to the CHANGELOG, you will need
+<code class="docutils literal"><span class="pre">&lt;YOUR-HELM-RELEASE-NAME&gt;</span></code> to run the upgrade commands. To find <code class="docutils literal"><span class="pre">&lt;YOUR-RELEASE-NAME&gt;</span></code>, run:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">helm</span> <span class="nb">list</span>
+</pre></div>
+</div>
+<p>Make sure to test the upgrade on a staging environment before doing the upgrade on
+a production system!</p>
+<p>To run the upgrade:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">helm</span> <span class="n">upgrade</span> <span class="o">&lt;</span><span class="n">YOUR</span><span class="o">-</span><span class="n">HELM</span><span class="o">-</span><span class="n">RELEASE</span><span class="o">-</span><span class="n">NAME</span><span class="o">&gt;</span> <span class="n">jupyterhub</span><span class="o">/</span><span class="n">jupyterhub</span> <span class="o">--</span><span class="n">version</span><span class="o">=&lt;</span><span class="n">RELEASE</span><span class="o">-</span><span class="n">VERSION</span><span class="o">&gt;</span> <span class="o">-</span><span class="n">f</span> <span class="n">config</span><span class="o">.</span><span class="n">yaml</span>
+</pre></div>
+</div>
+<p>For example, to upgrade to v0.6, enter and substituting <code class="docutils literal"><span class="pre">&lt;YOUR-HELM-RELEASE-NAME&gt;</span></code> and version v0.6:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">helm</span> <span class="n">upgrade</span> <span class="o">&lt;</span><span class="n">YOUR</span><span class="o">-</span><span class="n">HELM</span><span class="o">-</span><span class="n">RELEASE</span><span class="o">-</span><span class="n">NAME</span><span class="o">&gt;</span> <span class="n">jupyterhub</span><span class="o">/</span><span class="n">jupyterhub</span> <span class="o">--</span><span class="n">version</span><span class="o">=</span><span class="n">v0</span><span class="o">.</span><span class="mi">6</span> <span class="o">-</span><span class="n">f</span> <span class="n">config</span><span class="o">.</span><span class="n">yaml</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="database">
+<span id="database"></span><h3>Database<a class="headerlink" href="#database" title="Permalink to this headline">¶</a></h3>
 <p>This release contains a major JupyterHub version bump (from 0.7.2 to 0.8). If
 you are using the default database provider (SQLite), then the required db upgrades
 will be performed automatically when you do a <code class="docutils literal"><span class="pre">helm</span> <span class="pre">upgrade</span></code>.</p>
@@ -130,72 +167,30 @@ the following snippet to your <code class="docutils literal"><span class="pre">c
 <div class="section" id="custom-docker-images-jupyterhub-version-match">
 <span id="custom-docker-images-jupyterhub-version-match"></span><h3>Custom Docker Images: JupyterHub version match<a class="headerlink" href="#custom-docker-images-jupyterhub-version-match" title="Permalink to this headline">¶</a></h3>
 <p>If you are using a custom built image, make sure that the version of the
-JupyterHub package installed in it is now 0.8. It needs to be version 0.7.2 for
-it to work with v0.4 of the helm chart, and needs to be 0.8 for it to work with
-v0.5 of the helm chart.</p>
-<p>For example, if you are using pip to install JupyterHub in your custom Docker Image,
+JupyterHub package installed in it is now 0.8.1. It needs to be 0.8.1 for it to work with
+v0.6 of the helm chart.</p>
+<p>For example, if you are using <code class="docutils literal"><span class="pre">pip</span></code> to install JupyterHub in your custom Docker Image,
 you would use:</p>
-<div class="highlight-Dockerfile"><div class="highlight"><pre><span></span><span class="k">RUN</span> pip install --no-cache-dir <span class="nv">jupyterhub</span><span class="o">==</span><span class="m">0</span>.8.*
+<div class="highlight-Dockerfile"><div class="highlight"><pre><span></span><span class="k">RUN</span> pip install --no-cache-dir <span class="nv">jupyterhub</span><span class="o">==</span><span class="m">0</span>.8.1
 </pre></div>
 </div>
 </div>
-<div class="section" id="ingress-config-incompatibilities">
-<span id="ingress-config-incompatibilities"></span><h3>Ingress config incompatibilities<a class="headerlink" href="#ingress-config-incompatibilities" title="Permalink to this headline">¶</a></h3>
-<p>We've made HTTPS <a class="reference external" href="http://zero-to-jupyterhub.readthedocs.io/en/latest/extending-jupyterhub.html#setting-up-https">much easier to set up</a>,
-with automated certificates from <a class="reference external" href="https://letsencrypt.org/">Let's Encrypt</a>.
-However, this means that some of the keys used to set up your own ingress has
-changed.</p>
-<p>If you were using config under <code class="docutils literal"><span class="pre">ingress</span></code> purely to get HTTPS, we recommend
-that you delete your entire config section under <code class="docutils literal"><span class="pre">ingress</span></code> &amp; instead follow
-the new <a class="reference external" href="http://zero-to-jupyterhub.readthedocs.io/en/latest/extending-jupyterhub.html#setting-up-https">docs</a>
-on getting HTTPS set up. It's much easier &amp; a lot less error prone than the method recommended on 0.4.</p>
-<p>If you were using config under <code class="docutils literal"><span class="pre">ingress</span></code> for other reasons, you may continue
-to do so. The keys under <code class="docutils literal"><span class="pre">ingress</span></code> have changed, and are now much more in line
-with how many other projects use <code class="docutils literal"><span class="pre">ingress</span></code> in the <a class="reference external" href="https://github.com/kubernetes/charts/">official charts repo</a>.
-See <a class="reference external" href="http://zero-to-jupyterhub.readthedocs.io/en/latest/advanced.html#ingress">our ingress documentation</a>
-for more details on how to set up ingress properly. This is the most likely issue if
-you are getting an error like the following when upgrading:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>Ingress.extensions &quot;jupyterhub&quot; is invalid: spec: Invalid value: []extensions.IngressRule(nil): either `backend` or `rules` must be specified
+</div>
+<div class="section" id="troubleshooting">
+<span id="troubleshooting"></span><h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline">¶</a></h2>
+<p>If the upgrade is failing on a test system or a system that does not serve users, you can try
+deleting the helm chart using:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">helm</span> <span class="n">delete</span> <span class="o">&lt;</span><span class="n">YOUR</span><span class="o">-</span><span class="n">HELM</span><span class="o">-</span><span class="n">RELEASE</span><span class="o">-</span><span class="n">NAME</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">purge</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="admin-config-incompatibility">
-<span id="admin-config-incompatibility"></span><h3>Admin config incompatibility<a class="headerlink" href="#admin-config-incompatibility" title="Permalink to this headline">¶</a></h3>
-<p>If you had used the <code class="docutils literal"><span class="pre">admin</span></code> config section before, you now need to move it under
-<code class="docutils literal"><span class="pre">auth</span></code>. So if you had config like:</p>
-<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">admin</span><span class="p p-Indicator">:</span>
-   <span class="l l-Scalar l-Scalar-Plain">access</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
-   <span class="l l-Scalar l-Scalar-Plain">users</span><span class="p p-Indicator">:</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">yuvipanda</span>
-</pre></div>
-</div>
-<p>it should now be:</p>
-<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">auth</span><span class="p p-Indicator">:</span>
-  <span class="l l-Scalar l-Scalar-Plain">admin</span><span class="p p-Indicator">:</span>
-    <span class="l l-Scalar l-Scalar-Plain">access</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
-    <span class="l l-Scalar l-Scalar-Plain">users</span><span class="p p-Indicator">:</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">yuvipanda</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="upgrade-command">
-<span id="upgrade-command"></span><h3>Upgrade command<a class="headerlink" href="#upgrade-command" title="Permalink to this headline">¶</a></h3>
-<p>After modifying your config.yaml file to match, you can run the actual upgrade with
-the following helm command:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">helm</span> <span class="n">upgrade</span> <span class="o">&lt;</span><span class="n">YOUR</span><span class="o">-</span><span class="n">RELEASE</span><span class="o">-</span><span class="n">NAME</span><span class="o">&gt;</span> <span class="n">jupyterhub</span><span class="o">/</span><span class="n">jupyterhub</span> <span class="o">--</span><span class="n">version</span><span class="o">=</span><span class="n">v0</span><span class="o">.</span><span class="mi">5</span> <span class="o">-</span><span class="n">f</span> <span class="n">config</span><span class="o">.</span><span class="n">yaml</span>
-</pre></div>
-</div>
-<p>This should perform the upgrade! If you have forgotten your release name, you can find
-out with <code class="docutils literal"><span class="pre">helm</span> <span class="pre">list</span></code>. Make sure to test the upgrade on a staging environment
-before doing the upgrade!</p>
-</div>
+<p><code class="docutils literal"><span class="pre">helm</span> <span class="pre">list</span></code> may be used to find &lt;YOUR-HELM-RELEASE-NAME&gt;.</p>
 </div>
 </div>
 
 
   <div class='prev-next-bottom'>
     
-     <a class='left-prev' href="troubleshooting.html" title="previous chapter">Troubleshooting</a>
+     <a class='left-prev' href="security.html" title="previous chapter">Security</a>
      <a class='right-next' href="advanced.html" title="next chapter">Advanced Topics</a>
   <div style='clear:both;'></div>
 
@@ -228,6 +223,16 @@ before doing the upgrade!</p>
 
 
 
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
 <h3>Table of Contents</h3>
 <p class="caption"><span class="caption-text">Creating your JupyterHub</span></p>
 <ul>
@@ -251,10 +256,10 @@ before doing the upgrade!</p>
 <li class="toctree-l1"><a class="reference internal" href="debug.html">Debugging Kubernetes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cost.html">Estimating costs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="security.html">Security</a></li>
-<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Upgrading The helm chart</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#general-upgrade-advice">General upgrade advice</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#v0-4-to-v0-5">v0.4 to v0.5</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Upgrading the helm chart</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#major-helm-chart-upgrades">Major helm-chart upgrades</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#subtopics">Subtopics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Topics</a></li>
@@ -281,7 +286,7 @@ before doing the upgrade!</p>
 <h3>Navigation</h3>
 <ul>
   <li><a href="index.html">Documentation Home</a><ul>
-  <li><a href="troubleshooting.html" title="Previous">Previous topic</a></li>
+  <li><a href="security.html" title="Previous">Previous topic</a></li>
   <li><a href="advanced.html" title="Next">Next topic</a></li>
   </ul>
 </ul>
@@ -293,16 +298,6 @@ before doing the upgrade!</p>
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
-    <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>

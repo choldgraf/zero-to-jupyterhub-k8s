@@ -66,6 +66,8 @@ JupyterHub resources on various cloud providers.</p>
 </ol>
 <div class="section" id="for-all-cloud-providers">
 <h2>For all cloud providers<a class="headerlink" href="#for-all-cloud-providers" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="delete-the-helm-namespace">
+<span id="delete-namespace"></span><h3>Delete the helm namespace<a class="headerlink" href="#delete-the-helm-namespace" title="Permalink to this headline">¶</a></h3>
 <p>The steps in this section must be performed for all cloud providers first,
 before doing the cloud provider specific setup.</p>
 <ol class="arabic simple">
@@ -73,7 +75,7 @@ before doing the cloud provider specific setup.</p>
 by helm to make your jupyterhub.</li>
 </ol>
 <blockquote>
-<div><div class="highlight-bash"><div class="highlight"><pre><span></span>helm delete &lt;your-helm-release-name&gt; --purge
+<div><div class="highlight-bash"><div class="highlight"><pre><span></span>helm delete &lt;YOUR-HELM-RELEASE-NAME&gt; --purge
 </pre></div>
 </div>
 </div></blockquote>
@@ -81,20 +83,20 @@ by helm to make your jupyterhub.</li>
 <li><p class="first">Next, delete the namespace the hub was installed in. This deletes any disks
 that may have been created to store user’s data, and any IP addresses that
 may have been provisioned.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>kubectl delete namespace &lt;your-namespace&gt;
+<div class="highlight-bash"><div class="highlight"><pre><span></span>kubectl delete namespace &lt;YOUR-NAMESPACE&gt;
 </pre></div>
 </div>
 </li>
 </ol>
 </div>
+</div>
 <div class="section" id="google-cloud-platform">
 <h2>Google Cloud Platform<a class="headerlink" href="#google-cloud-platform" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic">
-<li><p class="first">Perform the steps above for all cloud providers. These cloud provider agnostic steps will
+<li><p class="first">Perform the steps in <a class="reference internal" href="#delete-namespace"><span class="std std-ref">Delete the helm namespace</span></a>. These cloud provider agnostic steps will
 delete the helm chart and delete the hub’s namespace. This must be done before proceeding.</p>
 </li>
-<li><p class="first">You should delete the kubernetes cluster. You can list all the clusters
-you have.</p>
+<li><p class="first">Delete the kubernetes cluster. You can list all the clusters you have.</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>gcloud container clusters list
 </pre></div>
 </div>
@@ -119,10 +121,36 @@ related to your JupyterHub cluster after you have deleted the cluster.</p>
 </li>
 </ol>
 </div>
+<div class="section" id="microsoft-azure-aks">
+<h2>Microsoft Azure AKS<a class="headerlink" href="#microsoft-azure-aks" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><p class="first">Perform the steps in <a class="reference internal" href="#delete-namespace"><span class="std std-ref">Delete the helm namespace</span></a>. These cloud provider agnostic steps will
+delete the helm chart and delete the hub’s namespace. This must be done before proceeding.</p>
+</li>
+<li><p class="first">Delete your resource group. You can list your active resource groups with
+the following command</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>az group list --output table
+</pre></div>
+</div>
+<p>You can then delete the one you want with the following command</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>az group delete --name &lt;YOUR-GROUP-NAME&gt;
+</pre></div>
+</div>
+<p>Be careful to delete the correct Resource Group, as doing so will irreversibly
+delete all resources within the group!</p>
+</li>
+<li><p class="first">Double check to make sure all the resources are now deleted, since anything you
+have not deleted will cost you money! You can check the <a class="reference external" href="https://portal.azure.com">web portal</a>
+(check the “Resource Groups” page) to verify that everything has been deleted.</p>
+<p>These might take several minutes to clear up, but they shouldn’t have anything
+related to your JupyterHub cluster after you have deleted the resource group.</p>
+</li>
+</ol>
+</div>
 <div class="section" id="amazon-web-services-aws">
 <h2>Amazon Web Services (AWS)<a class="headerlink" href="#amazon-web-services-aws" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic">
-<li><p class="first">Perform the steps above for all cloud providers. These cloud provider agnostic steps will
+<li><p class="first">Perform the steps in <a class="reference internal" href="#delete-namespace"><span class="std std-ref">Delete the helm namespace</span></a>. These cloud provider agnostic steps will
 delete the helm chart and delete the hub’s namespace. This must be done before proceeding.</p>
 </li>
 <li><p class="first">The easiest way to delete your cloud resources on AWS is to use their
@@ -179,6 +207,16 @@ the actions above if needed.</p>
 
 
 
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
 <h3>Table of Contents</h3>
 <p class="caption"><span class="caption-text">Creating your JupyterHub</span></p>
 <ul class="current">
@@ -189,6 +227,7 @@ the actions above if needed.</p>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Turning Off JupyterHub and Computational Resources</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#for-all-cloud-providers">For all cloud providers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#google-cloud-platform">Google Cloud Platform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#microsoft-azure-aks">Microsoft Azure AKS</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#amazon-web-services-aws">Amazon Web Services (AWS)</a></li>
 </ul>
 </li>
@@ -207,8 +246,7 @@ the actions above if needed.</p>
 <li class="toctree-l1"><a class="reference internal" href="debug.html">Debugging Kubernetes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cost.html">Estimating costs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="security.html">Security</a></li>
-<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
-<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading The helm chart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading the helm chart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Topics</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Reference</span></p>
@@ -245,16 +283,6 @@ the actions above if needed.</p>
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
-    <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>

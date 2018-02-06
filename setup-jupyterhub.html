@@ -82,14 +82,23 @@ use straight quotes and spaces and avoid using curly quotes or tabs.
 Substitute <code class="docutils literal"><span class="pre">RANDOM_STRING</span></code> below with the output of <code class="docutils literal"><span class="pre">openssl</span> <span class="pre">rand</span> <span class="pre">-hex</span> <span class="pre">32</span></code>
 from step 2.</p>
 <div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">proxy</span><span class="p p-Indicator">:</span>
-  <span class="l l-Scalar l-Scalar-Plain">secretToken</span><span class="p p-Indicator">:</span> <span class="s">&quot;RANDOM_STRING&quot;</span>
+  <span class="l l-Scalar l-Scalar-Plain">secretToken</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;OUTPUT-OF-`openssl</span><span class="nv"> </span><span class="s">rand</span><span class="nv"> </span><span class="s">-hex</span><span class="nv"> </span><span class="s">32`&gt;&quot;</span>
 </pre></div>
 </div>
 </li>
 </ol>
-<ol class="arabic simple" start="4">
-<li>Save the <code class="docutils literal"><span class="pre">config.yaml</span></code> file. If using the nano editor, hit <code class="docutils literal"><span class="pre">Ctrl-X</span></code> and
-make sure to answer ‘yes’ when it asks you to save.</li>
+<ol class="arabic" start="4">
+<li><p class="first"><strong>Azure AKS only</strong> If you’re on Microsoft Azure AKS, you must disable
+RBAC. Do so by putting the following in <code class="docutils literal"><span class="pre">config.yaml</span></code></p>
+<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">rbac</span><span class="p p-Indicator">:</span>
+   <span class="l l-Scalar l-Scalar-Plain">enabled</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+</pre></div>
+</div>
+<p>See the <a class="reference external" href="security.html#use-role-based-access-control-rbac">RBAC documentation</a>
+for more details.</p>
+</li>
+<li><p class="first">Save the <code class="docutils literal"><span class="pre">config.yaml</span></code> file.</p>
+</li>
 </ol>
 </div>
 <div class="section" id="install-jupyterhub">
@@ -114,7 +123,7 @@ Update Complete. ⎈ Happy Helming!⎈
 <li><p class="first">Now you can install the chart! Run this command from the directory that contains the
 <code class="docutils literal"><span class="pre">config.yaml</span></code> file to spin up JupyterHub:</p>
 <div class="code bash highlight-default"><div class="highlight"><pre><span></span><span class="n">helm</span> <span class="n">install</span> <span class="n">jupyterhub</span><span class="o">/</span><span class="n">jupyterhub</span> \
-    <span class="o">--</span><span class="n">version</span><span class="o">=</span><span class="n">v0</span><span class="o">.</span><span class="mi">5</span> \
+    <span class="o">--</span><span class="n">version</span><span class="o">=</span><span class="n">v0</span><span class="o">.</span><span class="mi">6</span> \
     <span class="o">--</span><span class="n">name</span><span class="o">=&lt;</span><span class="n">YOUR</span><span class="o">-</span><span class="n">RELEASE</span><span class="o">-</span><span class="n">NAME</span><span class="o">&gt;</span> \
     <span class="o">--</span><span class="n">namespace</span><span class="o">=&lt;</span><span class="n">YOUR</span><span class="o">-</span><span class="n">NAMESPACE</span><span class="o">&gt;</span> \
     <span class="o">-</span><span class="n">f</span> <span class="n">config</span><span class="o">.</span><span class="n">yaml</span>
@@ -143,6 +152,9 @@ helm should feel free to use different values.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <ul class="last">
+<li><p class="first">This step may take a moment, during which time there will be no output
+to your terminal. JupyterHub is being installed in the background.</p>
+</li>
 <li><p class="first">If you get a <code class="docutils literal"><span class="pre">release</span> <span class="pre">named</span> <span class="pre">&lt;YOUR-RELEASE-NAME&gt;</span> <span class="pre">already</span> <span class="pre">exists</span></code> error, then
 you should delete the release by running
 <code class="docutils literal"><span class="pre">helm</span> <span class="pre">delete</span> <span class="pre">--purge</span> <span class="pre">&lt;YOUR-RELEASE-NAME&gt;</span></code>. Then reinstall by repeating this
@@ -164,14 +176,14 @@ chart runs JupyterHub v0.8.</p>
 <ol class="arabic" start="2">
 <li><p class="first">While Step 1 is running, you can see the pods being created by entering in
 a different terminal:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>kubectl --namespace<span class="o">=</span>&lt;YOUR_NAMESPACE&gt; get pod
+<div class="highlight-bash"><div class="highlight"><pre><span></span>kubectl --namespace<span class="o">=</span>&lt;YOUR-NAMESPACE&gt; get pod
 </pre></div>
 </div>
 </li>
 <li><p class="first">Wait for the hub and proxy pod to begin running.</p>
 </li>
 <li><p class="first">You can find the IP to use for accessing the JupyterHub with:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>kubectl --namespace<span class="o">=</span>&lt;YOUR_NAMESPACE&gt; get svc
+<div class="highlight-bash"><div class="highlight"><pre><span></span>kubectl --namespace<span class="o">=</span>&lt;YOUR-NAMESPACE&gt; get svc
 </pre></div>
 </div>
 <p>The external IP for the <code class="docutils literal"><span class="pre">proxy-public</span></code> service should be accessible in a
@@ -180,7 +192,7 @@ minute or two.</p>
 <p class="first admonition-title">Note</p>
 <p>If the IP for <code class="docutils literal"><span class="pre">proxy-public</span></code> is too long to fit into the window, you
 can find the longer version by calling:</p>
-<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">kubectl</span> <span class="o">--</span><span class="n">namespace</span><span class="o">=&lt;</span><span class="n">YOUR_NAMESPACE</span><span class="o">&gt;</span> <span class="n">describe</span> <span class="n">svc</span> <span class="n">proxy</span><span class="o">-</span><span class="n">public</span>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">kubectl</span> <span class="o">--</span><span class="n">namespace</span><span class="o">=&lt;</span><span class="n">YOUR</span><span class="o">-</span><span class="n">NAMESPACE</span><span class="o">&gt;</span> <span class="n">describe</span> <span class="n">svc</span> <span class="n">proxy</span><span class="o">-</span><span class="n">public</span>
 </pre></div>
 </div>
 </div>
@@ -233,6 +245,16 @@ authenticators, and more!</p>
 
 
 
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
 <h3>Table of Contents</h3>
 <p class="caption"><span class="caption-text">Creating your JupyterHub</span></p>
 <ul class="current">
@@ -260,8 +282,7 @@ authenticators, and more!</p>
 <li class="toctree-l1"><a class="reference internal" href="debug.html">Debugging Kubernetes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cost.html">Estimating costs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="security.html">Security</a></li>
-<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
-<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading The helm chart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading the helm chart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Topics</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Reference</span></p>
@@ -298,16 +319,6 @@ authenticators, and more!</p>
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
-    <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>

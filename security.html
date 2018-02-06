@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="_static/favicon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Troubleshooting" href="troubleshooting.html" />
+    <link rel="next" title="Upgrading the helm chart" href="upgrading.html" />
     <link rel="prev" title="Estimating costs" href="cost.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -46,7 +46,7 @@
   <div class='prev-next-top'>
     
      <a class='left-prev' href="cost.html" title="previous chapter">Previous</a>
-     <a class='right-next' href="troubleshooting.html" title="next chapter">Next</a>
+     <a class='right-next' href="upgrading.html" title="next chapter">Next</a>
   <div style='clear:both;'></div>
 
   </div>
@@ -131,26 +131,15 @@ for more information. As a consequence, the default allows all users in your clu
 </div>
 <p>This limit shouldn't affect helm functionality in any form.</p>
 </div>
-<div class="section" id="audit-cloud-metadata-server-security">
-<span id="audit-cloud-metadata-server-security"></span><h2>Audit Cloud Metadata server security<a class="headerlink" href="#audit-cloud-metadata-server-security" title="Permalink to this headline">¶</a></h2>
-<p>Most cloud providers have a static IP you can hit from any of the compute nodes, including the user pod, to get metadata about the cloud. This metadata can contain very sensitive info, and this metadata, in the wrong hands, can allow attackers to take full control of your cluster and cloud resources. It is <strong>critical</strong> to secure the metadata service.</p>
+<div class="section" id="audit-cloud-metadata-server-access">
+<span id="audit-cloud-metadata-server-access"></span><h2>Audit Cloud Metadata server access<a class="headerlink" href="#audit-cloud-metadata-server-access" title="Permalink to this headline">¶</a></h2>
+<p>Most cloud providers have a static IP you can hit from any of the compute nodes, including the user pod, to get metadata about the cloud. This metadata can contain very sensitive info, and this metadata, in the wrong hands, can allow attackers to take full control of your cluster and cloud resources. It is <strong>critical</strong> to secure the metadata service. We block access to this IP by default (as of v0.6), so you are protected from this!</p>
 <p>The slides beginning at <a class="reference external" href="https://schd.ws/hosted_files/kccncna17/d8/Hacking%20and%20Hardening%20Kubernetes%20By%20Example%20v2.pdf"><em>Slide 38</em></a> provides more information on the dangers presented by this attack.</p>
-<p>The easiest way to mitigate it is to add an <a class="reference external" href="https://en.wikipedia.org/wiki/Iptables">iptables</a> rule in an <a class="reference external" href="https://kubernetes.io/docs/concepts/workloads/pods/init-containers/">init-container</a>. This allows setting up firewall rules specific to the user pod in a secure way that the user can not undo. Here is how you could do it on the most popular clouds:</p>
-<div class="section" id="google-cloud-aws-azure">
-<span id="google-cloud-aws-azure"></span><h3>Google Cloud / AWS / Azure<a class="headerlink" href="#google-cloud-aws-azure" title="Permalink to this headline">¶</a></h3>
-<p>In all these clouds you can access the metadata service via the IP <code class="docutils literal"><span class="pre">169.254.169.254</span></code>. Blocking all outgoing packets to that IP should protect you.</p>
+<p>If you need to enable access to the metadata server for some reason, you can do the following in config.yaml:</p>
 <div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">singleuser</span><span class="p p-Indicator">:</span>
-    <span class="l l-Scalar l-Scalar-Plain">initContainers</span><span class="p p-Indicator">:</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">block-metadata</span>
-        <span class="l l-Scalar l-Scalar-Plain">image</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">minrk/tc-init:0.0.4</span>
-        <span class="c1"># Block access to GCE Metadata Service from user pods</span>
-        <span class="l l-Scalar l-Scalar-Plain">command</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;iptables&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;-A&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;OUTPUT&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;-p&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;tcp&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;-d&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;169.254.169.254&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;-j&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;DROP&quot;</span><span class="p p-Indicator">]</span>
-        <span class="l l-Scalar l-Scalar-Plain">securityContext</span><span class="p p-Indicator">:</span>
-          <span class="l l-Scalar l-Scalar-Plain">runAsUser</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">0</span>
-          <span class="l l-Scalar l-Scalar-Plain">capabilities</span><span class="p p-Indicator">:</span>
-            <span class="l l-Scalar l-Scalar-Plain">add</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span> <span class="s">&quot;NET_ADMIN&quot;</span> <span class="p p-Indicator">]</span>
+  <span class="l l-Scalar l-Scalar-Plain">cloudMetadata</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">enabled</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
 </pre></div>
-</div>
 </div>
 </div>
 <div class="section" id="delete-the-kubernetes-dashboard">
@@ -176,7 +165,11 @@ to secure which pods / users can perform what kinds of actions on the cluster. R
    <span class="l l-Scalar l-Scalar-Plain">enabled</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
 </pre></div>
 </div>
-<p>We strongly <strong>discourage disabling</strong> the RBAC rules and remind you that this action will open up security vulnerabilities. Proceed with caution!</p>
+<p>We strongly <strong>discourage disabling</strong> the RBAC rules and remind you that this
+action will open up security vulnerabilities. However, some cloud providers
+(particularly Azure AKS)
+<a class="reference external" href="https://github.com/Azure/AKS/issues/67">do not support RBAC</a> right now,
+and you might have to disable RBAC with this config to run on Azure.</p>
 </div>
 <div class="section" id="kubernetes-api-access">
 <span id="kubernetes-api-access"></span><h2>Kubernetes API Access<a class="headerlink" href="#kubernetes-api-access" title="Permalink to this headline">¶</a></h2>
@@ -207,7 +200,7 @@ traditional computing environment), so be very careful.</p>
   <div class='prev-next-bottom'>
     
      <a class='left-prev' href="cost.html" title="previous chapter">Estimating costs</a>
-     <a class='right-next' href="troubleshooting.html" title="next chapter">Troubleshooting</a>
+     <a class='right-next' href="upgrading.html" title="next chapter">Upgrading the helm chart</a>
   <div style='clear:both;'></div>
 
   </div>
@@ -239,6 +232,16 @@ traditional computing environment), so be very careful.</p>
 
 
 
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
 <h3>Table of Contents</h3>
 <p class="caption"><span class="caption-text">Creating your JupyterHub</span></p>
 <ul>
@@ -264,14 +267,13 @@ traditional computing environment), so be very careful.</p>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Security</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#https">HTTPS</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#secure-access-to-helm">Secure access to Helm</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#audit-cloud-metadata-server-security">Audit Cloud Metadata server security</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#audit-cloud-metadata-server-access">Audit Cloud Metadata server access</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#delete-the-kubernetes-dashboard">Delete the Kubernetes Dashboard</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#use-role-based-access-control-rbac">Use Role Based Access Control (RBAC)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#kubernetes-api-access">Kubernetes API Access</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
-<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading The helm chart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading the helm chart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Topics</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Reference</span></p>
@@ -297,7 +299,7 @@ traditional computing environment), so be very careful.</p>
 <ul>
   <li><a href="index.html">Documentation Home</a><ul>
   <li><a href="cost.html" title="Previous">Previous topic</a></li>
-  <li><a href="troubleshooting.html" title="Next">Next topic</a></li>
+  <li><a href="upgrading.html" title="Next">Next topic</a></li>
   </ul>
 </ul>
 </div>
@@ -308,16 +310,6 @@ traditional computing environment), so be very careful.</p>
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
-    <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>

@@ -99,6 +99,7 @@ deployment.</p>
 <li class="toctree-l1"><a class="reference internal" href="turn-off.html">Turning Off JupyterHub and Computational Resources</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="turn-off.html#for-all-cloud-providers">For all cloud providers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="turn-off.html#google-cloud-platform">Google Cloud Platform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="turn-off.html#microsoft-azure-aks">Microsoft Azure AKS</a></li>
 <li class="toctree-l2"><a class="reference internal" href="turn-off.html#amazon-web-services-aws">Amazon Web Services (AWS)</a></li>
 </ul>
 </li>
@@ -121,10 +122,11 @@ helm chart fields.</p>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="user-environment.html">Customizing the User Environment</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="user-environment.html#use-an-existing-docker-image">Use an existing docker image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-environment.html#use-an-existing-docker-image">Use an existing Docker image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user-environment.html#build-a-custom-docker-image-with-repo2docker">Build a custom Docker image with <code class="docutils literal"><span class="pre">repo2docker</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-environment.html#use-jupyterlab-by-default">Use JupyterLab by default</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user-environment.html#set-environment-variables">Set environment variables</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user-environment.html#pre-populating-user-s-home-directory-with-notebooks">Pre-populating user’s <code class="docutils literal"><span class="pre">$HOME</span></code> directory with notebooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-environment.html#pre-populating-user-s-home-directory-with-files">Pre-populating user’s <code class="docutils literal"><span class="pre">$HOME</span></code> directory with files</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="user-resources.html">User Resources</a><ul>
@@ -134,13 +136,15 @@ helm chart fields.</p>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="user-storage.html">User storage in JupyterHub</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="user-storage.html#how-does-jupyterhub-manage-storage">How does JupyterHub manage storage?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-storage.html#how-can-this-process-break-down">How can this process break down?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user-storage.html#configuration">Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user-storage.html#turn-off-per-user-persistent-storage">Turn off per-user persistent storage</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="user-management.html">User Management</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user-management.html#culling-user-pods">Culling user pods</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user-management.html#admin-users">Admin Users</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-management.html#authenticating-users">Authenticating Users</a></li>
 </ul>
 </li>
 </ul>
@@ -176,26 +180,23 @@ cloud-based deployments and tips for maintaining your deployment.</p>
 <li class="toctree-l1"><a class="reference internal" href="security.html">Security</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="security.html#https">HTTPS</a></li>
 <li class="toctree-l2"><a class="reference internal" href="security.html#secure-access-to-helm">Secure access to Helm</a></li>
-<li class="toctree-l2"><a class="reference internal" href="security.html#audit-cloud-metadata-server-security">Audit Cloud Metadata server security</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security.html#audit-cloud-metadata-server-access">Audit Cloud Metadata server access</a></li>
 <li class="toctree-l2"><a class="reference internal" href="security.html#delete-the-kubernetes-dashboard">Delete the Kubernetes Dashboard</a></li>
 <li class="toctree-l2"><a class="reference internal" href="security.html#use-role-based-access-control-rbac">Use Role Based Access Control (RBAC)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="security.html#kubernetes-api-access">Kubernetes API Access</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="troubleshooting.html#faq-general">FAQ - General</a></li>
-<li class="toctree-l2"><a class="reference internal" href="troubleshooting.html#common-error-messages">Common error messages</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading The helm chart</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="upgrading.html#general-upgrade-advice">General upgrade advice</a></li>
-<li class="toctree-l2"><a class="reference internal" href="upgrading.html#v0-4-to-v0-5">v0.4 to v0.5</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading the helm chart</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="upgrading.html#major-helm-chart-upgrades">Major helm-chart upgrades</a></li>
+<li class="toctree-l2"><a class="reference internal" href="upgrading.html#subtopics">Subtopics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="upgrading.html#troubleshooting">Troubleshooting</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Topics</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="advanced.html#ingress">Ingress</a></li>
 <li class="toctree-l2"><a class="reference internal" href="advanced.html#arbitrary-code-in-jupyterhub-config-py">Arbitrary code in <code class="docutils literal"><span class="pre">jupyterhub_config.py</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="advanced.html#picking-a-scheduler-strategy">Picking a Scheduler Strategy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="advanced.html#pre-pulling-images-for-faster-startup">Pre-pulling Images for Faster Startup</a></li>
 </ul>
 </li>
 </ul>
@@ -215,8 +216,8 @@ cloud-based deployments and tips for maintaining your deployment.</p>
 </div>
 <div class="section" id="institutional-support">
 <h2>Institutional support<a class="headerlink" href="#institutional-support" title="Permalink to this headline">¶</a></h2>
-<p>This guide and the <a class="reference external" href="https://github.com/jupyterhub/helm-chart">associated helm chart</a>
-would not be possible without the amazing institutional support from the following
+<p>This guide and the associated helm chart would not be possible without the
+amazing institutional support from the following
 organizations (and the organizations that support them!)</p>
 <ul class="simple">
 <li><a class="reference external" href="http://data.berkeley.edu/">UC Berkeley Data Science Division</a></li>
@@ -224,6 +225,7 @@ organizations (and the organizations that support them!)</p>
 <li><a class="reference external" href="http://www.calpoly.edu/">Cal Poly, San Luis Obispo</a></li>
 <li><a class="reference external" href="https://www.simula.no/">Simula Research Institute</a></li>
 </ul>
+<p>There also a <a class="reference external" href="users-list.html">community maintained list</a> of users of this Guide + Chart.</p>
 </div>
 </div>
 
@@ -262,6 +264,16 @@ organizations (and the organizations that support them!)</p>
 
 
 
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
 <h3>Table of Contents</h3>
 <p class="caption"><span class="caption-text">Creating your JupyterHub</span></p>
 <ul>
@@ -285,8 +297,7 @@ organizations (and the organizations that support them!)</p>
 <li class="toctree-l1"><a class="reference internal" href="debug.html">Debugging Kubernetes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cost.html">Estimating costs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="security.html">Security</a></li>
-<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
-<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading The helm chart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading the helm chart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Topics</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Reference</span></p>
@@ -322,16 +333,6 @@ organizations (and the organizations that support them!)</p>
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
-    <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>

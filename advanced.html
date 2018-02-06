@@ -27,7 +27,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Helm Chart Configuration Reference" href="reference.html" />
-    <link rel="prev" title="Upgrading The helm chart" href="upgrading.html" />
+    <link rel="prev" title="Upgrading the helm chart" href="upgrading.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -55,7 +55,14 @@
   <div class="section" id="advanced-topics">
 <span id="advanced-topics"></span><h1>Advanced Topics<a class="headerlink" href="#advanced-topics" title="Permalink to this headline">¶</a></h1>
 <p>This page contains a grab bag of various useful topics that don't have an easy
-home elsewhere. Most people setting up JupyterHubs on popular public clouds
+home elsewhere:</p>
+<ul class="simple">
+<li>Ingress</li>
+<li>Arbitrary code in <code class="docutils literal"><span class="pre">jupyterhub_config.py</span></code></li>
+<li>Picking a Scheduler Strategy</li>
+<li>Pre-pulling Images for Faster Startup</li>
+</ul>
+<p>Most people setting up JupyterHubs on popular public clouds
 should not have to use any of this information, but it is essential for more
 complex installations.</p>
 <div class="section" id="ingress">
@@ -165,7 +172,7 @@ order of the key.</p>
 <div class="section" id="hub-extraconfigmap">
 <span id="hub-extraconfigmap"></span><h3><code class="docutils literal"><span class="pre">hub.extraConfigMap</span></code><a class="headerlink" href="#hub-extraconfigmap" title="Permalink to this headline">¶</a></h3>
 <p>This property takes a dictionary of values that are then made available for code
-in <code class="docutils literal"><span class="pre">hub.extraConfig</span></code> to read using a <code class="docutils literal"><span class="pre">get_config</span></code> function. You can use this to
+in <code class="docutils literal"><span class="pre">hub.extraConfig</span></code> to read using a <code class="docutils literal"><span class="pre">z2jh.get_config</span></code> function. You can use this to
 easily separate your code (which goes in <code class="docutils literal"><span class="pre">hub.extraConfig</span></code>) from your config
 (which should go here).</p>
 <p>For example, if you use the following snippet in your config.yaml file:</p>
@@ -184,15 +191,17 @@ easily separate your code (which goes in <code class="docutils literal"><span cl
 </div>
 <p>In your <code class="docutils literal"><span class="pre">hub.extraConfig</span></code>,</p>
 <ol class="simple">
-<li><code class="docutils literal"><span class="pre">get_config('custom.myString')</span></code> will return a string <code class="docutils literal"><span class="pre">&quot;Hello!&quot;</span></code></li>
-<li><code class="docutils literal"><span class="pre">get_config('custom.myList')</span></code> will return a list <code class="docutils literal"><span class="pre">[&quot;Item1&quot;,</span> <span class="pre">&quot;Item2&quot;]</span></code></li>
-<li><code class="docutils literal"><span class="pre">get_config('custom.myDict')</span></code> will return a dict <code class="docutils literal"><span class="pre">{&quot;key&quot;:</span> <span class="pre">&quot;value&quot;}</span></code></li>
-<li><code class="docutils literal"><span class="pre">get_config('custom.myLongString')</span></code> will return a string <code class="docutils literal"><span class="pre">&quot;Line1\nLine2&quot;</span></code></li>
-<li><code class="docutils literal"><span class="pre">get_config('custom.nonExistent')</span></code> will return <code class="docutils literal"><span class="pre">None</span></code> (since you didn't
+<li><code class="docutils literal"><span class="pre">z2jh.get_config('custom.myString')</span></code> will return a string <code class="docutils literal"><span class="pre">&quot;Hello!&quot;</span></code></li>
+<li><code class="docutils literal"><span class="pre">z2jh.get_config('custom.myList')</span></code> will return a list <code class="docutils literal"><span class="pre">[&quot;Item1&quot;,</span> <span class="pre">&quot;Item2&quot;]</span></code></li>
+<li><code class="docutils literal"><span class="pre">z2jh.get_config('custom.myDict')</span></code> will return a dict <code class="docutils literal"><span class="pre">{&quot;key&quot;:</span> <span class="pre">&quot;value&quot;}</span></code></li>
+<li><code class="docutils literal"><span class="pre">z2jh.get_config('custom.myLongString')</span></code> will return a string <code class="docutils literal"><span class="pre">&quot;Line1\nLine2&quot;</span></code></li>
+<li><code class="docutils literal"><span class="pre">z2jh.get_config('custom.nonExistent')</span></code> will return <code class="docutils literal"><span class="pre">None</span></code> (since you didn't
 specify any value for <code class="docutils literal"><span class="pre">nonExistent</span></code>)</li>
-<li><code class="docutils literal"><span class="pre">get_config('custom.myDefault',</span> <span class="pre">True)</span></code> will return <code class="docutils literal"><span class="pre">True</span></code>, since that is
+<li><code class="docutils literal"><span class="pre">z2jh.get_config('custom.myDefault',</span> <span class="pre">True)</span></code> will return <code class="docutils literal"><span class="pre">True</span></code>, since that is
 specified as the second parameter (default)</li>
 </ol>
+<p>You need to have a <code class="docutils literal"><span class="pre">import</span> <span class="pre">z2jh</span></code> at the top of your <code class="docutils literal"><span class="pre">extraConfig</span></code> for
+<code class="docutils literal"><span class="pre">z2jh.get_config()</span></code> to work.</p>
 <p>Note that the keys in <code class="docutils literal"><span class="pre">hub.extraConfigMap</span></code> must be alpha numeric strings
 starting with a character. Dashes and Underscores are not allowed.</p>
 </div>
@@ -242,7 +251,7 @@ limits, this strategy also allows your users the most efficient use of RAM &amp;
 <span id="pack"></span><h3>Pack<a class="headerlink" href="#pack" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><strong>Behavior</strong>: This packs user pods into <strong>as few nodes as possible</strong>.</li>
-<li><strong>Benefits</strong>: This increases your resource utilization, which is useful in conjunction with autoscalers.</li>
+<li><strong>Benefits</strong>: This reduces your resource utilization, which is useful in conjunction with autoscalers.</li>
 <li><strong>Drawbacks</strong>: A single node going down might affect more user pods than using
 a &quot;spread&quot; strategy (depending on the node).</li>
 </ul>
@@ -255,12 +264,76 @@ and cpu. This will make your users' experience more predictable.</p>
 </div>
 </div>
 </div>
+<div class="section" id="pre-pulling-images-for-faster-startup">
+<span id="pre-pulling-images-for-faster-startup"></span><h2>Pre-pulling Images for Faster Startup<a class="headerlink" href="#pre-pulling-images-for-faster-startup" title="Permalink to this headline">¶</a></h2>
+<p>Pulling and building a user's images forces a user to wait before the user's
+server is started. Sometimes, the wait can be 5 to 10 minutes. <strong>Pre-pulling</strong>
+the images on all the nodes can cut this wait time to a few seconds. Let's look
+at how pre-pulling works.</p>
+<div class="section" id="pre-pulling-basics">
+<span id="pre-pulling-basics"></span><h3>Pre-pulling basics<a class="headerlink" href="#pre-pulling-basics" title="Permalink to this headline">¶</a></h3>
+<p>With <strong>pre-pulling</strong>, which is enabled by default, the user's container image
+is pulled on all nodes whenever a <code class="docutils literal"><span class="pre">helm</span> <span class="pre">install</span></code> or <code class="docutils literal"><span class="pre">helm</span> <span class="pre">upgrade</span></code> is performed.
+While this causes <code class="docutils literal"><span class="pre">helm</span> <span class="pre">install</span></code> and <code class="docutils literal"><span class="pre">helm</span> <span class="pre">upgrade</span></code> to take several minutes,
+this time makes the user startup experience faster and more pleasant.</p>
+<p>With the default <strong>pre-pulling</strong> setting, a <code class="docutils literal"><span class="pre">helm</span> <span class="pre">install</span></code> or <code class="docutils literal"><span class="pre">helm</span> <span class="pre">upgrade</span></code>
+will cause the system to wait for 5 minutes to begin pulling the images before
+timing out. This wait time is configurable by passing the <code class="docutils literal"><span class="pre">--wait</span> <span class="pre">&lt;seconds&gt;</span></code>
+flag to the <code class="docutils literal"><span class="pre">helm</span></code> commands.</p>
+<p>We recommend using pre-pulling. For the rare cases where you have a good reason
+to disable it, pre-pulling can be disabled. To disable the pre-pulling during
+<code class="docutils literal"><span class="pre">helm</span> <span class="pre">install</span></code> and <code class="docutils literal"><span class="pre">helm</span> <span class="pre">upgrade</span></code>, you can use the following snippet in
+your <code class="docutils literal"><span class="pre">config.yaml</span></code>:</p>
+<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">prePuller</span><span class="p p-Indicator">:</span>
+   <span class="l l-Scalar l-Scalar-Plain">hook</span><span class="p p-Indicator">:</span>
+     <span class="l l-Scalar l-Scalar-Plain">enabled</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="pre-pulling-and-changes-in-cluster-size">
+<span id="pre-pulling-and-changes-in-cluster-size"></span><h3>Pre-pulling and changes in cluster size<a class="headerlink" href="#pre-pulling-and-changes-in-cluster-size" title="Permalink to this headline">¶</a></h3>
+<p>Cluster size can change through manual addition of nodes or autoscaling. When a
+new node is added to the cluster, the new node does not yet have the user image.
+A user using this new node would be forced to wait while the image is pulled
+from scratch. Ideally, it would be helpful to pre-pull images when the new node
+is added to the cluster.</p>
+<p>By enabling the <strong>continuous pre-puller</strong> (default state is disabled), the user
+image will be pre-pulled when adding a new node. When enabled, the
+<strong>continuous pre-puller</strong> runs as a <a class="reference external" href="https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/">daemonset</a>
+to force kubernetes to pull the user image on all nodes as soon as a node is
+present. The continuous pre-puller uses minimal resources on all nodes and
+greatly speeds up the user pod start time.</p>
+<p>The continuous pre-puller is disabled by default. To enable it, use the
+following snippet in your <code class="docutils literal"><span class="pre">config.yaml</span></code>:</p>
+<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">prePuller</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">continuous</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">enabled</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="pre-pulling-additional-images">
+<span id="pre-pulling-additional-images"></span><h3>Pre-pulling additional images<a class="headerlink" href="#pre-pulling-additional-images" title="Permalink to this headline">¶</a></h3>
+<p>By default, the pre-puller only pulls the singleuser image &amp; the networktools image (if
+access to cloud metadata is disabled). If you have customizations that need additional
+images present on all nodes, you can ask the pre-puller to also pull an arbitrary number
+of additional images.</p>
+<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">prePuller</span><span class="p p-Indicator">:</span>
+   <span class="l l-Scalar l-Scalar-Plain">extraImages</span><span class="p p-Indicator">:</span>
+     <span class="l l-Scalar l-Scalar-Plain">ubuntu-xenial</span><span class="p p-Indicator">:</span>
+       <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">ubuntu</span>
+       <span class="l l-Scalar l-Scalar-Plain">tag</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">16.04</span>
+</pre></div>
+</div>
+<p>This snippet will pre-pull the <code class="docutils literal"><span class="pre">ubuntu:16.04</span></code> image on all nodes, for example. You can
+pre-pull any number of images.</p>
+</div>
+</div>
 </div>
 
 
   <div class='prev-next-bottom'>
     
-     <a class='left-prev' href="upgrading.html" title="previous chapter">Upgrading The helm chart</a>
+     <a class='left-prev' href="upgrading.html" title="previous chapter">Upgrading the helm chart</a>
      <a class='right-next' href="reference.html" title="next chapter">Helm Chart Configuration Reference</a>
   <div style='clear:both;'></div>
 
@@ -293,6 +366,16 @@ and cpu. This will make your users' experience more predictable.</p>
 
 
 
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
 <h3>Table of Contents</h3>
 <p class="caption"><span class="caption-text">Creating your JupyterHub</span></p>
 <ul>
@@ -316,12 +399,12 @@ and cpu. This will make your users' experience more predictable.</p>
 <li class="toctree-l1"><a class="reference internal" href="debug.html">Debugging Kubernetes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cost.html">Estimating costs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="security.html">Security</a></li>
-<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
-<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading The helm chart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading the helm chart</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Advanced Topics</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#ingress">Ingress</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#arbitrary-code-in-jupyterhub-config-py">Arbitrary code in <code class="docutils literal"><span class="pre">jupyterhub_config.py</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#picking-a-scheduler-strategy">Picking a Scheduler Strategy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pre-pulling-images-for-faster-startup">Pre-pulling Images for Faster Startup</a></li>
 </ul>
 </li>
 </ul>
@@ -359,16 +442,6 @@ and cpu. This will make your users' experience more predictable.</p>
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
-    <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>

@@ -56,6 +56,43 @@
 <span id="user-management"></span><h1>User Management<a class="headerlink" href="#user-management" title="Permalink to this headline">¶</a></h1>
 <p>This section describes management of users and their
 permissions on JupyterHub.</p>
+<div class="section" id="culling-user-pods">
+<span id="culling-user-pods"></span><h2>Culling user pods<a class="headerlink" href="#culling-user-pods" title="Permalink to this headline">¶</a></h2>
+<p>JupyterHub will automatically delete any user pods that have no activity
+for a period of time. This helps free up computational resources and keeps
+costs down if you are using an autoscaling cluster.
+When these users navigate back to your JupyterHub, they will
+have to start their server again, and the state of their previous session
+(variables they've created, any in-memory data, etc)
+will be lost. This is known as <em>culling</em>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In JupyterHub, &quot;inactivity&quot; is defined as no response from the user's
+browser. JupyterHub constantly pings the user's JupyterHub browser session
+to check whether it is open. This means that leaving the computer running
+with the JupyterHub window open will <strong>not</strong> be treated as inactivity.</p>
+</div>
+<p>To disable culling, put the following into <code class="docutils literal"><span class="pre">config.yaml</span></code>:</p>
+<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">cull</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">enabled</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+</pre></div>
+</div>
+<p>By default, JupyterHub will run the culling process every ten minutes
+and will cull any user pods that have been inactive for more than one hour.
+You can configure this behavior in your <code class="docutils literal"><span class="pre">config.yaml</span></code> file with the following
+fields:</p>
+<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">cull</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">timeout</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;max-idle-seconds-before-user-pod-is-deleted&gt;</span>
+  <span class="l l-Scalar l-Scalar-Plain">every</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;number-of-seconds-this-check-is-done&gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">While JupyterHub automatically runs the culling process, it is not a
+replacement for keeping an eye on your cluster to make sure resources
+are being used as expected.</p>
+</div>
+</div>
 <div class="section" id="admin-users">
 <span id="admin-users"></span><h2>Admin Users<a class="headerlink" href="#admin-users" title="Permalink to this headline">¶</a></h2>
 <p>JupyterHub has the concept of
@@ -79,6 +116,11 @@ this in your <code class="docutils literal"><span class="pre">config.yaml</span>
     <span class="l l-Scalar l-Scalar-Plain">access</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
 </pre></div>
 </div>
+</div>
+<div class="section" id="authenticating-users">
+<span id="authenticating-users"></span><h2>Authenticating Users<a class="headerlink" href="#authenticating-users" title="Permalink to this headline">¶</a></h2>
+<p>For information on authenticating users in JupyterHub, see
+<a class="reference external" href="authentication.html">the Authentication guide</a>.</p>
 </div>
 </div>
 
@@ -118,6 +160,16 @@ this in your <code class="docutils literal"><span class="pre">config.yaml</span>
 
 
 
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
 <h3>Table of Contents</h3>
 <p class="caption"><span class="caption-text">Creating your JupyterHub</span></p>
 <ul>
@@ -134,7 +186,9 @@ this in your <code class="docutils literal"><span class="pre">config.yaml</span>
 <li class="toctree-l1"><a class="reference internal" href="user-resources.html">User Resources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user-storage.html">User storage in JupyterHub</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">User Management</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#culling-user-pods">Culling user pods</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#admin-users">Admin Users</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#authenticating-users">Authenticating Users</a></li>
 </ul>
 </li>
 </ul>
@@ -144,8 +198,7 @@ this in your <code class="docutils literal"><span class="pre">config.yaml</span>
 <li class="toctree-l1"><a class="reference internal" href="debug.html">Debugging Kubernetes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cost.html">Estimating costs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="security.html">Security</a></li>
-<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
-<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading The helm chart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading the helm chart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Topics</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Reference</span></p>
@@ -182,16 +235,6 @@ this in your <code class="docutils literal"><span class="pre">config.yaml</span>
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
-    <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>

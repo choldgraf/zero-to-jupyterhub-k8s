@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Troubleshooting &#8212; Zero to JupyterHub with Kubernetes 0.4 documentation</title>
+    <title>FAQ &#8212; Zero to JupyterHub with Kubernetes 0.4 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -26,8 +26,6 @@
     <link rel="shortcut icon" href="_static/favicon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Upgrading The helm chart" href="upgrading.html" />
-    <link rel="prev" title="Security" href="security.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -45,64 +43,34 @@
             
   <div class='prev-next-top'>
     
-     <a class='left-prev' href="security.html" title="previous chapter">Previous</a>
-     <a class='right-next' href="upgrading.html" title="next chapter">Next</a>
   <div style='clear:both;'></div>
 
   </div>
 
   
-  <div class="section" id="troubleshooting">
-<span id="id1"></span><h1>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline">¶</a></h1>
-<p>This section contains general troubleshooting tips for your JupyterHub
-deployment. For information on debugging Kubernetes, see <a class="reference internal" href="debug.html#debug"><span class="std std-ref">Debugging Kubernetes</span></a>.</p>
-<div class="section" id="faq-general">
-<h2>FAQ - General<a class="headerlink" href="#faq-general" title="Permalink to this headline">¶</a></h2>
-<p><strong>I thought I had deleted my cloud resources, but they still show up. Why?</strong></p>
+  <div class="section" id="faq">
+<span id="id1"></span><h1>FAQ<a class="headerlink" href="#faq" title="Permalink to this headline">¶</a></h1>
+<p>This section contains frequently asked questions about the JupyterHub deployment.
+For information on debugging Kubernetes, see <a class="reference internal" href="debug.html#debug"><span class="std std-ref">Debugging Kubernetes</span></a>.</p>
+<div class="section" id="i-thought-i-had-deleted-my-cloud-resources-but-they-still-show-up-why">
+<h2>I thought I had deleted my cloud resources, but they still show up. Why?<a class="headerlink" href="#i-thought-i-had-deleted-my-cloud-resources-but-they-still-show-up-why" title="Permalink to this headline">¶</a></h2>
 <p>You probably deleted the specific nodes, but not the kubernetes cluster that
 was controlling those nodes. Kubernetes is designed to make sure that a
 specific set of resources is available at all times. This means that if you
 only delete the nodes, but not the kubernetes instance, then it will detect
 the loss of computers and will create two new nodes to compensate.</p>
-<p><strong>How does billing for this work?</strong></p>
+</div>
+<div class="section" id="how-does-billing-for-this-work">
+<h2>How does billing for this work?<a class="headerlink" href="#how-does-billing-for-this-work" title="Permalink to this headline">¶</a></h2>
 <p>JupyterHub isn’t handling any of the billing for your usage. That’s done
 through whatever cloud service you’re using. For considerations about
 managing cost with JupyterHub, see <a class="reference internal" href="cost.html#cost"><span class="std std-ref">Estimating costs</span></a>.</p>
-</div>
-<div class="section" id="common-error-messages">
-<h2>Common error messages<a class="headerlink" href="#common-error-messages" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="google-cloud">
-<h3>Google Cloud<a class="headerlink" href="#google-cloud" title="Permalink to this headline">¶</a></h3>
-<div class="admonition tip">
-<p class="first admonition-title">Tip</p>
-<p class="last">In Google Cloud, you can see the logs using the
-<a class="reference external" href="https://console.cloud.google.com">Cloud Console GUI</a>. See the <strong>logging</strong>
-section under the hamburger menu.</p>
-</div>
-<ol class="arabic">
-<li><p class="first"><code class="docutils literal"><span class="pre">Could</span> <span class="pre">not</span> <span class="pre">find</span> <span class="pre">default</span> <span class="pre">credentials.</span> <span class="pre">See</span>
-<span class="pre">https://developers.google.com/accounts/docs/application-default-credentials</span>
-<span class="pre">for</span> <span class="pre">more</span> <span class="pre">information.</span></code></p>
-<p>Execute <code class="docutils literal"><span class="pre">gcloud</span> <span class="pre">auth</span> <span class="pre">application-default</span> <span class="pre">login</span></code> and follow the prompts.
-The provided link in the error message has additional options for advanced
-use cases.</p>
-</li>
-<li><p class="first"><code class="docutils literal"><span class="pre">ERROR:</span> <span class="pre">(gcloud.container.clusters.create)</span> <span class="pre">ResponseError:</span> <span class="pre">code=503,</span>
-<span class="pre">message=Project</span> <span class="pre">staeiou-5f880</span> <span class="pre">is</span> <span class="pre">not</span> <span class="pre">fully</span> <span class="pre">initialized</span> <span class="pre">with</span> <span class="pre">the</span> <span class="pre">default</span>
-<span class="pre">service</span> <span class="pre">accounts.</span> <span class="pre">Please</span> <span class="pre">try</span> <span class="pre">again</span> <span class="pre">later.</span></code></p>
-<p>Go to <a class="reference external" href="https://console.cloud.google.com/kubernetes/list">https://console.cloud.google.com/kubernetes/list</a> and click
-‘enable’ and follow the prompts.</p>
-</li>
-</ol>
-</div>
 </div>
 </div>
 
 
   <div class='prev-next-bottom'>
     
-     <a class='left-prev' href="security.html" title="previous chapter">Security</a>
-     <a class='right-next' href="upgrading.html" title="next chapter">Upgrading The helm chart</a>
   <div style='clear:both;'></div>
 
   </div>
@@ -134,6 +102,16 @@ use cases.</p>
 
 
 
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
 <h3>Table of Contents</h3>
 <p class="caption"><span class="caption-text">Creating your JupyterHub</span></p>
 <ul>
@@ -152,17 +130,12 @@ use cases.</p>
 <li class="toctree-l1"><a class="reference internal" href="user-management.html">User Management</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Administrator Guide</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication</a></li>
 <li class="toctree-l1"><a class="reference internal" href="debug.html">Debugging Kubernetes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cost.html">Estimating costs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="security.html">Security</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Troubleshooting</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#faq-general">FAQ - General</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#common-error-messages">Common error messages</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading The helm chart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading the helm chart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Topics</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Reference</span></p>
@@ -187,8 +160,6 @@ use cases.</p>
 <h3>Navigation</h3>
 <ul>
   <li><a href="index.html">Documentation Home</a><ul>
-  <li><a href="security.html" title="Previous">Previous topic</a></li>
-  <li><a href="upgrading.html" title="Next">Next topic</a></li>
   </ul>
 </ul>
 </div>
@@ -199,16 +170,6 @@ use cases.</p>
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
-    <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
