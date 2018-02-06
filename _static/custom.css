@@ -68,19 +68,29 @@ div.sphinxsidebar h3 {
     font-size: 1.3em;
     padding-top: .8em;
     font-weight: 800;
+    margin-left: 0px !important;
 }
 
 div.sphinxsidebar p.caption {
     font-size: 1.2em;
     margin-bottom: 0px;
+    margin-left: 0px !important;
+    font-weight: 800;
+    color: gray;
 }
 
 div.sphinxsidebar ul {
     font-size: .8em;
     margin-top: 0px;
     padding-left: 3%;
+    margin-left: 0px !important;
 }
 
 div.relations ul {
     font-size: 1em;
+    margin-left: 0px !important;
+}
+
+div#searchbox form {
+    margin-left: 0px !important;
 }
