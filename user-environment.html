@@ -4,24 +4,18 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Customizing the User Environment &#8212; Zero to JupyterHub with Kubernetes 0.4 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/custom.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '0.4',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/custom.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@1/dist/clipboard.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
@@ -34,8 +28,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
-  </head>
-  <body>
+  </head><body>
   
 
     <div class="document">
@@ -73,10 +66,10 @@ environment variables.</p>
 <span id="existing-docker-image"></span><h2>Use an existing Docker image<a class="headerlink" href="#use-an-existing-docker-image" title="Permalink to this headline">¶</a></h2>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">The Docker image you are using must have the <code class="docutils literal"><span class="pre">jupyterhub</span></code> package
-installed in order to work. Moreover, the version of <code class="docutils literal"><span class="pre">jupyterhub</span></code> must
+<p class="last">The Docker image you are using must have the <code class="docutils literal notranslate"><span class="pre">jupyterhub</span></code> package
+installed in order to work. Moreover, the version of <code class="docutils literal notranslate"><span class="pre">jupyterhub</span></code> must
 match the version installed by the helm chart that you’re using. For example,
-<code class="docutils literal"><span class="pre">v0.5</span></code> of the helm chart uses  <code class="docutils literal"><span class="pre">jupyterhub==0.8</span></code>.</p>
+<code class="docutils literal notranslate"><span class="pre">v0.5</span></code> of the helm chart uses  <code class="docutils literal notranslate"><span class="pre">jupyterhub==0.8</span></code>.</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -89,13 +82,13 @@ is the simplest approach. For example, Project Jupyter maintains the
 which contains ready to use Docker images. Each image includes a set of
 commonly used science and data science libraries and tools.</p>
 <p>The <a class="reference external" href="https://hub.docker.com/r/jupyter/scipy-notebook/">scipy-notebook</a>
-image, which can be found in the <code class="docutils literal"><span class="pre">docker-stacks</span></code> repo, contains
+image, which can be found in the <code class="docutils literal notranslate"><span class="pre">docker-stacks</span></code> repo, contains
 <a class="reference external" href="https://github.com/jupyter/docker-stacks/tree/master/scipy-notebook">useful scientific programming libraries</a>
 pre-installed. This image may satisfy your needs. If you wish to use an
-existing image, such as the <code class="docutils literal"><span class="pre">scipy-notebook</span></code> image, complete these steps:</p>
+existing image, such as the <code class="docutils literal notranslate"><span class="pre">scipy-notebook</span></code> image, complete these steps:</p>
 <ol class="arabic">
-<li><p class="first">Modify your <code class="docutils literal"><span class="pre">config.yaml</span></code> file to specify the image. For example:</p>
-<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">singleuser</span><span class="p p-Indicator">:</span>
+<li><p class="first">Modify your <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> file to specify the image. For example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">singleuser</span><span class="p p-Indicator">:</span>
   <span class="l l-Scalar l-Scalar-Plain">image</span><span class="p p-Indicator">:</span>
     <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">jupyter/scipy-notebook</span>
     <span class="l l-Scalar l-Scalar-Plain">tag</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">c7fb6660d096</span>
@@ -103,9 +96,9 @@ existing image, such as the <code class="docutils literal"><span class="pre">sci
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p>Container image name cannot be longer than 63 characters.</p>
-<p>Always use an explicit <code class="docutils literal"><span class="pre">tag</span></code>, such as a specific commit.</p>
-<p class="last">Avoid using <code class="docutils literal"><span class="pre">latest</span></code>. Using <code class="docutils literal"><span class="pre">latest</span></code> might cause a several minute
+<p>Container image names cannot be longer than 63 characters.</p>
+<p>Always use an explicit <code class="docutils literal notranslate"><span class="pre">tag</span></code>, such as a specific commit.</p>
+<p class="last">Avoid using <code class="docutils literal notranslate"><span class="pre">latest</span></code>. Using <code class="docutils literal notranslate"><span class="pre">latest</span></code> might cause a several minute
 delay, confusion, or failures for users when a new version of the image
 is released.</p>
 </div>
@@ -118,12 +111,12 @@ complete.</p>
 </ol>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Docker images must have the <code class="docutils literal"><span class="pre">jupyterhub</span></code> package installed within them to
+<p class="last">Docker images must have the <code class="docutils literal notranslate"><span class="pre">jupyterhub</span></code> package installed within them to
 be used in this manner.</p>
 </div>
 </div>
 <div class="section" id="build-a-custom-docker-image-with-repo2docker">
-<h2>Build a custom Docker image with <code class="docutils literal"><span class="pre">repo2docker</span></code><a class="headerlink" href="#build-a-custom-docker-image-with-repo2docker" title="Permalink to this headline">¶</a></h2>
+<span id="r2d-custom-image"></span><h2>Build a custom Docker image with <code class="docutils literal notranslate"><span class="pre">repo2docker</span></code><a class="headerlink" href="#build-a-custom-docker-image-with-repo2docker" title="Permalink to this headline">¶</a></h2>
 <p>If you can’t find a pre-existing image that suits your needs, you can
 create your own image. The easiest way to do this is with the package
 <a class="reference internal" href="glossary.html#term-repo2docker"><span class="xref std std-term">repo2docker</span></a>.</p>
@@ -134,54 +127,54 @@ convert a GitHub repository into a Docker image that can be used as a base
 for your JupyterHub instance. Anything inside the GitHub repository
 will exist in a user’s environment when they join your JupyterHub:</p>
 <ul class="last simple">
-<li>If you include a <code class="docutils literal"><span class="pre">requirements.txt</span></code> file in the root level of the
-repository, <code class="docutils literal"><span class="pre">repo2docker</span></code> will <code class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span></code> the specified packages
+<li>If you include a <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> file in the root level of the
+repository, <code class="docutils literal notranslate"><span class="pre">repo2docker</span></code> will <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span></code> the specified packages
 into the Docker image to be built.</li>
-<li>If you have an <code class="docutils literal"><span class="pre">environment.yaml</span></code> file, <code class="docutils literal"><span class="pre">conda</span></code> will create an
+<li>If you have an <code class="docutils literal notranslate"><span class="pre">environment.yaml</span></code> file, <code class="docutils literal notranslate"><span class="pre">conda</span></code> will create an
 environment based on this file’s specification.</li>
-<li>If you have a <code class="docutils literal"><span class="pre">Dockerfile</span></code>, <code class="docutils literal"><span class="pre">repo2docker</span></code> will ignore everything
+<li>If you have a <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code>, <code class="docutils literal notranslate"><span class="pre">repo2docker</span></code> will ignore everything
 else and just use the Dockerfile.</li>
 </ul>
 </div>
-<p>Below we’ll cover how to use <code class="docutils literal"><span class="pre">repo2docker</span></code> to generate a Docker image and
+<p>Below we’ll cover how to use <code class="docutils literal notranslate"><span class="pre">repo2docker</span></code> to generate a Docker image and
 how to configure JupyterHub to build off of this image:</p>
 <ol class="arabic">
 <li><p class="first"><strong>Download and start Docker.</strong> You can do this by
 <a class="reference external" href="https://store.docker.com/search?offering=community&amp;platform=desktop%2Cserver&amp;q=&amp;type=edition">downloading and installing Docker</a>. Once you’ve started Docker,
 it will show up as a tiny background application.</p>
 </li>
-<li><p class="first"><strong>Install repo2docker</strong> using <code class="docutils literal"><span class="pre">pip</span></code>:</p>
-<div class="code bash highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">jupyter</span><span class="o">-</span><span class="n">repo2docker</span>
+<li><p class="first"><strong>Install repo2docker</strong> using <code class="docutils literal notranslate"><span class="pre">pip</span></code>:</p>
+<div class="code bash highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">jupyter</span><span class="o">-</span><span class="n">repo2docker</span>
 </pre></div>
 </div>
 <p>If that command fails due to insufficient permissions, try it with the
-command option, <code class="docutils literal"><span class="pre">user</span></code>:</p>
-<div class="code bash highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">user</span> <span class="n">jupyter</span><span class="o">-</span><span class="n">repo2docker</span>
+command option, <code class="docutils literal notranslate"><span class="pre">user</span></code>:</p>
+<div class="code bash highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">user</span> <span class="n">jupyter</span><span class="o">-</span><span class="n">repo2docker</span>
 </pre></div>
 </div>
 </li>
 <li><p class="first"><strong>Create (or find) a GitHub repository you want to use.</strong> This repo should
 have all materials that you want your users to be able to use. You may want
-to include a <a class="reference external" href="https://pip.readthedocs.io/en/latest/user_guide/#requirements-files">pip</a> <code class="docutils literal"><span class="pre">requirements.txt</span></code> file to list packages, one per
-file line, to install such as when using <code class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span></code>. Specify the
+to include a <a class="reference external" href="https://pip.readthedocs.io/en/latest/user_guide/#requirements-files">pip</a> <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> file to list packages, one per
+file line, to install such as when using <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span></code>. Specify the
 versions explicitly so the image is fully reproducible. An example
-<code class="docutils literal"><span class="pre">requirements.txt</span></code> follows:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="nv">numpy</span><span class="o">==</span><span class="m">1</span>.12.1
+<code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> follows:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">jupyterhub</span><span class="o">==</span><span class="m">0</span>.8.*
+<span class="nv">numpy</span><span class="o">==</span><span class="m">1</span>.12.1
 <span class="nv">scipy</span><span class="o">==</span><span class="m">0</span>.19.0
 <span class="nv">matplotlib</span><span class="o">==</span><span class="m">2</span>.0
 </pre></div>
 </div>
+<p>As noted above, the requirements must include <code class="docutils literal notranslate"><span class="pre">jupyterhub</span></code>, pinned to a
+version compatible with the version of JupyterHub used by Helm chart.</p>
 </li>
 <li><p class="first"><strong>Use repo2docker to build a Docker image.</strong></p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>jupyter-repo2docker &lt;YOUR-GITHUB-REPOSITORY&gt; --image<span class="o">=</span>gcr.io/&lt;PROJECT-NAME&gt;/&lt;IMAGE-NAME&gt;:&lt;TAG&gt; --no-run
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>jupyter-repo2docker &lt;YOUR-GITHUB-REPOSITORY&gt; --user-name<span class="o">=</span>jovyan --image<span class="o">=</span>gcr.io/&lt;PROJECT-NAME&gt;/&lt;IMAGE-NAME&gt;:&lt;TAG&gt; --no-run
 </pre></div>
 </div>
-<p>This tells <code class="docutils literal"><span class="pre">repo2docker</span></code> to fetch <code class="docutils literal"><span class="pre">master</span></code> of the GitHub repository,
+<p>This tells <code class="docutils literal notranslate"><span class="pre">repo2docker</span></code> to fetch <code class="docutils literal notranslate"><span class="pre">master</span></code> of the GitHub repository,
 and uses heuristics to build a docker image of it.</p>
-</li>
-</ol>
-<blockquote>
-<div><div class="admonition note">
+<div class="admonition note">
 <p class="first admonition-title">Note</p>
 <ul class="last simple">
 <li>The project name should match your google cloud project’s name.</li>
@@ -192,18 +185,17 @@ commit desired for building the image since this improves
 reproducibility.</li>
 </ul>
 </div>
-</div></blockquote>
-<ol class="arabic" start="5">
+</li>
 <li><p class="first"><strong>Push the newly-built Docker image to the cloud.</strong> You can either push
 this to Docker Hub or to the gcloud docker repository. Here we’ll
 demonstrate pushing to the gcloud repository:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>gcloud docker -- push gcr.io/&lt;project-name&gt;/&lt;image-name&gt;:&lt;tag&gt;
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gcloud docker -- push gcr.io/&lt;project-name&gt;/&lt;image-name&gt;:&lt;tag&gt;
 </pre></div>
 </div>
 </li>
 <li><p class="first"><strong>Edit the JupyterHub configuration to build from this image.</strong>
-Edit <code class="docutils literal"><span class="pre">config.yaml</span></code> file to include these lines in it:</p>
-<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">singleuser</span><span class="p p-Indicator">:</span>
+Edit <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> file to include these lines in it:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">singleuser</span><span class="p p-Indicator">:</span>
   <span class="l l-Scalar l-Scalar-Plain">image</span><span class="p p-Indicator">:</span>
     <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">gcr.io/&lt;project-name&gt;/&lt;image-name&gt;</span>
     <span class="l l-Scalar l-Scalar-Plain">tag</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;tag&gt;</span>
@@ -221,7 +213,7 @@ won’t have to do this.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">The contents of your GitHub repository might not show up if you have
-enabled <a class="reference external" href="user_storage">persistent storage</a>. Disable persistent storage
+enabled <a class="reference external" href="user-storage.html">persistent storage</a>. Disable persistent storage
 if you want the
 GitHub repository contents to show up.</p>
 </div>
@@ -233,34 +225,62 @@ computing environment built off of the Docker image we’ve created.</p>
 </div>
 <div class="section" id="use-jupyterlab-by-default">
 <h2>Use JupyterLab by default<a class="headerlink" href="#use-jupyterlab-by-default" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference external" href="https://github.com/jupyterlab/jupyterlab">JupyterLab</a> is the next generation
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">As JupyterLab is a quickly-evolving tool right now, it is important to use
+recent versions of JupyterLab. If you install JupyterLab with <code class="docutils literal notranslate"><span class="pre">conda</span></code>,
+<strong>make sure to use the ``conda-forge`` channel instead of ``default``</strong>.</p>
+</div>
+<p><a class="reference external" href="http://jupyterlab.readthedocs.io/en/stable/index.html">JupyterLab</a> is the next generation
 user interface for Project Jupyter. It can be used with JupyterHub, both as an
 optional interface and as a default.</p>
+<p>In addition, a JupyterLab extension, called JupyterLab-Hub, provides a nice UI
+for accessing the JupyterHub control panel from JupyterLab. These instructions
+show how to install both JupyterLab and JupyterLab-Hub.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If JupyterLab is installed on your hub (and with or without “JupyterLab Hub” installed),
+users can always switch to the classic Jupyter Notebook by selecting menu item
+“Help &gt;&gt; Launch Classic Notebook” or by replacing <code class="docutils literal notranslate"><span class="pre">/lab</span></code> with <code class="docutils literal notranslate"><span class="pre">/tree</span></code> in the URL
+(if the server is running).
+Similarly, you can access JupyterLab even if it is not the default by replacing <code class="docutils literal notranslate"><span class="pre">/tree</span></code>
+in the URL with <code class="docutils literal notranslate"><span class="pre">/lab</span></code>.</p>
+</div>
 <ol class="arabic">
 <li><p class="first"><a class="reference external" href="https://github.com/jupyterlab/jupyterlab#installation">Install JupyterLab</a>
-in your user image.</p>
+and the <a class="reference external" href="https://github.com/jupyterhub/jupyterlab-hub#installation">JupyterLab Hub</a>
+extension in your user image, for example in your Dockerfile:</p>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span class="k">FROM</span><span class="s"> jupyter/base-notebook:27ba57364579</span>
+
+...
+ARG <span class="nv">JUPYTERLAB_VERSION</span><span class="o">=</span><span class="m">0</span>.31.12
+<span class="k">RUN</span>     pip install <span class="nv">jupyterlab</span><span class="o">==</span><span class="nv">$JUPYTERLAB_VERSION</span> <span class="se">\</span>
+    <span class="o">&amp;&amp;</span>  jupyter labextension install @jupyterlab/hub-extension
+...
+</pre></div>
+</div>
 </li>
-<li><p class="first"><a class="reference external" href="https://github.com/jupyterhub/jupyterlab-hub#installation">Install JupyterLab Hub extension</a> in your user
-image. This provides a nice UI for accessing JupyterHub control panel from
-JupyterLab. You only need the <code class="docutils literal"><span class="pre">jupyter</span> <span class="pre">labextension</span></code> command.</p>
+<li><p class="first">Enable JupyterLab in your Helm configuration by adding the following snippet:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">hub</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">extraEnv</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">JUPYTER_ENABLE_LAB</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+  <span class="l l-Scalar l-Scalar-Plain">extraConfig</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+    <span class="no">c.KubeSpawner.cmd = [&#39;jupyter-labhub&#39;]</span>
+</pre></div>
+</div>
 </li>
-<li><p class="first">If you want users to launch automatically into JupyterLab instead of classic
-notebook, use the following in your <code class="docutils literal"><span class="pre">config.yaml</span></code></p>
-<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">singleuser</span><span class="p p-Indicator">:</span>
+<li><p class="first">If you want users to launch automatically into JupyterLab instead of the classic
+notebook, set the following setting in your Helm configuration:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">singleuser</span><span class="p p-Indicator">:</span>
   <span class="l l-Scalar l-Scalar-Plain">defaultUrl</span><span class="p p-Indicator">:</span> <span class="s">&quot;/lab&quot;</span>
 </pre></div>
 </div>
-<p>This will put users into JupyterLab when they launch.</p>
-</li>
-<li><p class="first">Users can always switch to classic Jupyter Notebook by replacing the <code class="docutils literal"><span class="pre">/lab</span></code>
-in the URL after their server starts with <code class="docutils literal"><span class="pre">/tree</span></code>. Similarly, you can access
-JupyterLab even if it is not the default by replacing <code class="docutils literal"><span class="pre">/tree</span></code> in the URL
-with <code class="docutils literal"><span class="pre">/lab</span></code></p>
+<p>This will put users into JupyterLab when they launch their server.</p>
 </li>
 </ol>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">JupyterLab is just about to go into beta, so use with caution!</p>
+<p class="last">JupyterLab is in beta, so use with caution!</p>
 </div>
 </div>
 <div class="section" id="set-environment-variables">
@@ -268,19 +288,19 @@ with <code class="docutils literal"><span class="pre">/lab</span></code></p>
 <p>Another way to affect your user’s environment is by setting values for
 <a class="reference internal" href="glossary.html#term-environment-variables"><span class="xref std std-term">environment variables</span></a>. While you can set them up in your Docker image,
 it is often easier to set them up in your helm chart.</p>
-<p>To set them up in your helm chart, edit your <code class="docutils literal"><span class="pre">config.yaml</span></code> file
+<p>To set them up in your helm chart, edit your <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> file
 and <a class="reference external" href="extending-jupyterhub.html#apply-config-changes">apply the changes</a>. For example, this code snippet will set the
-environment variable <code class="docutils literal"><span class="pre">EDITOR</span></code> to the value <code class="docutils literal"><span class="pre">vim</span></code>:</p>
-<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">singleuser</span><span class="p p-Indicator">:</span>
+environment variable <code class="docutils literal notranslate"><span class="pre">EDITOR</span></code> to the value <code class="docutils literal notranslate"><span class="pre">vim</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">singleuser</span><span class="p p-Indicator">:</span>
   <span class="l l-Scalar l-Scalar-Plain">extraEnv</span><span class="p p-Indicator">:</span>
     <span class="l l-Scalar l-Scalar-Plain">EDITOR</span><span class="p p-Indicator">:</span> <span class="s">&quot;vim&quot;</span>
 </pre></div>
 </div>
-<p>You can set any number of static environment variables in the <code class="docutils literal"><span class="pre">config.yaml</span></code>
+<p>You can set any number of static environment variables in the <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>
 file.</p>
 <p>Users can read the environment variables in their code in various ways. In
 Python, for example, the following code will read in an environment variable:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 <span class="n">my_value</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;MY_ENVIRONMENT_VARIABLE&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -288,36 +308,36 @@ Python, for example, the following code will read in an environment variable:</p
 variables.</p>
 </div>
 <div class="section" id="pre-populating-user-s-home-directory-with-files">
-<h2>Pre-populating user’s <code class="docutils literal"><span class="pre">$HOME</span></code> directory with files<a class="headerlink" href="#pre-populating-user-s-home-directory-with-files" title="Permalink to this headline">¶</a></h2>
+<h2>Pre-populating user’s <code class="docutils literal notranslate"><span class="pre">$HOME</span></code> directory with files<a class="headerlink" href="#pre-populating-user-s-home-directory-with-files" title="Permalink to this headline">¶</a></h2>
 <p>When persistent storage is enabled (which is the default), the contents of the
 docker image’s $HOME directory will be hidden from the user. To make these
 contents visible to the user, you must pre-populate the user’s
-filesystem. To do so, you would include commands in the <code class="docutils literal"><span class="pre">config.yaml</span></code> that would
+filesystem. To do so, you would include commands in the <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> that would
 be run each time a user starts their server. The following pattern can be used
-in <code class="docutils literal"><span class="pre">config.yaml</span></code>:</p>
-<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">singleuser</span><span class="p p-Indicator">:</span>
+in <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">singleuser</span><span class="p p-Indicator">:</span>
   <span class="l l-Scalar l-Scalar-Plain">lifecycleHooks</span><span class="p p-Indicator">:</span>
     <span class="l l-Scalar l-Scalar-Plain">postStart</span><span class="p p-Indicator">:</span>
       <span class="l l-Scalar l-Scalar-Plain">exec</span><span class="p p-Indicator">:</span>
         <span class="l l-Scalar l-Scalar-Plain">command</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;your&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;command&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;here&quot;</span><span class="p p-Indicator">]</span>
 </pre></div>
 </div>
-<p>Note that this command will be run from the <code class="docutils literal"><span class="pre">$HOME</span></code> location of the user’s
-running container, meaning that commands that place files relative to <code class="docutils literal"><span class="pre">./</span></code>
+<p>Note that this command will be run from the <code class="docutils literal notranslate"><span class="pre">$HOME</span></code> location of the user’s
+running container, meaning that commands that place files relative to <code class="docutils literal notranslate"><span class="pre">./</span></code>
 will result in users seeing those files in their home directory. You can use
-commands like <code class="docutils literal"><span class="pre">wget</span></code> to place files where you like.</p>
+commands like <code class="docutils literal notranslate"><span class="pre">wget</span></code> to place files where you like.</p>
 <p>However, keep in mind that this command will be run <strong>each time</strong> a user
-starts their server. For this reason, we recommend using <code class="docutils literal"><span class="pre">nbgitpuller</span></code> to
+starts their server. For this reason, we recommend using <code class="docutils literal notranslate"><span class="pre">nbgitpuller</span></code> to
 synchronize your user folders with a git repository.</p>
-<div class="section" id="using-nbgitpuller-for-synchronizing-a-folder">
-<h3>Using <code class="docutils literal"><span class="pre">nbgitpuller</span></code> for synchronizing a folder<a class="headerlink" href="#using-nbgitpuller-for-synchronizing-a-folder" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="using-nbgitpuller-to-synchronize-a-folder">
+<h3>Using <code class="docutils literal notranslate"><span class="pre">nbgitpuller</span></code> to synchronize a folder<a class="headerlink" href="#using-nbgitpuller-to-synchronize-a-folder" title="Permalink to this headline">¶</a></h3>
 <p>We recommend using the tool <a class="reference external" href="https://github.com/data-8/nbgitpuller">nbgitpuller</a>
-to synchronize a folder in your user’s filesystem with a <code class="docutils literal"><span class="pre">git</span></code> repository.</p>
-<p>To use <code class="docutils literal"><span class="pre">nbgitpuller</span></code>, first make sure that you <a class="reference external" href="https://github.com/data-8/nbgitpuller#installation">install it in your Docker
+to synchronize a folder in your user’s filesystem with a <code class="docutils literal notranslate"><span class="pre">git</span></code> repository.</p>
+<p>To use <code class="docutils literal notranslate"><span class="pre">nbgitpuller</span></code>, first make sure that you <a class="reference external" href="https://github.com/data-8/nbgitpuller#installation">install it in your Docker
 image</a>.
-Once this is done, you’ll have access to the <code class="docutils literal"><span class="pre">nbgitpuller</span></code> CLI from within
-JupyterHub. You can run it with a <code class="docutils literal"><span class="pre">postStart</span></code> hook with the following configuration</p>
-<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">singleuser</span><span class="p p-Indicator">:</span>
+Once this is done, you’ll have access to the <code class="docutils literal notranslate"><span class="pre">nbgitpuller</span></code> CLI from within
+JupyterHub. You can run it with a <code class="docutils literal notranslate"><span class="pre">postStart</span></code> hook with the following configuration</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">singleuser</span><span class="p p-Indicator">:</span>
   <span class="l l-Scalar l-Scalar-Plain">lifecycleHooks</span><span class="p p-Indicator">:</span>
     <span class="l l-Scalar l-Scalar-Plain">postStart</span><span class="p p-Indicator">:</span>
       <span class="l l-Scalar l-Scalar-Plain">exec</span><span class="p p-Indicator">:</span>
@@ -325,15 +345,40 @@ JupyterHub. You can run it with a <code class="docutils literal"><span class="pr
 </pre></div>
 </div>
 <p>This will synchronize the master branch of the repository to a folder called
-<code class="docutils literal"><span class="pre">$HOME/materials-fa</span></code> each time a user logs in. See <a class="reference external" href="https://github.com/data-8/nbgitpuller">the nbgitpuller documentation</a>
+<code class="docutils literal notranslate"><span class="pre">$HOME/materials-fa</span></code> each time a user logs in. See <a class="reference external" href="https://github.com/data-8/nbgitpuller">the nbgitpuller documentation</a>
 for more information on using this tool.</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p class="last"><code class="docutils literal"><span class="pre">nbgitpuller</span></code> will attempt to automatically resolve merge conflicts if
+<p class="last"><code class="docutils literal notranslate"><span class="pre">nbgitpuller</span></code> will attempt to automatically resolve merge conflicts if
 your user’s repository has changed since the last sync. You should familiarize
 yourself with the <a class="reference external" href="https://github.com/data-8/nbgitpuller#merging-behavior">nbgitpuller merging behavior</a>
 prior to using the tool in production.</p>
 </div>
+</div>
+<div class="section" id="allow-users-to-create-their-own-conda-environments">
+<h3>Allow users to create their own <code class="docutils literal notranslate"><span class="pre">conda</span></code> environments<a class="headerlink" href="#allow-users-to-create-their-own-conda-environments" title="Permalink to this headline">¶</a></h3>
+<p>Sometimes you want users to be able to create their own <code class="docutils literal notranslate"><span class="pre">conda</span></code> environments.
+By default, any environments created in a JupyterHub session will not persist
+across sessions. To resolve this, take the following steps:</p>
+<ol class="arabic">
+<li><p class="first">Ensure the <code class="docutils literal notranslate"><span class="pre">nb_conda_kernels</span></code> package is installed in the root
+environment (e.g., see <a class="reference internal" href="#r2d-custom-image"><span class="std std-ref">Build a custom Docker image with repo2docker</span></a>)</p>
+</li>
+<li><p class="first">Configure Anaconda to install user environments to a folder within <code class="docutils literal notranslate"><span class="pre">$HOME</span></code>.</p>
+<p>Create a file called <code class="docutils literal notranslate"><span class="pre">.condarc</span></code> in the home folder for all users, and make
+sure that the following lines are inside:</p>
+<p><a href="#id1"><span class="problematic" id="id2">``</span></a>`
+envs_dirs:</p>
+<blockquote>
+<div><ul class="simple">
+<li>/home/jovyan/my-conda-envs/</li>
+</ul>
+</div></blockquote>
+<p><a href="#id3"><span class="problematic" id="id4">``</span></a><a href="#id5"><span class="problematic" id="id6">`</span></a></p>
+<p>The text above will cause Anaconda to install new environments to this
+folder, which will persist across sessions.</p>
+</li>
+</ol>
 </div>
 </div>
 </div>
@@ -371,19 +416,28 @@ prior to using the tool in production.</p>
 
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3>Table of Contents</h3>
+<p class="caption"><span class="caption-text">Step Zero: your Kubernetes cluster</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="create-k8s-cluster.html">Creating a Kubernetes Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="google/step-zero-gcp.html">Step Zero: Kubernetes on Google Cloud</a></li>
+<li class="toctree-l1"><a class="reference internal" href="microsoft/step-zero-azure.html">Step Zero: Kubernetes on Microsoft Azure Container Service (AKS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="amazon/step-zero-aws.html">Step Zero: Kubernetes on Amazon Web Services (AWS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="redhat/step-zero-openshift.html">JupyterHub on Red Hat OpenShift</a></li>
+</ul>
 <p class="caption"><span class="caption-text">Creating your JupyterHub</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started with JupyterHub</a></li>
-<li class="toctree-l1"><a class="reference internal" href="create-k8s-cluster.html">Creating a Kubernetes Cluster</a></li>
 <li class="toctree-l1"><a class="reference internal" href="setup-helm.html">Setting up Helm</a></li>
 <li class="toctree-l1"><a class="reference internal" href="setup-jupyterhub.html">Setting up JupyterHub</a></li>
 <li class="toctree-l1"><a class="reference internal" href="turn-off.html">Turning Off JupyterHub and Computational Resources</a></li>
@@ -393,10 +447,10 @@ prior to using the tool in production.</p>
 <li class="toctree-l1"><a class="reference internal" href="extending-jupyterhub.html">Extending your JupyterHub setup</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Customizing the User Environment</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#use-an-existing-docker-image">Use an existing Docker image</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#build-a-custom-docker-image-with-repo2docker">Build a custom Docker image with <code class="docutils literal"><span class="pre">repo2docker</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#build-a-custom-docker-image-with-repo2docker">Build a custom Docker image with <code class="docutils literal notranslate"><span class="pre">repo2docker</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#use-jupyterlab-by-default">Use JupyterLab by default</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#set-environment-variables">Set environment variables</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#pre-populating-user-s-home-directory-with-files">Pre-populating user’s <code class="docutils literal"><span class="pre">$HOME</span></code> directory with files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pre-populating-user-s-home-directory-with-files">Pre-populating user’s <code class="docutils literal notranslate"><span class="pre">$HOME</span></code> directory with files</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="user-resources.html">User Resources</a></li>
@@ -405,19 +459,28 @@ prior to using the tool in production.</p>
 </ul>
 <p class="caption"><span class="caption-text">Administrator Guide</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">The JupyterHub Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="debug.html">Debugging Kubernetes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cost.html">Estimating costs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optimization.html">Speed and Optimization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="security.html">Security</a></li>
-<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading the helm chart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading your JupyterHub Kubernetes deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cost.html">Appendix: Projecting deployment costs</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Resources from the community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="additional-resources.html">Community-authored documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="users-list.html">Zero to JupyterHub Gallery of Deployments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tips.html">Tips and command snippets</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="reference.html">Helm Chart Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference-docs.html">Official JupyterHub and Project Jupyter Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tools.html">Tools used in a JupyterHub Deployment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
-<li class="toctree-l1"><a class="reference internal" href="additional-resources.html">Additional resources</a></li>
 </ul>
 
 

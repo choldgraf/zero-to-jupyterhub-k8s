@@ -4,38 +4,31 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Estimating costs &#8212; Zero to JupyterHub with Kubernetes 0.4 documentation</title>
+    <title>Appendix: Projecting deployment costs &#8212; Zero to JupyterHub with Kubernetes 0.4 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/custom.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '0.4',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/custom.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@1/dist/clipboard.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Security" href="security.html" />
-    <link rel="prev" title="Debugging Kubernetes" href="debug.html" />
+    <link rel="next" title="Community-authored documentation" href="additional-resources.html" />
+    <link rel="prev" title="Advanced Topics" href="advanced.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
-  </head>
-  <body>
+  </head><body>
   
 
     <div class="document">
@@ -45,15 +38,35 @@
             
   <div class='prev-next-top'>
     
-     <a class='left-prev' href="debug.html" title="previous chapter">Previous</a>
-     <a class='right-next' href="security.html" title="next chapter">Next</a>
+     <a class='left-prev' href="advanced.html" title="previous chapter">Previous</a>
+     <a class='right-next' href="additional-resources.html" title="next chapter">Next</a>
   <div style='clear:both;'></div>
 
   </div>
 
   
-  <div class="section" id="estimating-costs">
-<span id="cost"></span><h1>Estimating costs<a class="headerlink" href="#estimating-costs" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="appendix-projecting-deployment-costs">
+<span id="cost"></span><h1>Appendix: Projecting deployment costs<a class="headerlink" href="#appendix-projecting-deployment-costs" title="Permalink to this headline">¶</a></h1>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p>Clarification on cost projections</p>
+<p>As a non-profit research project, Project Jupyter does not offer,
+recommend, or sell cloud deployment services for JupyterHub.</p>
+<p class="last">The information in this section is offered as guidance as requested
+by our users. We <strong>caution</strong> that costs can vary widely based
+on providers selected and your use cases.</p>
+</div>
+<div class="section" id="cost-calculators-for-cloud-providers">
+<h2>Cost calculators for cloud providers<a class="headerlink" href="#cost-calculators-for-cloud-providers" title="Permalink to this headline">¶</a></h2>
+<p>Below are several links to cost estimators for cloud providers:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://cloud.google.com/products/calculator/">Google Cloud Platform cost calculator</a></li>
+<li><a class="reference external" href="https://calculator.s3.amazonaws.com/index.html">Amazon AWS cost calculator</a></li>
+<li><a class="reference external" href="https://azure.microsoft.com/en-us/pricing/calculator/">Microsoft Azure cost claculator</a></li>
+</ul>
+</div>
+<div class="section" id="factors-influencing-costs">
+<h2>Factors influencing costs<a class="headerlink" href="#factors-influencing-costs" title="Permalink to this headline">¶</a></h2>
 <p>Cost estimates depend highly on your deployment setup. Several factors that
 significantly influence cost estimates, include:</p>
 <ul class="simple">
@@ -62,7 +75,7 @@ significantly influence cost estimates, include:</p>
 <li>Usage patterns of users</li>
 </ul>
 <div class="section" id="computational-resources">
-<h2>Computational Resources<a class="headerlink" href="#computational-resources" title="Permalink to this headline">¶</a></h2>
+<h3>Computational Resources<a class="headerlink" href="#computational-resources" title="Permalink to this headline">¶</a></h3>
 <p><strong>Memory (RAM)</strong> makes up the largest part of a cost estimate. More RAM means
 that your users will be able to work with larger datasets with more
 flexibility, but it can also be expensive.</p>
@@ -71,35 +84,18 @@ the cost estimate. If users don’t have persistent storage, then disks will be
 wiped after users finish their sessions. None of their changes will be saved.
 This requires significantly fewer storage resources, and also results in faster
 load times.</p>
-<p>For an example of how costs scale with computational resources, see the
+<p>For an indicator of how costs scale with computational resources, see the
 <a class="reference external" href="https://cloud.google.com/compute/pricing">Google Cloud pricing page</a>.</p>
 </div>
-<div class="section" id="interactive-cost-estimator">
-<h2>Interactive Cost Estimator<a class="headerlink" href="#interactive-cost-estimator" title="Permalink to this headline">¶</a></h2>
-<p>We’ve put together a small notebook that can help you estimate your costs
-for a JupyterHub instance. The button below will take you to an interactive
-notebook served with <a class="reference external" href="https://mybinder.org">Binder</a>. Run the cells and
-you’ll be able to choose the computational requirements you have, as well as
-draw a pattern of usage you expect over time. It will estimate the costs for
-you.</p>
-<a target="_blank" href="http://mybinder.org/v2/gh/jupyterhub/zero-to-jupyterhub-k8s/master?filepath=doc/ntbk/draw_function.ipynb">
-<button style="background-color: rgb(235, 119, 55); border: 1px solid; border-color: black; color: white; padding: 15px 32px; text-align: center; text-decoration: none; font-size: 16px; margin: 4px 2px; cursor: pointer; border-radius: 8px;">Launch the Cost Estimator</button></a><div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">These are cost estimates based on Google Cloud Engine instances served from
-Oregon. Costs will vary based on your location / provider, so double check
-with their numbers to see how they compare to this demo.</p>
-</div>
-<p>For a description of how these costs are broken down, see below.</p>
-</div>
 <div class="section" id="users">
-<h2>Users<a class="headerlink" href="#users" title="Permalink to this headline">¶</a></h2>
+<h3>Users<a class="headerlink" href="#users" title="Permalink to this headline">¶</a></h3>
 <p>The number of users has a direct relationship to cost estimates. Since a
 deployment may support different types of users (i.e. researchers, students,
 instructors) with varying hardware and storage needs, take into account both the
 type of users and the number per type.</p>
 </div>
 <div class="section" id="user-usage-patterns">
-<h2>User usage patterns<a class="headerlink" href="#user-usage-patterns" title="Permalink to this headline">¶</a></h2>
+<h3>User usage patterns<a class="headerlink" href="#user-usage-patterns" title="Permalink to this headline">¶</a></h3>
 <p>Another important factor is what usage pattern your users will have. Will they
 all use the JupyterHub at once, such as during a large class workshop?
 will users use JupyterHub at different times of day?</p>
@@ -108,11 +104,31 @@ the resources you need to provide. In the future JupyterHub will have
 auto-scaling functionality, but currently it does not. This means that you need
 to provision resources for the <em>maximum</em> expected number of users at one time.</p>
 </div>
+</div>
+<div class="section" id="interactive-cost-estimator-rough-estimate">
+<h2>Interactive Cost Estimator (rough estimate)<a class="headerlink" href="#interactive-cost-estimator-rough-estimate" title="Permalink to this headline">¶</a></h2>
+<p>This small notebook may help you to make an initial planning estimate of costs
+for your JupyterHub instance.</p>
+<p>To use the estimator, the button below will take you to an interactive
+notebook served with <a class="reference external" href="https://mybinder.org">Binder</a>. Run the cells and
+you’ll be able to choose the computational requirements you have, as well as
+draw a pattern of usage you expect over time. It will estimate the costs for
+you.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last"><strong>The cost estimator is a very rough estimate.</strong> It is based on Google Cloud
+Engine instances served from Oregon. Costs will vary based on your
+location / provider, and will be highly variable if you implement any kind
+of auto-scaling. Treat it as an order-of-magnitude estimate, not a hard rule.</p>
+</div>
+<a target="_blank" href="http://mybinder.org/v2/gh/jupyterhub/zero-to-jupyterhub-k8s/master?filepath=doc/ntbk/draw_function.ipynb">
+<button style="background-color: rgb(235, 119, 55); border: 1px solid; border-color: black; color: white; padding: 15px 32px; text-align: center; text-decoration: none; font-size: 16px; margin: 4px 2px; cursor: pointer; border-radius: 8px;">Launch the Cost Estimator</button></a></div>
 <div class="section" id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
-<p>Here are a few examples that describe the use cases and amount of resources
-used by a particular JupyterHub implementation, and how much it might cost.
-Your estimates will vary.</p>
+<p>Here are a few examples that describe different use cases and the amount of
+resources used by a particular JupyterHub implementation. There are many
+factors that go into these estimates, and you should expect that your actual
+costs may vary significantly under other conditions.</p>
 <div class="section" id="data-8">
 <h3>Data 8<a class="headerlink" href="#data-8" title="Permalink to this headline">¶</a></h3>
 <p>The Data 8 course at UC Berkeley used a JupyterHub to coordinate all course
@@ -128,8 +144,8 @@ needs.</p>
 
   <div class='prev-next-bottom'>
     
-     <a class='left-prev' href="debug.html" title="previous chapter">Debugging Kubernetes</a>
-     <a class='right-next' href="security.html" title="next chapter">Security</a>
+     <a class='left-prev' href="advanced.html" title="previous chapter">Advanced Topics</a>
+     <a class='right-next' href="additional-resources.html" title="next chapter">Community-authored documentation</a>
   <div style='clear:both;'></div>
 
   </div>
@@ -158,19 +174,28 @@ needs.</p>
 
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3>Table of Contents</h3>
+<p class="caption"><span class="caption-text">Step Zero: your Kubernetes cluster</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="create-k8s-cluster.html">Creating a Kubernetes Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="google/step-zero-gcp.html">Step Zero: Kubernetes on Google Cloud</a></li>
+<li class="toctree-l1"><a class="reference internal" href="microsoft/step-zero-azure.html">Step Zero: Kubernetes on Microsoft Azure Container Service (AKS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="amazon/step-zero-aws.html">Step Zero: Kubernetes on Amazon Web Services (AWS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="redhat/step-zero-openshift.html">JupyterHub on Red Hat OpenShift</a></li>
+</ul>
 <p class="caption"><span class="caption-text">Creating your JupyterHub</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started with JupyterHub</a></li>
-<li class="toctree-l1"><a class="reference internal" href="create-k8s-cluster.html">Creating a Kubernetes Cluster</a></li>
 <li class="toctree-l1"><a class="reference internal" href="setup-helm.html">Setting up Helm</a></li>
 <li class="toctree-l1"><a class="reference internal" href="setup-jupyterhub.html">Setting up JupyterHub</a></li>
 <li class="toctree-l1"><a class="reference internal" href="turn-off.html">Turning Off JupyterHub and Computational Resources</a></li>
@@ -185,26 +210,34 @@ needs.</p>
 </ul>
 <p class="caption"><span class="caption-text">Administrator Guide</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">The JupyterHub Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="debug.html">Debugging Kubernetes</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Estimating costs</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#computational-resources">Computational Resources</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#interactive-cost-estimator">Interactive Cost Estimator</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#users">Users</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#user-usage-patterns">User usage patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optimization.html">Speed and Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security.html">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading your JupyterHub Kubernetes deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Topics</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Appendix: Projecting deployment costs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#cost-calculators-for-cloud-providers">Cost calculators for cloud providers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#factors-influencing-costs">Factors influencing costs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#interactive-cost-estimator-rough-estimate">Interactive Cost Estimator (rough estimate)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="security.html">Security</a></li>
-<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading the helm chart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Topics</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Resources from the community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="additional-resources.html">Community-authored documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="users-list.html">Zero to JupyterHub Gallery of Deployments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tips.html">Tips and command snippets</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="reference.html">Helm Chart Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference-docs.html">Official JupyterHub and Project Jupyter Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tools.html">Tools used in a JupyterHub Deployment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
-<li class="toctree-l1"><a class="reference internal" href="additional-resources.html">Additional resources</a></li>
 </ul>
 
 
@@ -221,8 +254,8 @@ needs.</p>
 <h3>Navigation</h3>
 <ul>
   <li><a href="index.html">Documentation Home</a><ul>
-  <li><a href="debug.html" title="Previous">Previous topic</a></li>
-  <li><a href="security.html" title="Next">Next topic</a></li>
+  <li><a href="advanced.html" title="Previous">Previous topic</a></li>
+  <li><a href="additional-resources.html" title="Next">Next topic</a></li>
   </ul>
 </ul>
 </div>

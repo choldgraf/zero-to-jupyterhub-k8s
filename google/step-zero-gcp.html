@@ -1,0 +1,278 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Step Zero: Kubernetes on Google Cloud &#8212; Zero to JupyterHub with Kubernetes 0.4 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script type="text/javascript" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/custom.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@1/dist/clipboard.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Step Zero: Kubernetes on Microsoft Azure Container Service (AKS)" href="../microsoft/step-zero-azure.html" />
+    <link rel="prev" title="Creating a Kubernetes Cluster" href="../create-k8s-cluster.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class='prev-next-top'>
+    
+     <a class='left-prev' href="../create-k8s-cluster.html" title="previous chapter">Previous</a>
+     <a class='right-next' href="../microsoft/step-zero-azure.html" title="next chapter">Next</a>
+  <div style='clear:both;'></div>
+
+  </div>
+
+  
+  <div class="section" id="step-zero-kubernetes-on-google-cloud">
+<span id="google-cloud"></span><h1>Step Zero: Kubernetes on <a class="reference external" href="https://cloud.google.com/">Google Cloud</a><a class="headerlink" href="#step-zero-kubernetes-on-google-cloud" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://cloud.google.com/kubernetes-engine/">Google Kubernetes Engine</a>
+(GKE) is the simplest and most common way of setting
+up a Kubernetes Cluster. You may be able to receive <a class="reference external" href="https://cloud.google.com/free/">free credits</a> for trying it out (though note that a
+free account <a class="reference external" href="https://cloud.google.com/free/docs/frequently-asked-questions#limitations">comes with limitations</a>).
+Either way, you will need to connect your credit card or other payment method to
+your google cloud account.</p>
+<ol class="arabic">
+<li><p class="first">Go to <code class="docutils literal notranslate"><span class="pre">https://console.cloud.google.com</span></code> and log in.</p>
+</li>
+<li><p class="first">Enable the <a class="reference external" href="https://console.cloud.google.com/apis/api/container.googleapis.com/overview">Kubernetes Engine API</a>.</p>
+</li>
+<li><p class="first">Use your preferred command line interface.</p>
+<p>You have two options: a) use the Google Cloud Shell (no installation needed)
+or b) install and use the gcloud command-line tool.
+If you are unsure which to choose, we recommend beginning with option
+“a” and using the Google Cloud Shell. Instructions
+for each are detailed below:</p>
+<ol class="loweralpha">
+<li><p class="first"><strong>Use the Google Cloud Shell</strong>. Start the Google Cloud Shell
+by clicking the button shown below. This will start an interactive shell
+session within Google Cloud.</p>
+<img alt="../_images/start_interactive_cli.png" class="align-center" src="../_images/start_interactive_cli.png" />
+<p>See the <a class="reference external" href="https://cloud.google.com/shell/docs/">Google Cloud Shell docs</a>
+for more information.</p>
+</li>
+<li><p class="first"><strong>Install and use the gcloud command line tool</strong>.
+This tool sends commands to Google Cloud and lets you do things like create
+and delete clusters.</p>
+<ul class="simple">
+<li>Go to the <a class="reference external" href="https://cloud.google.com/sdk/downloads">gcloud command line tool downloads page</a>
+to <strong>download and install the gcloud command line tool</strong>.</li>
+<li>See the <a class="reference external" href="https://cloud.google.com/pubsub/docs/quickstart-cli">gcloud documentation</a> for
+more information on the gcloud command line tool.</li>
+</ul>
+</li>
+</ol>
+</li>
+<li><p class="first">Install <code class="docutils literal notranslate"><span class="pre">kubectl</span></code>, which is a tool for controlling kubernetes. From
+the terminal, enter:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gcloud components install kubectl
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">Create a Kubernetes cluster on Google Cloud, by typing the following
+command into either the Google Cloud shell or the gcloud command-line tool:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gcloud container clusters create &lt;YOUR-CLUSTER&gt; <span class="se">\</span>
+    --num-nodes<span class="o">=</span><span class="m">3</span> <span class="se">\</span>
+    --machine-type<span class="o">=</span>n1-standard-2 <span class="se">\</span>
+    --zone<span class="o">=</span>us-central1-b
+</pre></div>
+</div>
+<p>where:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">--num-nodes</span></code> specifies how many computers to spin up. The higher the
+number, the greater the cost.</li>
+<li><code class="docutils literal notranslate"><span class="pre">--machine-type</span></code> specifies the amount of CPU and RAM in each node. There
+is a <a class="reference external" href="https://cloud.google.com/compute/docs/machine-types">variety of types</a>
+to choose from. Picking something appropriate here will have a large effect
+on how much you pay - smaller machines restrict the max amount of RAM each
+user can have access to but allow more fine-grained scaling, reducing cost.
+The default (<code class="docutils literal notranslate"><span class="pre">n1-standard-2</span></code>) has 2CPUs and 7.5G of RAM each, and might not
+be a good fit for all use cases!</li>
+<li><code class="docutils literal notranslate"><span class="pre">--zone</span></code> specifies which data center to use. Pick something that is not
+too far away from your users. You can find a list of them <a class="reference external" href="https://cloud.google.com/compute/docs/regions-zones/regions-zones#available">here</a>.</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Consider <a class="reference external" href="https://cloud.google.com/billing/docs/how-to/budgets">setting a cloud budget</a>
+for your Google Cloud account in order to make sure you don’t accidentally
+spend more than you wish to.</p>
+</div>
+</li>
+<li><p class="first">To test if your cluster is initialized, run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl get node
+</pre></div>
+</div>
+<p>The response should list three running nodes.</p>
+</li>
+<li><p class="first">Give your account super-user permissions, allowing you to perform all
+the actions needed to set up JupyterHub.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl create clusterrolebinding cluster-admin-binding <span class="se">\</span>
+    --clusterrole<span class="o">=</span>cluster-admin <span class="se">\</span>
+    --user<span class="o">=</span>&lt;YOUR-EMAIL-ADDRESS&gt;
+</pre></div>
+</div>
+</li>
+</ol>
+<p>Congrats. Now that you have your Kubernetes cluster running, it’s time to
+begin <a class="reference internal" href="../index.html#creating-your-jupyterhub"><span class="std std-ref">Creating your JupyterHub</span></a>.</p>
+</div>
+
+
+  <div class='prev-next-bottom'>
+    
+     <a class='left-prev' href="../create-k8s-cluster.html" title="previous chapter">Creating a Kubernetes Cluster</a>
+     <a class='right-next' href="../microsoft/step-zero-azure.html" title="next chapter">Step Zero: Kubernetes on Microsoft Azure Container Service (AKS)</a>
+  <div style='clear:both;'></div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+<h1 class="logo"><a href="../index.html">Zero to JupyterHub with Kubernetes</a></h1>
+
+
+
+<p class="blurb">A tutorial to help install and manage JupyterHub with Kubernetes</p>
+
+
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3>Table of Contents</h3>
+<p class="caption"><span class="caption-text">Step Zero: your Kubernetes cluster</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../create-k8s-cluster.html">Creating a Kubernetes Cluster</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Step Zero: Kubernetes on Google Cloud</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../microsoft/step-zero-azure.html">Step Zero: Kubernetes on Microsoft Azure Container Service (AKS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../amazon/step-zero-aws.html">Step Zero: Kubernetes on Amazon Web Services (AWS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../redhat/step-zero-openshift.html">JupyterHub on Red Hat OpenShift</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Creating your JupyterHub</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started.html">Getting started with JupyterHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../setup-helm.html">Setting up Helm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../setup-jupyterhub.html">Setting up JupyterHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../turn-off.html">Turning Off JupyterHub and Computational Resources</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Customization Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../extending-jupyterhub.html">Extending your JupyterHub setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user-environment.html">Customizing the User Environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user-resources.html">User Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user-storage.html">User storage in JupyterHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user-management.html">User Management</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Administrator Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">The JupyterHub Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../debug.html">Debugging Kubernetes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../authentication.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../optimization.html">Speed and Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../security.html">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../upgrading.html">Upgrading your JupyterHub Kubernetes deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced.html">Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cost.html">Appendix: Projecting deployment costs</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Resources from the community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../additional-resources.html">Community-authored documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../users-list.html">Zero to JupyterHub Gallery of Deployments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tips.html">Tips and command snippets</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../reference.html">Helm Chart Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference-docs.html">Official JupyterHub and Project Jupyter Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools.html">Tools used in a JupyterHub Deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="http://github.com/jupyterhub/zero-to-jupyterhub-k8s">GitHub Repo</a></li>
+    
+    <li class="toctree-l1"><a href="http://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues">Issue Tracker</a></li>
+    
+</ul>
+
+<div class="relations">
+<h3>Navigation</h3>
+<ul>
+  <li><a href="../index.html">Documentation Home</a><ul>
+  <li><a href="../create-k8s-cluster.html" title="Previous">Previous topic</a></li>
+  <li><a href="../microsoft/step-zero-azure.html" title="Next">Next topic</a></li>
+  </ul>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/google/step-zero-gcp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Project Jupyter team.
+      
+      |
+      <a href="../_sources/google/step-zero-gcp.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

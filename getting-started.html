@@ -4,38 +4,31 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Getting started with JupyterHub &#8212; Zero to JupyterHub with Kubernetes 0.4 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/custom.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '0.4',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/custom.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@1/dist/clipboard.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Creating a Kubernetes Cluster" href="create-k8s-cluster.html" />
-    <link rel="prev" title="Zero to JupyterHub" href="index.html" />
+    <link rel="next" title="Setting up Helm" href="setup-helm.html" />
+    <link rel="prev" title="JupyterHub on Red Hat OpenShift" href="redhat/step-zero-openshift.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
-  </head>
-  <body>
+  </head><body>
   
 
     <div class="document">
@@ -45,8 +38,8 @@
             
   <div class='prev-next-top'>
     
-     <a class='left-prev' href="index.html" title="previous chapter">Previous</a>
-     <a class='right-next' href="create-k8s-cluster.html" title="next chapter">Next</a>
+     <a class='left-prev' href="redhat/step-zero-openshift.html" title="previous chapter">Previous</a>
+     <a class='right-next' href="setup-helm.html" title="next chapter">Next</a>
   <div style='clear:both;'></div>
 
   </div>
@@ -69,20 +62,29 @@ others</li>
 </ul>
 <p>You already are well on your way to understanding what it means (procedurally)
 to deploy Jupyterhub.</p>
-<div class="section" id="dependencies-for-deploying-a-jupyterhub-instance">
-<h2>Dependencies for Deploying a JupyterHub Instance<a class="headerlink" href="#dependencies-for-deploying-a-jupyterhub-instance" title="Permalink to this headline">¶</a></h2>
-<p>For a more extensive description of the tools and services that JupyterHub
+<div class="section" id="verifying-jupyterhub-dependencies">
+<h2>Verifying JupyterHub dependencies<a class="headerlink" href="#verifying-jupyterhub-dependencies" title="Permalink to this headline">¶</a></h2>
+<p>At this point, you should have completed <em>Step Zero</em> and have an operational
+Kubernetes cluster. You will already have a cloud provider/infrastructure
+and kubernetes and docker installed.</p>
+<p>If you need to create a Kubernetes cluster, see
+<a class="reference internal" href="create-k8s-cluster.html#create-k8s-cluster"><span class="std std-ref">Creating a Kubernetes Cluster</span></a>.</p>
+<p>We also depend on Helm and the JupyterHub Helm chart for your JupyterHub
+deployment. We’ll deploy them in this section. Let’s begin by moving on to
+<a class="reference internal" href="setup-helm.html#setup-helm"><span class="std std-ref">Setting up Helm</span></a>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">For a more extensive description of the tools and services that JupyterHub
 depends upon, see our <a class="reference internal" href="tools.html#tools"><span class="std std-ref">Tools used in a JupyterHub Deployment</span></a> page.</p>
-<p>To begin deploying your JupyterHub on Kubernetes, please move on
-to <a class="reference internal" href="create-k8s-cluster.html#create-k8s-cluster"><span class="std std-ref">Creating a Kubernetes Cluster</span></a>.</p>
+</div>
 </div>
 </div>
 
 
   <div class='prev-next-bottom'>
     
-     <a class='left-prev' href="index.html" title="previous chapter">Zero to JupyterHub</a>
-     <a class='right-next' href="create-k8s-cluster.html" title="next chapter">Creating a Kubernetes Cluster</a>
+     <a class='left-prev' href="redhat/step-zero-openshift.html" title="previous chapter">JupyterHub on Red Hat OpenShift</a>
+     <a class='right-next' href="setup-helm.html" title="next chapter">Setting up Helm</a>
   <div style='clear:both;'></div>
 
   </div>
@@ -111,22 +113,28 @@ to <a class="reference internal" href="create-k8s-cluster.html#create-k8s-cluste
 
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3>Table of Contents</h3>
+<p class="caption"><span class="caption-text">Step Zero: your Kubernetes cluster</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="create-k8s-cluster.html">Creating a Kubernetes Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="google/step-zero-gcp.html">Step Zero: Kubernetes on Google Cloud</a></li>
+<li class="toctree-l1"><a class="reference internal" href="microsoft/step-zero-azure.html">Step Zero: Kubernetes on Microsoft Azure Container Service (AKS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="amazon/step-zero-aws.html">Step Zero: Kubernetes on Amazon Web Services (AWS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="redhat/step-zero-openshift.html">JupyterHub on Red Hat OpenShift</a></li>
+</ul>
 <p class="caption"><span class="caption-text">Creating your JupyterHub</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting started with JupyterHub</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#dependencies-for-deploying-a-jupyterhub-instance">Dependencies for Deploying a JupyterHub Instance</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="create-k8s-cluster.html">Creating a Kubernetes Cluster</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting started with JupyterHub</a></li>
 <li class="toctree-l1"><a class="reference internal" href="setup-helm.html">Setting up Helm</a></li>
 <li class="toctree-l1"><a class="reference internal" href="setup-jupyterhub.html">Setting up JupyterHub</a></li>
 <li class="toctree-l1"><a class="reference internal" href="turn-off.html">Turning Off JupyterHub and Computational Resources</a></li>
@@ -141,19 +149,28 @@ to <a class="reference internal" href="create-k8s-cluster.html#create-k8s-cluste
 </ul>
 <p class="caption"><span class="caption-text">Administrator Guide</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">The JupyterHub Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="debug.html">Debugging Kubernetes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cost.html">Estimating costs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optimization.html">Speed and Optimization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="security.html">Security</a></li>
-<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading the helm chart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading your JupyterHub Kubernetes deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cost.html">Appendix: Projecting deployment costs</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Resources from the community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="additional-resources.html">Community-authored documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="users-list.html">Zero to JupyterHub Gallery of Deployments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tips.html">Tips and command snippets</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="reference.html">Helm Chart Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference-docs.html">Official JupyterHub and Project Jupyter Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tools.html">Tools used in a JupyterHub Deployment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
-<li class="toctree-l1"><a class="reference internal" href="additional-resources.html">Additional resources</a></li>
 </ul>
 
 
@@ -170,8 +187,8 @@ to <a class="reference internal" href="create-k8s-cluster.html#create-k8s-cluste
 <h3>Navigation</h3>
 <ul>
   <li><a href="index.html">Documentation Home</a><ul>
-  <li><a href="index.html" title="Previous">Previous topic</a></li>
-  <li><a href="create-k8s-cluster.html" title="Next">Next topic</a></li>
+  <li><a href="redhat/step-zero-openshift.html" title="Previous">Previous topic</a></li>
+  <li><a href="setup-helm.html" title="Next">Next topic</a></li>
   </ul>
 </ul>
 </div>

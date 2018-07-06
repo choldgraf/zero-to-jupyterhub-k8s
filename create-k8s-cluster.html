@@ -4,38 +4,31 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Creating a Kubernetes Cluster &#8212; Zero to JupyterHub with Kubernetes 0.4 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/custom.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '0.4',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/custom.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@1/dist/clipboard.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Setting up Helm" href="setup-helm.html" />
-    <link rel="prev" title="Getting started with JupyterHub" href="getting-started.html" />
+    <link rel="next" title="Step Zero: Kubernetes on Google Cloud" href="google/step-zero-gcp.html" />
+    <link rel="prev" title="Zero to JupyterHub" href="index.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
-  </head>
-  <body>
+  </head><body>
   
 
     <div class="document">
@@ -45,8 +38,8 @@
             
   <div class='prev-next-top'>
     
-     <a class='left-prev' href="getting-started.html" title="previous chapter">Previous</a>
-     <a class='right-next' href="setup-helm.html" title="next chapter">Next</a>
+     <a class='left-prev' href="index.html" title="previous chapter">Previous</a>
+     <a class='right-next' href="google/step-zero-gcp.html" title="next chapter">Next</a>
   <div style='clear:both;'></div>
 
   </div>
@@ -56,13 +49,13 @@
 <span id="create-k8s-cluster"></span><h1>Creating a Kubernetes Cluster<a class="headerlink" href="#creating-a-kubernetes-cluster" title="Permalink to this headline">¶</a></h1>
 <p>Kubernetes’ documentation describes the many <a class="reference external" href="https://kubernetes.io/docs/setup/pick-right-solution/">ways to set up a cluster</a>.
 Here, we shall provide quick instructions for the most painless and
-popular ways of getting setup in various cloud providers:</p>
+popular ways of getting setup in various cloud providers and on other
+infrastructure:</p>
 <ul class="simple">
-<li><a class="reference internal" href="#google-cloud"><span class="std std-ref">Google Cloud</span></a></li>
-<li><a class="reference internal" href="#microsoft-azure"><span class="std std-ref">Microsoft Azure</span></a></li>
-<li><a class="reference internal" href="#amazon-aws"><span class="std std-ref">Amazon AWS</span></a></li>
-<li>Red Hat OpenShift</li>
-<li>Others</li>
+<li><a class="reference internal" href="google/step-zero-gcp.html#google-cloud"><span class="std std-ref">Google Cloud</span></a></li>
+<li><a class="reference internal" href="microsoft/step-zero-azure.html#microsoft-azure"><span class="std std-ref">Microsoft Azure</span></a></li>
+<li><a class="reference internal" href="amazon/step-zero-aws.html#amazon-aws"><span class="std std-ref">Amazon AWS</span></a></li>
+<li><a class="reference internal" href="redhat/step-zero-openshift.html#redhat-openshift"><span class="std std-ref">Red Hat OpenShift</span></a></li>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -75,456 +68,13 @@ the <a class="reference external" href="http://blog.kubernetes.io/2016/08/securi
 for information about keeping your Kubernetes infrastructure secure.</li>
 </ul>
 </div>
-<div class="section" id="setting-up-kubernetes-on-google-cloud">
-<span id="google-cloud"></span><h2>Setting up Kubernetes on <a class="reference external" href="https://cloud.google.com/">Google Cloud</a><a class="headerlink" href="#setting-up-kubernetes-on-google-cloud" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference external" href="https://cloud.google.com/kubernetes-engine/">Google Kubernetes Engine</a>
-(GKE) is the simplest and most common way of setting
-up a Kubernetes Cluster. You may be able to receive <a class="reference external" href="https://cloud.google.com/free/">free credits</a> for trying it out. You will need to
-connect your credit card or other payment method to your google cloud account.</p>
-<ol class="arabic">
-<li><p class="first">Go to <code class="docutils literal"><span class="pre">https://console.cloud.google.com</span></code> and log in.</p>
-</li>
-<li><p class="first">Enable the <a class="reference external" href="https://console.cloud.google.com/apis/api/container.googleapis.com/overview">Kubernetes Engine API</a>.</p>
-</li>
-<li><p class="first">Use your preferred command line interface.</p>
-<p>You have two options: a) use the Google Cloud Shell (no installation needed)
-or b) install and use the gcloud command-line tool.
-If you are unsure which to choose, we recommend beginning with option
-“a” and using the Google Cloud Shell. Instructions
-for each are detailed below:</p>
-<ol class="loweralpha simple">
-<li><strong>Use the Google Cloud Shell</strong>. Start the Google Cloud Shell</li>
-</ol>
-<blockquote>
-<div><p>by clicking the button shown below. This will start an interactive shell
-session within Google Cloud.</p>
-</div></blockquote>
-<img alt="_images/start_interactive_cli.png" class="align-center" src="_images/start_interactive_cli.png" />
-<p>See the <a class="reference external" href="https://cloud.google.com/shell/docs/">Google Cloud Shell docs</a>
-for more information.</p>
-<ul class="simple">
-<li><strong>Install and use the gcloud command line tool</strong>.
-This tool sends commands to Google Cloud and lets you do things like create
-and delete clusters.<ul>
-<li>Go to the <a class="reference external" href="https://cloud.google.com/sdk/downloads">gcloud command line tool downloads page</a>
-to <strong>download and install the gcloud command line tool</strong>.</li>
-<li>See the <a class="reference external" href="https://cloud.google.com/pubsub/docs/quickstart-cli">gcloud documentation</a> for
-more information on the gcloud command line tool.</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p class="first">Install <code class="docutils literal"><span class="pre">kubectl</span></code>, which is a tool for controlling kubernetes. From
-the terminal, enter:</p>
-<blockquote>
-<div><div class="highlight-bash"><div class="highlight"><pre><span></span>gcloud components install kubectl
-</pre></div>
-</div>
-</div></blockquote>
-</li>
-<li><p class="first">Create a Kubernetes cluster on Google Cloud, by typing the following
-command into either the Google Cloud shell or the gcloud command-line tool:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>gcloud container clusters create &lt;YOUR-CLUSTER&gt; <span class="se">\</span>
-    --num-nodes<span class="o">=</span><span class="m">3</span> <span class="se">\</span>
-    --machine-type<span class="o">=</span>n1-standard-2 <span class="se">\</span>
-    --zone<span class="o">=</span>us-central1-b <span class="se">\</span>
-    --cluster-version<span class="o">=</span><span class="m">1</span>.8.6-gke.0
-</pre></div>
-</div>
-<p>where:</p>
-<ul class="simple">
-<li><code class="docutils literal"><span class="pre">--num-nodes</span></code> specifies how many computers to spin up. The higher the
-number, the greater the cost.</li>
-<li><code class="docutils literal"><span class="pre">--machine-type</span></code> specifies the amount of CPU and RAM in each node. There
-is a <a class="reference external" href="https://cloud.google.com/compute/docs/machine-types">variety of types</a>
-to choose from. Picking something appropriate here will have a large effect
-on how much you pay - smaller machines restrict the max amount of RAM each
-user can have access to but allow more fine-grained scaling, reducing cost.
-The default (<code class="docutils literal"><span class="pre">n1-standard-2</span></code>) has 2CPUs and 7.5G of RAM each, and might not
-be a good fit for all use cases!</li>
-<li><code class="docutils literal"><span class="pre">--zone</span></code> specifies which data center to use. Pick something that is not
-too far away from your users. You can find a list of them <a class="reference external" href="https://cloud.google.com/compute/docs/regions-zones/regions-zones#available">here</a>.</li>
-<li><code class="docutils literal"><span class="pre">--cluster-version</span></code> specifies the version of kubernetes we want. Here,
-we specify the minimum that the default configuration will support.</li>
-</ul>
-</li>
-<li><p class="first">To test if your cluster is initialized, run:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>kubectl get node
-</pre></div>
-</div>
-<p>The response should list three running nodes.</p>
-</li>
-<li><p class="first">Give your account super-user permissions, allowing you to perform all
-the actions needed to set up JupyterHub.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>kubectl create clusterrolebinding cluster-admin-binding <span class="se">\</span>
-    --clusterrole<span class="o">=</span>cluster-admin <span class="se">\</span>
-    --user<span class="o">=</span>&lt;YOUR-EMAIL-ADDRESS&gt;
-</pre></div>
-</div>
-</li>
-</ol>
-</div>
-<div class="section" id="setting-up-kubernetes-on-microsoft-azure-container-service-aks">
-<span id="microsoft-azure"></span><h2>Setting up Kubernetes on Microsoft Azure Container Service (AKS)<a class="headerlink" href="#setting-up-kubernetes-on-microsoft-azure-container-service-aks" title="Permalink to this headline">¶</a></h2>
-<ol class="arabic">
-<li><p class="first">Prepare your Azure shell environment. You have two options, one is to use
-the Azure interactive shell, the other is to install the Azure command-line
-tools locally. Instructions for each are below.</p>
-<ul>
-<li><p class="first"><strong>Using the Azure interactive shell</strong>. The <a class="reference external" href="https://portal.azure.com">Azure Portal</a>
-contains an interactive shell that you can use to communicate with your
-Kubernetes cluster. To access this shell, go to <a class="reference external" href="https://portal.azure.com">portal.azure.com</a>
-and click on the button below.</p>
-<img alt="_images/cli_start.png" class="align-center" src="_images/cli_start.png" />
-</li>
-</ul>
-<blockquote>
-<div><div class="admonition note">
-<p class="first admonition-title">Note</p>
-<ul class="last simple">
-<li>If you get errors like <code class="docutils literal"><span class="pre">could</span> <span class="pre">not</span> <span class="pre">retrieve</span> <span class="pre">token</span> <span class="pre">from</span> <span class="pre">local</span> <span class="pre">cache</span></code>,
-try refreshing your browser window.</li>
-<li>The first time you do this, you’ll be asked to create a storage
-account where your shell filesystem will live.</li>
-</ul>
-</div>
-</div></blockquote>
-<ul>
-<li><p class="first"><strong>Install command-line tools locally</strong>. You can access the Azure CLI via
-a package that you can install locally.</p>
-<p>To do so, first follow the <a class="reference external" href="https://docs.microsoft.com/en-us/cli/azure/install-azure-cli">installation instructions</a> in the
-Azure documentation. Then run the following command to connect your local
-CLI with your account:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>az login
-</pre></div>
-</div>
-<p>You’ll need to open a browser and follow the instructions in your terminal
-to log in.</p>
-</li>
-</ul>
-</li>
-<li><p class="first">Activate the correct subscription. Azure uses the concept
-of <strong>subscriptions</strong> to manage spending. You can
-get a list of subscriptions your account has access to by running:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>az account list --refresh --output table
-</pre></div>
-</div>
-<p>Pick the subscription you want to use for creating the cluster, and set that
-as your default.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>az account <span class="nb">set</span> -s &lt;YOUR-CHOSEN-SUBSCRIPTION-NAME&gt;
-</pre></div>
-</div>
-</li>
-<li><p class="first">Create a resource group. Azure uses the concept of
-<strong>resource groups</strong> to group related resources together.
-We need to create a resource group in a given data center location. We will create
-computational resources <em>within</em> this resource group.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>az group create <span class="se">\</span>
-              --name<span class="o">=</span>&lt;RESOURCE-GROUP-NAME&gt; <span class="se">\</span>
-              --location<span class="o">=</span>centralus <span class="se">\</span>
-              --output table
-</pre></div>
-</div>
-</li>
-</ol>
-<blockquote>
-<div><p>where:</p>
-<ul class="simple">
-<li><code class="docutils literal"><span class="pre">--name</span></code> specifies the name of your resource group. We recommend using something
-that uniquely identifies this hub. For example, if you are creating a resource group
-for UC Berkeley’s 2018 Spring Data100 Course, you may give it a
-<code class="docutils literal"><span class="pre">&lt;RESOURCE-GROUP-NAME&gt;</span></code> of <code class="docutils literal"><span class="pre">ucb_2018sp_data100_hub</span></code>.</li>
-<li><code class="docutils literal"><span class="pre">--location</span></code> specifies the location of the data center you want your resource to be in.
-In this case, we used the <code class="docutils literal"><span class="pre">centralus</span></code> location. For other options, see the
-<a class="reference external" href="https://github.com/Azure/AKS/blob/master/preview_regions.md">Azure list of locations that support AKS</a>.</li>
-<li><code class="docutils literal"><span class="pre">--output</span> <span class="pre">table</span></code> specifies that the output should be in human readable
-format, rather than the default JSON output. We shall use this with most
-commands when executing them by hand.</li>
-</ul>
-</div></blockquote>
-<ol class="arabic" start="4">
-<li><p class="first">Enable the cloud APIs required before creating a cluster.</p>
-<p>The following commands enable various Azure tools that we’ll need in
-creating and managing the JupyterHub.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>az provider register --name Microsoft.Network --wait
-az provider register --name Microsoft.Compute --wait
-az provider register --name Microsoft.Storage --wait
-az provider register --name Microsoft.ContainerService --wait
-</pre></div>
-</div>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Each of these commands may take up to several minutes to complete.</p>
-</div>
-</li>
-<li><p class="first">Choose a cluster name.</p>
-<p>In the following steps we’ll run commands that ask you to input a cluster
-name. We recommend using something descriptive and short. We’ll refer to
-this as <code class="docutils literal"><span class="pre">&lt;CLUSTER-NAME&gt;</span></code> for the remainder of this section.</p>
-<p>The next step will create a few files on your filesystem, so first create
-a folder in which these files will go. We recommend giving it the same
-name as your cluster:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="o">&lt;</span><span class="n">CLUSTER</span><span class="o">-</span><span class="n">NAME</span><span class="o">&gt;</span>
-<span class="n">cd</span> <span class="o">&lt;</span><span class="n">CLUSTER</span><span class="o">-</span><span class="n">NAME</span><span class="o">&gt;</span>
-</pre></div>
-</div>
-</li>
-<li><p class="first">Create an ssh key to secure your cluster.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>ssh-keygen -f ssh-key-&lt;CLUSTER-NAME&gt;
-</pre></div>
-</div>
-<p>It will prompt you to add a password, which you can leave empty if you wish.
-This will create a public key named <code class="docutils literal"><span class="pre">ssh-key-&lt;CLUSTER-NAME&gt;.pub</span></code> and a private key named
-<code class="docutils literal"><span class="pre">ssh-key-&lt;CLUSTER-NAME&gt;</span></code>. Make sure both go into the folder we created earlier,
-and keep both of them safe!</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This command will also print out something to your terminal screen. You
-don’t need to do anything with this text.</p>
-</div>
-</li>
-<li><p class="first">Create an AKS cluster.</p>
-<p>The following command will request a Kubernetes cluster within the resource
-group that we created earlier.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>az aks create --name &lt;CLUSTER-NAME&gt; <span class="se">\</span>
-              --resource-group &lt;RESOURCE-GROUP-NAME&gt; <span class="se">\</span>
-              --ssh-key-value ssh-key-&lt;CLUSTER-NAME&gt;.pub <span class="se">\</span>
-              --node-count <span class="m">3</span> <span class="se">\</span>
-              --node-vm-size Standard_D2s_v3 <span class="se">\</span>
-              --kubernetes-version <span class="m">1</span>.8.2 <span class="se">\</span>
-              --output table
-</pre></div>
-</div>
-<p>where:</p>
-<ul class="simple">
-<li><code class="docutils literal"><span class="pre">--name</span></code> is the name you want to use to refer to your cluster</li>
-<li><code class="docutils literal"><span class="pre">--resource-group</span></code> is the ResourceGroup you created in step 4</li>
-<li><code class="docutils literal"><span class="pre">--ssh-key-value</span></code> is the ssh public key created in step 7</li>
-<li><code class="docutils literal"><span class="pre">--node-count</span></code> is the number of nodes you want in your kubernetes cluster</li>
-<li><code class="docutils literal"><span class="pre">--node-vm-size</span></code> is the size of the nodes you want to use, which varies based on
-what you are using your cluster for and how much RAM/CPU each of your users need.
-There is a <a class="reference external" href="https://docs.microsoft.com/en-us/azure/cloud-services/cloud-services-sizes-specs">list of all possible node sizes</a>
-for you to choose from, but not all might be available in your location.</li>
-<li><code class="docutils literal"><span class="pre">--kubernetes-version</span></code> is the version of Kubernetes we want to use.</li>
-</ul>
-<p>This should take a few minutes and provide you with a working Kubernetes cluster!</p>
-</li>
-<li><p class="first">Install <a class="reference external" href="https://kubernetes.io/docs/reference/kubectl/overview/">kubectl</a>, a tool
-for accessing the Kubernetes API from the commandline:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>az aks install-cli
-</pre></div>
-</div>
-</li>
-<li><p class="first">Get credentials from Azure for <code class="docutils literal"><span class="pre">kubectl</span></code> to work:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>az aks get-credentials <span class="se">\</span>
-             --name &lt;CLUSTER-NAME&gt; <span class="se">\</span>
-             --resource-group &lt;RESOURCE-GROUP-NAME&gt; <span class="se">\</span>
-             --output table
-</pre></div>
-</div>
-</li>
-</ol>
-<blockquote>
-<div><p>where:</p>
-<ul class="simple">
-<li><code class="docutils literal"><span class="pre">--name</span></code> is the name you gave your cluster in step 7</li>
-<li><code class="docutils literal"><span class="pre">--resource-group</span></code> is the ResourceGroup you created in step 4</li>
-</ul>
-</div></blockquote>
-<ol class="arabic simple" start="10">
-<li>Check if your cluster is fully functional</li>
-</ol>
-<blockquote>
-<div><div class="highlight-bash"><div class="highlight"><pre><span></span>kubectl get node
-</pre></div>
-</div>
-<p>The response should list three running nodes and their kubernetes versions!
-Each node should have the status of <code class="docutils literal"><span class="pre">Ready</span></code>, note that this may take a
-few moments.</p>
-</div></blockquote>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p>Azure AKS is still in <strong>preview</strong>, and not all features might work as
-intended. In particular,</p>
-<ol class="last arabic simple">
-<li>You have to <a class="reference external" href="security.html#use-role-based-access-control-rbac">not use RBAC</a>, since AKS does not support it
-yet.</li>
-<li>You should skip step 2 (granting RBAC rights) with the “initialization”
-section <a class="reference internal" href="setup-helm.html#helm-rbac"><span class="std std-ref">when setting up helm</span></a>.</li>
-</ol>
-</div>
-</div>
-<div class="section" id="setting-up-kubernetes-on-amazon-web-services-aws">
-<span id="amazon-aws"></span><h2>Setting up Kubernetes on Amazon Web Services (AWS)<a class="headerlink" href="#setting-up-kubernetes-on-amazon-web-services-aws" title="Permalink to this headline">¶</a></h2>
-<p>AWS does not have native support for Kubernetes, however there are
-many organizations that have put together their own solutions and
-guides for setting up Kubernetes on AWS.</p>
-<p>We like the <a class="reference external" href="https://s3.amazonaws.com/quickstart-reference/heptio/latest/doc/heptio-kubernetes-on-the-aws-cloud.pdf">Heptio guide</a>, and recommend using this for setting up your cluster for clusters
-that span short periods of time (a week long workshop, for example). However, if
-you are setting up a cluster that would need to run for much longer, we recommend you use
-[kops](<a class="reference external" href="https://kubernetes.io/docs/getting-started-guides/kops/">https://kubernetes.io/docs/getting-started-guides/kops/</a>). It is a bit more complex,
-but provides features (such as log collection &amp; cluster upgrades) that are necessary to
-run a longer term cluster.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">The Heptio deployment of Kubernetes on AWS should not be considered
-production-ready. See <a class="reference external" href="http://docs.heptio.com/content/tutorials/aws-cloudformation-k8s.html">the introduction in the Heptio Kubernetes tutorial</a>
-for information about what to expect.</p>
-</div>
-<ol class="arabic">
-<li><p class="first">Follow Step 1 of the <a class="reference external" href="https://s3.amazonaws.com/quickstart-reference/heptio/latest/doc/heptio-kubernetes-on-the-aws-cloud.pdf">Heptio guide</a>, called <strong>Prepare your AWS Account</strong>.</p>
-<p>This sets up your Amazon account with the credentials needed to run Kubernetes.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<ul class="last simple">
-<li>Make sure that you keep the file downloaded when you create the SSH
-key. This will be needed later to allow <code class="docutils literal"><span class="pre">kubectl</span></code> to interact with
-your Kubernetes cluster.</li>
-<li>You may find it helpful to “pin” the services we’ll be using to your AWS
-navbar. This makes it easier to navigate in subsequent sessions.
-Click the “pin” icon at the top, then drag <code class="docutils literal"><span class="pre">CloudFormation</span></code> and
-<code class="docutils literal"><span class="pre">EC2</span></code> into your navbar.</li>
-</ul>
-</div>
-</li>
-<li><p class="first">Deploy a Kubernetes template from Heptio.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This section largely follows Step 2 of the <a class="reference external" href="https://s3.amazonaws.com/quickstart-reference/heptio/latest/doc/heptio-kubernetes-on-the-aws-cloud.pdf">Heptio guide</a>.</p>
-</div>
-<p>AWS makes it possible to deploy computational resources in a “stack” using
-templates. Heptio has put together a template for running Kubernetes on AWS.
-Click the button below to select the Heptio template, then follow the
-instructions below.</p>
-<a target="_blank" href="https://console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks/new?stackName=Heptio-Kubernetes&templateURL=https://s3.amazonaws.com/quickstart-reference/heptio/latest/templates/kubernetes-cluster-with-new-vpc.template">
-<button style="background-color: rgb(235, 119, 55); border: 1px solid; border-color: black; color: white; padding: 15px 32px; text-align: center; text-decoration: none; font-size: 16px; margin: 4px 2px; cursor: pointer; border-radius: 8px;">Deploy the Heptio Template</button></a><p>You’ll be taken to an AWS page with a field already
-chosen under “Choose a template”. Simply hit “Next”.</p>
-<p><strong>Enter AWS instance information (page 1)</strong>: On this page you’ll tell AWS
-what kind of hardware you need. Fill in the following required fields:</p>
-<ul class="simple">
-<li><code class="docutils literal"><span class="pre">Stack</span> <span class="pre">Name</span></code> can be anything you like.</li>
-<li><code class="docutils literal"><span class="pre">Availability</span> <span class="pre">Zone</span></code> is related to the location of the AWS
-resources. Choose an AWS location close to your physical location or
-any other desired AWS location.</li>
-<li><code class="docutils literal"><span class="pre">Admin</span> <span class="pre">Ingress</span> <span class="pre">Location</span></code> defines the locations from which you
-can access this cluster as an administrator. Enter <code class="docutils literal"><span class="pre">0.0.0.0/0</span></code>
-for the most permissive approach.</li>
-<li><code class="docutils literal"><span class="pre">SSH</span> <span class="pre">Key</span></code> is a dropdown list of keys attached to your account.
-The one you created in Step 1 should be listed here. This will allow
-you to SSH into the machines if you desire.</li>
-<li><code class="docutils literal"><span class="pre">Node</span> <span class="pre">Capacity</span></code> defines the number of machines you’ve got available.
-This will depend on the <code class="docutils literal"><span class="pre">Instance</span> <span class="pre">Type</span></code> that you choose. E.g., if you
-want each user to have 2GB and you expect 10 users, choose a combination
-of <code class="docutils literal"><span class="pre">Instance</span> <span class="pre">Type</span></code> and <code class="docutils literal"><span class="pre">Node</span> <span class="pre">Capacity</span></code> that meets this requirement.</li>
-<li><code class="docutils literal"><span class="pre">Instance</span> <span class="pre">Type</span></code> defines what kind of machine you’re requesting. See
-this <a class="reference external" href="https://aws.amazon.com/ec2/instance-types/">list of instance types with Amazon</a>
-as well as this list of <a class="reference external" href="https://aws.amazon.com/ec2/pricing/on-demand/">pricing for each instance type</a>.</li>
-<li><code class="docutils literal"><span class="pre">Disk</span> <span class="pre">Size</span></code> corresponds to the hard disk for each node. Note that this is
-different from the disks that users will use for their own notebooks/data.
-This disk should be large enough to contain the size of any Docker
-images you’re serving with the JupyterHub.</li>
-<li><code class="docutils literal"><span class="pre">Instance</span> <span class="pre">Type</span> <span class="pre">(Bastion</span> <span class="pre">Host)</span></code> corresponds to a computer that allows
-for easy SSH access to your Kubernetes cluster. This does not need to
-be a fancy computer. You may leave these as defaults. For more information
-on the Bastion Host, <a class="reference external" href="http://docs.aws.amazon.com/quickstart/latest/linux-bastion/architecture.html">see here</a>.</li>
-</ul>
-<p><strong>Enter AWS instance information (page 2)</strong>: On the second page you may leave
-all of these fields as is or customize as you wish. When done, hit <code class="docutils literal"><span class="pre">Next</span></code>. Then
-confirm and hit <code class="docutils literal"><span class="pre">Next</span></code> once more.</p>
-<p>AWS will now create the computational resources defined in the Heptio
-template (and according to the options that you chose).</p>
-<p>To see the status of the resources you’ve requested,
-see the <code class="docutils literal"><span class="pre">CloudFormation</span></code> page. You should see two stacks being created,
-each will have the name you’ve requested. When they’re done creating,
-continue with the guide.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This often takes 15-20 minutes to finish. You’ll know it’s done when
-both stacks show the status <code class="docutils literal"><span class="pre">CREATE_COMPLETE</span></code>.</p>
-</div>
-</li>
-<li><p class="first">Ensure that the <em>latest</em> version of <a class="reference external" href="https://kubernetes.io/docs/user-guide/prereqs/">kubectl</a> is
-installed on your machine be following the <a class="reference external" href="https://kubernetes.io/docs/user-guide/prereqs">install instructions</a>.</p>
-</li>
-<li><p class="first">Configure your <code class="docutils literal"><span class="pre">kubectl</span></code> to send instructions to the newly-created
-Kubernetes cluster. To do this, you’ll need to copy a security file
-onto your computer. Heptio has pre-configured the command needed to do this.
-To access it, from the <code class="docutils literal"><span class="pre">CloudFormation</span></code> page click on the stack you just
-created (the one without “k8s-stack” in it). Below, there is an “Outputs”
-tab. Click on this, and look for a field called <code class="docutils literal"><span class="pre">GetKubeConfigCommand</span></code>.
-Copy / paste that text into your terminal, replacing the <code class="docutils literal"><span class="pre">path/to/myKey.pem</span></code>
-with the path to the key you downloaded in Step 1. It looks something like:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>SSH_KEY=&quot;&lt;path/to/varMyKey.pem&gt;&quot;; scp -i $SSH_KEY -o
-ProxyCommand=&quot;ssh -i \&quot;${SSH_KEY}\&quot; ubuntu@&lt;BastionHostPublicIP&gt; nc
-%h %p&quot; ubuntu@&lt;MasterPrivateIP&gt;:~/kubeconfig ./kubeconfig
-</pre></div>
-</div>
-</li>
-<li><p class="first">Tell Kubernetes to use this configuration file. Run:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>export KUBECONFIG=$(pwd)/kubeconfig
-</pre></div>
-</div>
-</li>
-<li><p class="first">Confirm that <code class="docutils literal"><span class="pre">kubectl</span></code> is connected to your Kubernetes cluster.
-Run:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">kubectl</span> <span class="n">get</span> <span class="n">nodes</span>
-</pre></div>
-</div>
-<p>you should see a list of three nodes, each beginning with <code class="docutils literal"><span class="pre">ip</span></code>.</p>
-</li>
-<li><p class="first">Enable dynamic storage on your Kubernetes cluster.
-Create a file, <code class="docutils literal"><span class="pre">storageclass.yml</span></code> on your local computer, and enter
-this text:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">kind</span><span class="p">:</span> <span class="n">StorageClass</span>
-<span class="n">apiVersion</span><span class="p">:</span> <span class="n">storage</span><span class="o">.</span><span class="n">k8s</span><span class="o">.</span><span class="n">io</span><span class="o">/</span><span class="n">v1</span>
-<span class="n">metadata</span><span class="p">:</span>
-  <span class="n">annotations</span><span class="p">:</span>
-     <span class="n">storageclass</span><span class="o">.</span><span class="n">beta</span><span class="o">.</span><span class="n">kubernetes</span><span class="o">.</span><span class="n">io</span><span class="o">/</span><span class="ow">is</span><span class="o">-</span><span class="n">default</span><span class="o">-</span><span class="n">class</span><span class="p">:</span> <span class="s2">&quot;true&quot;</span>
-  <span class="n">name</span><span class="p">:</span> <span class="n">gp2</span>
-<span class="n">provisioner</span><span class="p">:</span> <span class="n">kubernetes</span><span class="o">.</span><span class="n">io</span><span class="o">/</span><span class="n">aws</span><span class="o">-</span><span class="n">ebs</span>
-<span class="n">parameters</span><span class="p">:</span>
-  <span class="nb">type</span><span class="p">:</span> <span class="n">gp2</span>
-</pre></div>
-</div>
-<p>Next, run this command:</p>
-<blockquote>
-<div><div class="highlight-bash"><div class="highlight"><pre><span></span>kubectl apply -f storageclass.yml
-</pre></div>
-</div>
-</div></blockquote>
-<p>This enables <a class="reference external" href="https://kubernetes.io/docs/concepts/storage/persistent-volumes/#dynamic">dynamic provisioning</a> of
-disks, allowing us to automatically assign a disk per user when they log
-in to JupyterHub.</p>
-</li>
-<li><p class="first">Enable legacy authorization mode. This is temporarily required since the newer
-and more secure authorization mode is not out of beta yet.</p>
-<blockquote>
-<div><div class="highlight-bash"><div class="highlight"><pre><span></span>kubectl create clusterrolebinding permissive-binding <span class="se">\</span>
- --clusterrole<span class="o">=</span>cluster-admin <span class="se">\</span>
- --user<span class="o">=</span>admin <span class="se">\</span>
- --user<span class="o">=</span>kubelet <span class="se">\</span>
- --group<span class="o">=</span>system:serviceaccounts
-</pre></div>
-</div>
-</div></blockquote>
-</li>
-</ol>
-<blockquote>
-<div>This step should hopefully go away soon!</div></blockquote>
-<p>You should now be ready for the next step.</p>
-</div>
-<div class="section" id="next-step">
-<h2>Next Step<a class="headerlink" href="#next-step" title="Permalink to this headline">¶</a></h2>
-<p>Now that you have a Kubernetes cluster running, it is time to
-<a class="reference internal" href="setup-helm.html#setup-helm"><span class="std std-ref">set up helm</span></a>.</p>
-</div>
 </div>
 
 
   <div class='prev-next-bottom'>
     
-     <a class='left-prev' href="getting-started.html" title="previous chapter">Getting started with JupyterHub</a>
-     <a class='right-next' href="setup-helm.html" title="next chapter">Setting up Helm</a>
+     <a class='left-prev' href="index.html" title="previous chapter">Zero to JupyterHub</a>
+     <a class='right-next' href="google/step-zero-gcp.html" title="next chapter">Step Zero: Kubernetes on Google Cloud</a>
   <div style='clear:both;'></div>
 
   </div>
@@ -553,25 +103,28 @@ and more secure authorization mode is not out of beta yet.</p>
 
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3>Table of Contents</h3>
-<p class="caption"><span class="caption-text">Creating your JupyterHub</span></p>
+<p class="caption"><span class="caption-text">Step Zero: your Kubernetes cluster</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started with JupyterHub</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Creating a Kubernetes Cluster</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#setting-up-kubernetes-on-google-cloud">Setting up Kubernetes on Google Cloud</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#setting-up-kubernetes-on-microsoft-azure-container-service-aks">Setting up Kubernetes on Microsoft Azure Container Service (AKS)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#setting-up-kubernetes-on-amazon-web-services-aws">Setting up Kubernetes on Amazon Web Services (AWS)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#next-step">Next Step</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Creating a Kubernetes Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="google/step-zero-gcp.html">Step Zero: Kubernetes on Google Cloud</a></li>
+<li class="toctree-l1"><a class="reference internal" href="microsoft/step-zero-azure.html">Step Zero: Kubernetes on Microsoft Azure Container Service (AKS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="amazon/step-zero-aws.html">Step Zero: Kubernetes on Amazon Web Services (AWS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="redhat/step-zero-openshift.html">JupyterHub on Red Hat OpenShift</a></li>
 </ul>
-</li>
+<p class="caption"><span class="caption-text">Creating your JupyterHub</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started with JupyterHub</a></li>
 <li class="toctree-l1"><a class="reference internal" href="setup-helm.html">Setting up Helm</a></li>
 <li class="toctree-l1"><a class="reference internal" href="setup-jupyterhub.html">Setting up JupyterHub</a></li>
 <li class="toctree-l1"><a class="reference internal" href="turn-off.html">Turning Off JupyterHub and Computational Resources</a></li>
@@ -586,19 +139,28 @@ and more secure authorization mode is not out of beta yet.</p>
 </ul>
 <p class="caption"><span class="caption-text">Administrator Guide</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">The JupyterHub Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="debug.html">Debugging Kubernetes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cost.html">Estimating costs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optimization.html">Speed and Optimization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="security.html">Security</a></li>
-<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading the helm chart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading your JupyterHub Kubernetes deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cost.html">Appendix: Projecting deployment costs</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Resources from the community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="additional-resources.html">Community-authored documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="users-list.html">Zero to JupyterHub Gallery of Deployments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tips.html">Tips and command snippets</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="reference.html">Helm Chart Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference-docs.html">Official JupyterHub and Project Jupyter Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tools.html">Tools used in a JupyterHub Deployment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
-<li class="toctree-l1"><a class="reference internal" href="additional-resources.html">Additional resources</a></li>
 </ul>
 
 
@@ -615,8 +177,8 @@ and more secure authorization mode is not out of beta yet.</p>
 <h3>Navigation</h3>
 <ul>
   <li><a href="index.html">Documentation Home</a><ul>
-  <li><a href="getting-started.html" title="Previous">Previous topic</a></li>
-  <li><a href="setup-helm.html" title="Next">Next topic</a></li>
+  <li><a href="index.html" title="Previous">Previous topic</a></li>
+  <li><a href="google/step-zero-gcp.html" title="Next">Next topic</a></li>
   </ul>
 </ul>
 </div>

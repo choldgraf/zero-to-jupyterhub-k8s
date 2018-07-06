@@ -4,38 +4,31 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Helm Chart Configuration Reference &#8212; Zero to JupyterHub with Kubernetes 0.4 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/custom.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '0.4',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/custom.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@1/dist/clipboard.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Tools used in a JupyterHub Deployment" href="tools.html" />
-    <link rel="prev" title="Advanced Topics" href="advanced.html" />
+    <link rel="next" title="Official JupyterHub and Project Jupyter Documentation" href="reference-docs.html" />
+    <link rel="prev" title="Tips and command snippets" href="tips.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
-  </head>
-  <body>
+  </head><body>
   
 
     <div class="document">
@@ -45,8 +38,8 @@
             
   <div class='prev-next-top'>
     
-     <a class='left-prev' href="advanced.html" title="previous chapter">Previous</a>
-     <a class='right-next' href="tools.html" title="next chapter">Next</a>
+     <a class='left-prev' href="tips.html" title="previous chapter">Previous</a>
+     <a class='right-next' href="reference-docs.html" title="next chapter">Next</a>
   <div style='clear:both;'></div>
 
   </div>
@@ -54,25 +47,25 @@
   
   <div class="section" id="helm-chart-configuration-reference">
 <span id="helm-chart-configuration-reference"></span><span id="id1"></span><h1>Helm Chart Configuration Reference<a class="headerlink" href="#helm-chart-configuration-reference" title="Permalink to this headline">¶</a></h1>
-<p>The <a class="reference external" href="https://github.com/jupyterhub/zero-to-jupyterhub-k8s">JupyterHub helm chart</a> is configurable so that you can customize your JupyterHub setup however you'd like. You can extend user resources, build off of different Docker images, manage security and authentication, and more.</p>
+<p>The <a class="reference external" href="https://github.com/jupyterhub/zero-to-jupyterhub-k8s">JupyterHub helm chart</a> is configurable so that you can customize your JupyterHub setup however you’d like. You can extend user resources, build off of different Docker images, manage security and authentication, and more.</p>
 <p>Below is a description of the fields that are exposed with the JupyterHub helm chart.
 For more guided information about some specific things you can do with
 modifications to the helm chart, see the <a class="reference external" href="extending-jupyterhub.html">extending jupyterhub</a>
-and <a class="reference external" href="user-experience.html">user experience</a> pages.</p>
+and <a class="reference external" href="user-environment.html">user environment</a> pages.</p>
 <div class="section" id="hub">
 <span id="hub"></span><h2>hub<a class="headerlink" href="#hub" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="hub-cookiesecret">
 <span id="hub-cookiesecret"></span><h3>hub.cookieSecret<a class="headerlink" href="#hub-cookiesecret" title="Permalink to this headline">¶</a></h3>
 <p>A 64-byte cryptographically secure randomly generated string used to sign values of
 secure cookies set by the hub. If unset, jupyterhub will generate one on startup and
-save it in the file <code class="docutils literal"><span class="pre">jupyterhub_cookie_secret</span></code> in the <code class="docutils literal"><span class="pre">/srv/jupyterhub</span></code> directory of
-the hub container. Value set here will override the value in <code class="docutils literal"><span class="pre">jupyterhub_cookie_secret</span></code>.</p>
+save it in the file <code class="docutils literal notranslate"><span class="pre">jupyterhub_cookie_secret</span></code> in the <code class="docutils literal notranslate"><span class="pre">/srv/jupyterhub</span></code> directory of
+the hub container. Value set here will override the value in <code class="docutils literal notranslate"><span class="pre">jupyterhub_cookie_secret</span></code>.</p>
 <p>You do not need to set this at all if you are using the default configuration for
-storing databases - sqlite on a persistent volume (with <code class="docutils literal"><span class="pre">hub.db.type</span></code> set to the
-default <code class="docutils literal"><span class="pre">sqlite-pvc</span></code>). If you are using an external database, then you must set this
+storing databases - sqlite on a persistent volume (with <code class="docutils literal notranslate"><span class="pre">hub.db.type</span></code> set to the
+default <code class="docutils literal notranslate"><span class="pre">sqlite-pvc</span></code>). If you are using an external database, then you must set this
 value explicitly - or your users will keep getting logged out each time the hub pod
 restarts.</p>
-<p>This must be generated with <code class="docutils literal"><span class="pre">openssl</span> <span class="pre">rand</span> <span class="pre">-hex</span> <span class="pre">32</span></code>.</p>
+<p>This must be generated with <code class="docutils literal notranslate"><span class="pre">openssl</span> <span class="pre">rand</span> <span class="pre">-hex</span> <span class="pre">32</span></code>.</p>
 <p>Changing this value will all user logins to be invalidated. If this secret leaks,
 <em>immediately</em> change it to something else, or user data can be compromised</p>
 </div>
@@ -100,7 +93,7 @@ other images might not work.</p>
 <div class="section" id="hub-image-tag">
 <span id="hub-image-tag"></span><h4>hub.image.tag<a class="headerlink" href="#hub-image-tag" title="Permalink to this headline">¶</a></h4>
 <p>The tag of the image to pull.</p>
-<p>This is the value after the <code class="docutils literal"><span class="pre">:</span></code> in your full image name.</p>
+<p>This is the value after the <code class="docutils literal notranslate"><span class="pre">:</span></code> in your full image name.</p>
 </div>
 </div>
 <div class="section" id="hub-db">
@@ -113,15 +106,15 @@ where it should be stored.</p>
 <p>The various options are:</p>
 <ol>
 <li><p class="first"><strong>sqlite-pvc</strong></p>
-<p>Use an <code class="docutils literal"><span class="pre">sqlite</span></code> database kept on a persistent volume attached to the hub.</p>
+<p>Use an <code class="docutils literal notranslate"><span class="pre">sqlite</span></code> database kept on a persistent volume attached to the hub.</p>
 <p>By default, this disk is dynamically created using the default
 [dynamic provisioner]. You can customize how this disk is created / attached
-by setting various properties under <code class="docutils literal"><span class="pre">hub.db.pvc</span></code>.</p>
+by setting various properties under <code class="docutils literal notranslate"><span class="pre">hub.db.pvc</span></code>.</p>
 <p>This is the default setting, and should work well for most cloud provider
 deployments.</p>
 </li>
 <li><p class="first"><strong>sqlite-memory</strong></p>
-<p>Use an in-memory <code class="docutils literal"><span class="pre">sqlite</span></code> database. This should only be used for testing,
+<p>Use an in-memory <code class="docutils literal notranslate"><span class="pre">sqlite</span></code> database. This should only be used for testing,
 since the database is erased whenever the hub pod restarts - causing the hub
 to lose all memory of users who had logged in before.</p>
 <p>When using this for testing, make sure you delete all other objects that the
@@ -131,26 +124,26 @@ Otherwise you might run into errors about duplicate resources.</p>
 <li><p class="first"><strong>mysql</strong></p>
 <p>Use an externaly hosted mysql database.</p>
 <p>You have to specify an sqlalchemy connection string for the mysql database you
-want to connect to in <code class="docutils literal"><span class="pre">hub.db.url</span></code> if using this option.</p>
+want to connect to in <code class="docutils literal notranslate"><span class="pre">hub.db.url</span></code> if using this option.</p>
 <p>The general format of the connection string is:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mysql</span><span class="o">+</span><span class="n">pymysql</span><span class="p">:</span><span class="o">//&lt;</span><span class="n">db</span><span class="o">-</span><span class="n">username</span><span class="o">&gt;</span><span class="p">:</span><span class="o">&lt;</span><span class="n">db</span><span class="o">-</span><span class="n">password</span><span class="o">&gt;@&lt;</span><span class="n">db</span><span class="o">-</span><span class="n">hostname</span><span class="o">&gt;</span><span class="p">:</span><span class="o">&lt;</span><span class="n">db</span><span class="o">-</span><span class="n">port</span><span class="o">&gt;/&lt;</span><span class="n">db</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mysql</span><span class="o">+</span><span class="n">pymysql</span><span class="p">:</span><span class="o">//&lt;</span><span class="n">db</span><span class="o">-</span><span class="n">username</span><span class="o">&gt;</span><span class="p">:</span><span class="o">&lt;</span><span class="n">db</span><span class="o">-</span><span class="n">password</span><span class="o">&gt;@&lt;</span><span class="n">db</span><span class="o">-</span><span class="n">hostname</span><span class="o">&gt;</span><span class="p">:</span><span class="o">&lt;</span><span class="n">db</span><span class="o">-</span><span class="n">port</span><span class="o">&gt;/&lt;</span><span class="n">db</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 <p>The user specified in the connection string must have the rights to create
 tables in the database specified.</p>
-<p>Note that if you use this, you <em>must</em> also set <code class="docutils literal"><span class="pre">hub.cookieSecret</span></code>.</p>
+<p>Note that if you use this, you <em>must</em> also set <code class="docutils literal notranslate"><span class="pre">hub.cookieSecret</span></code>.</p>
 </li>
 <li><p class="first"><strong>postgres</strong></p>
 <p>Use an externaly hosted postgres database.</p>
 <p>You have to specify an sqlalchemy connection string for the postgres database you
-want to connect to in <code class="docutils literal"><span class="pre">hub.db.url</span></code> if using this option.</p>
+want to connect to in <code class="docutils literal notranslate"><span class="pre">hub.db.url</span></code> if using this option.</p>
 <p>The general format of the connection string is:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">postgres</span><span class="o">+</span><span class="n">psycopg2</span><span class="p">:</span><span class="o">//&lt;</span><span class="n">db</span><span class="o">-</span><span class="n">username</span><span class="o">&gt;</span><span class="p">:</span><span class="o">&lt;</span><span class="n">db</span><span class="o">-</span><span class="n">password</span><span class="o">&gt;@&lt;</span><span class="n">db</span><span class="o">-</span><span class="n">hostname</span><span class="o">&gt;</span><span class="p">:</span><span class="o">&lt;</span><span class="n">db</span><span class="o">-</span><span class="n">port</span><span class="o">&gt;/&lt;</span><span class="n">db</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">postgres</span><span class="o">+</span><span class="n">psycopg2</span><span class="p">:</span><span class="o">//&lt;</span><span class="n">db</span><span class="o">-</span><span class="n">username</span><span class="o">&gt;</span><span class="p">:</span><span class="o">&lt;</span><span class="n">db</span><span class="o">-</span><span class="n">password</span><span class="o">&gt;@&lt;</span><span class="n">db</span><span class="o">-</span><span class="n">hostname</span><span class="o">&gt;</span><span class="p">:</span><span class="o">&lt;</span><span class="n">db</span><span class="o">-</span><span class="n">port</span><span class="o">&gt;/&lt;</span><span class="n">db</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 <p>The user specified in the connection string must have the rights to create
 tables in the database specified.</p>
-<p>Note that if you use this, you <em>must</em> also set <code class="docutils literal"><span class="pre">hub.cookieSecret</span></code>.</p>
+<p>Note that if you use this, you <em>must</em> also set <code class="docutils literal notranslate"><span class="pre">hub.cookieSecret</span></code>.</p>
 </li>
 </ol>
 </div>
@@ -174,8 +167,8 @@ tables in the database specified.</p>
 </div>
 <div class="section" id="hub-db-url">
 <span id="hub-db-url"></span><h4>hub.db.url<a class="headerlink" href="#hub-db-url" title="Permalink to this headline">¶</a></h4>
-<p>Connection string when <code class="docutils literal"><span class="pre">hub.db.type</span></code> is mysql or postgres.</p>
-<p>See documentation for <code class="docutils literal"><span class="pre">hub.db.type</span></code> for more details on the format of this property.</p>
+<p>Connection string when <code class="docutils literal notranslate"><span class="pre">hub.db.type</span></code> is mysql or postgres.</p>
+<p>See documentation for <code class="docutils literal notranslate"><span class="pre">hub.db.type</span></code> for more details on the format of this property.</p>
 </div>
 </div>
 <div class="section" id="hub-labels">
@@ -187,19 +180,18 @@ to learn more about labels.</p>
 <div class="section" id="hub-extraenv">
 <span id="hub-extraenv"></span><h3>hub.extraEnv<a class="headerlink" href="#hub-extraenv" title="Permalink to this headline">¶</a></h3>
 <p>Extra environment variables that should be set for the hub pod.</p>
-<p>A dictionary of key value pairs (both strings), where the key is the name of the
-environment value and the value is the value of the environment variable that should
-be set on the hub pod.</p>
+<p>A list of <a class="reference external" href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.9/#envvar-v1-core">EnvVar</a>
+objects.</p>
 <p>These are usually used in two circumstances:</p>
 <ul class="simple">
-<li>Passing parameters to some custom code specified with <code class="docutils literal"><span class="pre">extraConfig</span></code></li>
+<li>Passing parameters to some custom code specified with <code class="docutils literal notranslate"><span class="pre">extraConfig</span></code></li>
 <li>Passing parameters to an authenticator or spawner that can be directly customized
 by environment variables (rarer)</li>
 </ul>
 </div>
 <div class="section" id="hub-extraconfig">
 <span id="hub-extraconfig"></span><h3>hub.extraConfig<a class="headerlink" href="#hub-extraconfig" title="Permalink to this headline">¶</a></h3>
-<p>Arbitrary extra python based configuration that should be in <code class="docutils literal"><span class="pre">jupyterhub_config.py</span></code>.</p>
+<p>Arbitrary extra python based configuration that should be in <code class="docutils literal notranslate"><span class="pre">jupyterhub_config.py</span></code>.</p>
 <p>This is the <em>escape hatch</em> - if you want to configure JupyterHub to do something specific
 that is not present here as an option, you can just write the raw Python to do it here.</p>
 <p>Non-exhaustive examples of things you can do here:</p>
@@ -209,30 +201,30 @@ that is not present here as an option, you can just write the raw Python to do i
 <li>Inject an auth token from GitHub authenticator into user pod</li>
 <li>Anything else you can think of!</li>
 </ul>
-<p>Since this is usually a multi-line string, you want to format it using YAML's
+<p>Since this is usually a multi-line string, you want to format it using YAML’s
 <a class="reference external" href="http://www.yaml.org/spec/1.2/spec.html#id2795688">| operator</a>.</p>
 <p>For example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">hub</span><span class="p">:</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hub</span><span class="p">:</span>
   <span class="n">extraConfig</span><span class="p">:</span> <span class="o">|</span>
     <span class="n">c</span><span class="o">.</span><span class="n">JupyterHub</span><span class="o">.</span><span class="n">something</span> <span class="o">=</span> <span class="s1">&#39;something&#39;</span>
     <span class="n">c</span><span class="o">.</span><span class="n">Spawner</span><span class="o">.</span><span class="n">somethingelse</span> <span class="o">=</span> <span class="s1">&#39;something else&#39;</span>
 </pre></div>
 </div>
 <p>No validation of this python is performed! If you make a mistake here, it will probably
-manifest as either the hub pod going into <code class="docutils literal"><span class="pre">Error</span></code> or <code class="docutils literal"><span class="pre">CrashLoopBackoff</span></code> states, or in
-some special cases, the hub running but... just doing very random things. Be careful!</p>
+manifest as either the hub pod going into <code class="docutils literal notranslate"><span class="pre">Error</span></code> or <code class="docutils literal notranslate"><span class="pre">CrashLoopBackoff</span></code> states, or in
+some special cases, the hub running but… just doing very random things. Be careful!</p>
 </div>
 <div class="section" id="hub-uid">
 <span id="hub-uid"></span><h3>hub.uid<a class="headerlink" href="#hub-uid" title="Permalink to this headline">¶</a></h3>
 <p>The UID the hub process should be running as.
 Use this only if you are building your own image &amp; know that a user with this uid exists inside the hub container! Advanced feature, handle with care!
-Defaults to 1000, which is the uid of the <code class="docutils literal"><span class="pre">jovyan</span></code> user that is present in the default hub image.</p>
+Defaults to 1000, which is the uid of the <code class="docutils literal notranslate"><span class="pre">jovyan</span></code> user that is present in the default hub image.</p>
 </div>
 <div class="section" id="hub-fsgid">
 <span id="hub-fsgid"></span><h3>hub.fsGid<a class="headerlink" href="#hub-fsgid" title="Permalink to this headline">¶</a></h3>
 <p>The gid the hub process should be using when touching any volumes mounted.
 Use this only if you are building your own image &amp; know that a group with this gid exists inside the hub container! Advanced feature, handle with care!
-Defaults to 1000, which is the uid of the <code class="docutils literal"><span class="pre">jovyan</span></code> user that is present in the default hub image.</p>
+Defaults to 1000, which is the gid of the <code class="docutils literal notranslate"><span class="pre">jovyan</span></code> user that is present in the default hub image.</p>
 </div>
 </div>
 <div class="section" id="proxy">
@@ -241,7 +233,7 @@ Defaults to 1000, which is the uid of the <code class="docutils literal"><span c
 <span id="proxy-secrettoken"></span><h3>proxy.secretToken<a class="headerlink" href="#proxy-secrettoken" title="Permalink to this headline">¶</a></h3>
 <p>A 64-byte cryptographically secure randomly generated string used to secure communications
 between the hub and the configurable-http-proxy.</p>
-<p>This must be generated with <code class="docutils literal"><span class="pre">openssl</span> <span class="pre">rand</span> <span class="pre">-hex</span> <span class="pre">32</span></code>.</p>
+<p>This must be generated with <code class="docutils literal notranslate"><span class="pre">openssl</span> <span class="pre">rand</span> <span class="pre">-hex</span> <span class="pre">32</span></code>.</p>
 <p>Changing this value will cause the proxy and hub pods to restart. It is good security
 practice to rotate these values over time. If this secret leaks, <em>immediately</em> change
 it to something else, or user data can be compromised</p>
@@ -262,7 +254,7 @@ See: http://jupyterhub.readthedocs.io/en/latest/api/auth.html</p>
 Encrypting auth_state requires the cryptography package.
 It must contain one (or more, separated by ;) 32B encryption keys. These can be either base64 or hex-encoded.
 The JUPYTERHUB_CRYPTO_KEY envirionment variable will be used to set this key.</p>
-<p>This can be generated with <code class="docutils literal"><span class="pre">openssl</span> <span class="pre">rand</span> <span class="pre">-hex</span> <span class="pre">32</span></code>.</p>
+<p>This can be generated with <code class="docutils literal notranslate"><span class="pre">openssl</span> <span class="pre">rand</span> <span class="pre">-hex</span> <span class="pre">32</span></code>.</p>
 <p>If encryption is unavailable, auth_state cannot be persisted.</p>
 </div>
 </div>
@@ -308,7 +300,7 @@ See: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-
 <div class="section" id="singleuser-image-tag">
 <span id="singleuser-image-tag"></span><h4>singleuser.image.tag<a class="headerlink" href="#singleuser-image-tag" title="Permalink to this headline">¶</a></h4>
 <p>The tag of the image to use.</p>
-<p>This is the value after the <code class="docutils literal"><span class="pre">:</span></code> in your full image name.</p>
+<p>This is the value after the <code class="docutils literal notranslate"><span class="pre">:</span></code> in your full image name.</p>
 </div>
 </div>
 </div>
@@ -317,8 +309,8 @@ See: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-
 
   <div class='prev-next-bottom'>
     
-     <a class='left-prev' href="advanced.html" title="previous chapter">Advanced Topics</a>
-     <a class='right-next' href="tools.html" title="next chapter">Tools used in a JupyterHub Deployment</a>
+     <a class='left-prev' href="tips.html" title="previous chapter">Tips and command snippets</a>
+     <a class='right-next' href="reference-docs.html" title="next chapter">Official JupyterHub and Project Jupyter Documentation</a>
   <div style='clear:both;'></div>
 
   </div>
@@ -347,19 +339,28 @@ See: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-
 
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3>Table of Contents</h3>
+<p class="caption"><span class="caption-text">Step Zero: your Kubernetes cluster</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="create-k8s-cluster.html">Creating a Kubernetes Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="google/step-zero-gcp.html">Step Zero: Kubernetes on Google Cloud</a></li>
+<li class="toctree-l1"><a class="reference internal" href="microsoft/step-zero-azure.html">Step Zero: Kubernetes on Microsoft Azure Container Service (AKS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="amazon/step-zero-aws.html">Step Zero: Kubernetes on Amazon Web Services (AWS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="redhat/step-zero-openshift.html">JupyterHub on Red Hat OpenShift</a></li>
+</ul>
 <p class="caption"><span class="caption-text">Creating your JupyterHub</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started with JupyterHub</a></li>
-<li class="toctree-l1"><a class="reference internal" href="create-k8s-cluster.html">Creating a Kubernetes Cluster</a></li>
 <li class="toctree-l1"><a class="reference internal" href="setup-helm.html">Setting up Helm</a></li>
 <li class="toctree-l1"><a class="reference internal" href="setup-jupyterhub.html">Setting up JupyterHub</a></li>
 <li class="toctree-l1"><a class="reference internal" href="turn-off.html">Turning Off JupyterHub and Computational Resources</a></li>
@@ -374,19 +375,28 @@ See: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-
 </ul>
 <p class="caption"><span class="caption-text">Administrator Guide</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">The JupyterHub Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="debug.html">Debugging Kubernetes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cost.html">Estimating costs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optimization.html">Speed and Optimization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="security.html">Security</a></li>
-<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading the helm chart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading your JupyterHub Kubernetes deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cost.html">Appendix: Projecting deployment costs</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Resources from the community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="additional-resources.html">Community-authored documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="users-list.html">Zero to JupyterHub Gallery of Deployments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tips.html">Tips and command snippets</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Reference</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Helm Chart Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference-docs.html">Official JupyterHub and Project Jupyter Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tools.html">Tools used in a JupyterHub Deployment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
-<li class="toctree-l1"><a class="reference internal" href="additional-resources.html">Additional resources</a></li>
 </ul>
 
 
@@ -403,8 +413,8 @@ See: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-
 <h3>Navigation</h3>
 <ul>
   <li><a href="index.html">Documentation Home</a><ul>
-  <li><a href="advanced.html" title="Previous">Previous topic</a></li>
-  <li><a href="tools.html" title="Next">Next topic</a></li>
+  <li><a href="tips.html" title="Previous">Previous topic</a></li>
+  <li><a href="reference-docs.html" title="Next">Next topic</a></li>
   </ul>
 </ul>
 </div>

@@ -1,0 +1,253 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Tips and command snippets &#8212; Zero to JupyterHub with Kubernetes 0.4 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+    <script type="text/javascript" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/custom.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@1/dist/clipboard.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Helm Chart Configuration Reference" href="reference.html" />
+    <link rel="prev" title="Zero to JupyterHub Gallery of Deployments" href="users-list.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class='prev-next-top'>
+    
+     <a class='left-prev' href="users-list.html" title="previous chapter">Previous</a>
+     <a class='right-next' href="reference.html" title="next chapter">Next</a>
+  <div style='clear:both;'></div>
+
+  </div>
+
+  
+  <div class="section" id="tips-and-command-snippets">
+<h1>Tips and command snippets<a class="headerlink" href="#tips-and-command-snippets" title="Permalink to this headline">¶</a></h1>
+<p>This is a page to collect a few particularly useful patterns and snippets
+that help you interact with your Kubernetes cluster and JupyterHub.
+If there’s something that you think is generic enough (and not obvious enough)
+to be added to this page, please feel free to make a PR!</p>
+<div class="section" id="kubectl-autocompletion">
+<h2><code class="docutils literal notranslate"><span class="pre">kubectl</span></code> autocompletion<a class="headerlink" href="#kubectl-autocompletion" title="Permalink to this headline">¶</a></h2>
+<p>Kubernetes has a helper script that allows you to auto-complete commands
+and references to objects when using <code class="docutils literal notranslate"><span class="pre">kubectl</span></code>. This lets you
+<code class="docutils literal notranslate"><span class="pre">&lt;TAB&gt;</span></code>-complete and saves a lot of time.</p>
+<p><a class="reference external" href="https://kubernetes.io/docs/tasks/tools/install-kubectl/#enabling-shell-autocompletion">Here are the instructions to install kubectl auto-completion</a>.</p>
+</div>
+<div class="section" id="helm-autocompletion">
+<h2><code class="docutils literal notranslate"><span class="pre">helm</span></code> autocompletion<a class="headerlink" href="#helm-autocompletion" title="Permalink to this headline">¶</a></h2>
+<p>Helm also has an auto-completion script that lets you <code class="docutils literal notranslate"><span class="pre">&lt;TAB&gt;</span></code>-complete
+your commands when using Helm.</p>
+<p><a class="reference external" href="https://docs.helm.sh/helm/#helm-completion">Here are the instructions to install helm auto-completion</a>.</p>
+</div>
+<div class="section" id="managing-kubectl-contexts">
+<h2>Managing <code class="docutils literal notranslate"><span class="pre">kubectl</span></code> contexts<a class="headerlink" href="#managing-kubectl-contexts" title="Permalink to this headline">¶</a></h2>
+<p>Oftentimes people manage multiple Kubernetes deployments at the same time.
+<code class="docutils literal notranslate"><span class="pre">kubectl</span></code> handles this with the idea of “contexts”, which specify which
+kubernetes deployment you are referring to when you type <code class="docutils literal notranslate"><span class="pre">kubectl</span> <span class="pre">get</span> <span class="pre">XXX</span></code>.</p>
+<p>To see a list of contexts currently available to you, use the following
+command:</p>
+<blockquote>
+<div>kubectl config get-contexts</div></blockquote>
+<p>This will list all of your Kubernetes contexts. You can select a particular
+context by entering:</p>
+<blockquote>
+<div>kubectl config use-context &lt;CONTEXT-NAME&gt;</div></blockquote>
+</div>
+<div class="section" id="specifying-a-default-namespace-for-a-context">
+<h2>Specifying a default namespace for a context<a class="headerlink" href="#specifying-a-default-namespace-for-a-context" title="Permalink to this headline">¶</a></h2>
+<p>If you grow tired of typing <code class="docutils literal notranslate"><span class="pre">namespace=XXX</span></code> each time you type a kubernetes
+command, here’s a snippet that will allow you set a _default_ namespace for
+a given Kubernetes context:</p>
+<blockquote>
+<div>kubectl config set-context $(kubectl config current-context) –namespace=&lt;YOUR-NAMESPACE&gt;</div></blockquote>
+<p>The above command will only apply to the _currently active <a href="#id1"><span class="problematic" id="id2">context_</span></a>, and will
+allow you to skip the <code class="docutils literal notranslate"><span class="pre">--namespace=</span></code> part of your commands for this context.</p>
+</div>
+<div class="section" id="using-labels-and-selectors-with-kubectl">
+<h2>Using labels and selectors with <code class="docutils literal notranslate"><span class="pre">kubectl</span></code><a class="headerlink" href="#using-labels-and-selectors-with-kubectl" title="Permalink to this headline">¶</a></h2>
+<p>Sometimes it’s useful to select an entire _class_ of Kubernetes objects rather
+than referring to them by their name. You can attach an arbitrary set of
+_labels_ to a Kubernetes object, and can then refer to those labels when
+searching with <code class="docutils literal notranslate"><span class="pre">kubectl</span></code>.</p>
+<p>To search based on a label value, use the <code class="docutils literal notranslate"><span class="pre">-l</span></code> or <code class="docutils literal notranslate"><span class="pre">--selector=</span></code> keyword
+arguments. For example, JupyterHub creates a specific subset of labels for all
+user pods. You can search for all user pods with the following label query:</p>
+<blockquote>
+<div>kubectl –namespace=&lt;YOUR-NAMESPACE&gt; get pod -l “component=singleuser-server”</div></blockquote>
+<p>For more information, see the <a class="reference external" href="https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/">Kubernetes labels and selectors page</a>.</p>
+</div>
+<div class="section" id="asking-for-a-more-verbose-or-structured-output">
+<h2>Asking for a more verbose or structured output<a class="headerlink" href="#asking-for-a-more-verbose-or-structured-output" title="Permalink to this headline">¶</a></h2>
+<p>Sometimes the information that’s in the default output for <code class="docutils literal notranslate"><span class="pre">kubectl</span> <span class="pre">get</span> <span class="pre">&lt;XXX&gt;</span></code>
+is not enough for your needs, or isn’t structured the way you’d like. We
+recommend looking into the different kubernetes output options, which can be
+modified like so:</p>
+<blockquote>
+<div>kubectl –namespace=&lt;NAMESPACE&gt; get pod -o &lt;json|yaml|wide|name…&gt;</div></blockquote>
+<p>You can find more information on what kinds of output you can generate at
+<a class="reference external" href="https://kubernetes.io/docs/reference/kubectl/overview/">the kubectl information page</a>.
+(click and search for the text “Output Options”)</p>
+</div>
+</div>
+
+
+  <div class='prev-next-bottom'>
+    
+     <a class='left-prev' href="users-list.html" title="previous chapter">Zero to JupyterHub Gallery of Deployments</a>
+     <a class='right-next' href="reference.html" title="next chapter">Helm Chart Configuration Reference</a>
+  <div style='clear:both;'></div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+<h1 class="logo"><a href="index.html">Zero to JupyterHub with Kubernetes</a></h1>
+
+
+
+<p class="blurb">A tutorial to help install and manage JupyterHub with Kubernetes</p>
+
+
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3>Table of Contents</h3>
+<p class="caption"><span class="caption-text">Step Zero: your Kubernetes cluster</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="create-k8s-cluster.html">Creating a Kubernetes Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="google/step-zero-gcp.html">Step Zero: Kubernetes on Google Cloud</a></li>
+<li class="toctree-l1"><a class="reference internal" href="microsoft/step-zero-azure.html">Step Zero: Kubernetes on Microsoft Azure Container Service (AKS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="amazon/step-zero-aws.html">Step Zero: Kubernetes on Amazon Web Services (AWS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="redhat/step-zero-openshift.html">JupyterHub on Red Hat OpenShift</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Creating your JupyterHub</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started with JupyterHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup-helm.html">Setting up Helm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup-jupyterhub.html">Setting up JupyterHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="turn-off.html">Turning Off JupyterHub and Computational Resources</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Customization Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="extending-jupyterhub.html">Extending your JupyterHub setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-environment.html">Customizing the User Environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-resources.html">User Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-storage.html">User storage in JupyterHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-management.html">User Management</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Administrator Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">The JupyterHub Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="debug.html">Debugging Kubernetes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optimization.html">Speed and Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security.html">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading your JupyterHub Kubernetes deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cost.html">Appendix: Projecting deployment costs</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Resources from the community</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="additional-resources.html">Community-authored documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="users-list.html">Zero to JupyterHub Gallery of Deployments</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Tips and command snippets</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Helm Chart Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference-docs.html">Official JupyterHub and Project Jupyter Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">Tools used in a JupyterHub Deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="http://github.com/jupyterhub/zero-to-jupyterhub-k8s">GitHub Repo</a></li>
+    
+    <li class="toctree-l1"><a href="http://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues">Issue Tracker</a></li>
+    
+</ul>
+
+<div class="relations">
+<h3>Navigation</h3>
+<ul>
+  <li><a href="index.html">Documentation Home</a><ul>
+  <li><a href="users-list.html" title="Previous">Previous topic</a></li>
+  <li><a href="reference.html" title="Next">Next topic</a></li>
+  </ul>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/tips.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Project Jupyter team.
+      
+      |
+      <a href="_sources/tips.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

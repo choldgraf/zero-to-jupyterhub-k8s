@@ -4,24 +4,18 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Turning Off JupyterHub and Computational Resources &#8212; Zero to JupyterHub with Kubernetes 0.4 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/custom.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '0.4',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/custom.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@1/dist/clipboard.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
@@ -34,8 +28,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
-  </head>
-  <body>
+  </head><body>
   
 
     <div class="document">
@@ -75,7 +68,7 @@ before doing the cloud provider specific setup.</p>
 by helm to make your jupyterhub.</li>
 </ol>
 <blockquote>
-<div><div class="highlight-bash"><div class="highlight"><pre><span></span>helm delete &lt;YOUR-HELM-RELEASE-NAME&gt; --purge
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>helm delete &lt;YOUR-HELM-RELEASE-NAME&gt; --purge
 </pre></div>
 </div>
 </div></blockquote>
@@ -83,7 +76,7 @@ by helm to make your jupyterhub.</li>
 <li><p class="first">Next, delete the namespace the hub was installed in. This deletes any disks
 that may have been created to store user’s data, and any IP addresses that
 may have been provisioned.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>kubectl delete namespace &lt;YOUR-NAMESPACE&gt;
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl delete namespace &lt;YOUR-NAMESPACE&gt;
 </pre></div>
 </div>
 </li>
@@ -97,11 +90,11 @@ may have been provisioned.</p>
 delete the helm chart and delete the hub’s namespace. This must be done before proceeding.</p>
 </li>
 <li><p class="first">Delete the kubernetes cluster. You can list all the clusters you have.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>gcloud container clusters list
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gcloud container clusters list
 </pre></div>
 </div>
 <p>You can then delete the one you want.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>gcloud container clusters delete &lt;CLUSTER-NAME&gt; --zone<span class="o">=</span>&lt;CLUSTER-ZONE&gt;
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gcloud container clusters delete &lt;CLUSTER-NAME&gt; --zone<span class="o">=</span>&lt;CLUSTER-ZONE&gt;
 </pre></div>
 </div>
 </li>
@@ -129,11 +122,11 @@ delete the helm chart and delete the hub’s namespace. This must be done before
 </li>
 <li><p class="first">Delete your resource group. You can list your active resource groups with
 the following command</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>az group list --output table
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az group list --output table
 </pre></div>
 </div>
 <p>You can then delete the one you want with the following command</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>az group delete --name &lt;YOUR-GROUP-NAME&gt;
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az group delete --name &lt;YOUR-GROUP-NAME&gt;
 </pre></div>
 </div>
 <p>Be careful to delete the correct Resource Group, as doing so will irreversibly
@@ -149,19 +142,24 @@ related to your JupyterHub cluster after you have deleted the resource group.</p
 </div>
 <div class="section" id="amazon-web-services-aws">
 <h2>Amazon Web Services (AWS)<a class="headerlink" href="#amazon-web-services-aws" title="Permalink to this headline">¶</a></h2>
-<ol class="arabic">
-<li><p class="first">Perform the steps in <a class="reference internal" href="#delete-namespace"><span class="std std-ref">Delete the helm namespace</span></a>. These cloud provider agnostic steps will
-delete the helm chart and delete the hub’s namespace. This must be done before proceeding.</p>
-</li>
-<li><p class="first">The easiest way to delete your cloud resources on AWS is to use their
-website. Go to the <code class="docutils literal"><span class="pre">CloudFormation</span></code> page. This should have a list of all
-running AWS stacks that you’ve created.</p>
-<p>If you followed the JupyterHub guide, there should be two items, both containing the name
-that you chose for this stack. For each item, click the checkbox next to it. Then, click
-<code class="docutils literal"><span class="pre">Actions</span></code> and finally <code class="docutils literal"><span class="pre">Delete</span> <span class="pre">Stack</span></code>. Answer “yes” to any confirmation dialogues, and
-this should begin the process of deleting your Kubernetes cluster.</p>
-</li>
+<ol class="arabic simple">
+<li>Perform the steps in <a class="reference internal" href="#delete-namespace"><span class="std std-ref">Delete the helm namespace</span></a>. These cloud provider agnostic steps will
+delete the helm chart and delete the hub’s namespace. This must be done before proceeding.</li>
+<li>on CI host:</li>
 </ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kops delete cluster &lt;CLUSTER-NAME&gt; --yes
+<span class="nb">exit</span> <span class="c1">#(leave CI host)</span>
+Terminicate CI Host
+aws ec2 stop-instances --intance-ids &lt;aws-instance id of CI HOST&gt;
+aws ec2 terminate-instances --instance-ids &lt;aws-instance id of CI HOST&gt;
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">cluster name was set as an env var aka: <code class="docutils literal notranslate"><span class="pre">NAME=&lt;somename&gt;.k8s.local</span></code>
+Stoping the CI host will still incure disk storage and Ip address costs,
+but the host can be restarted at a later date to resume using.</p>
+</div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Sometimes AWS fails to delete parts of the stack on a first pass. Be sure
@@ -204,28 +202,31 @@ the actions above if needed.</p>
 
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3>Table of Contents</h3>
+<p class="caption"><span class="caption-text">Step Zero: your Kubernetes cluster</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="create-k8s-cluster.html">Creating a Kubernetes Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="google/step-zero-gcp.html">Step Zero: Kubernetes on Google Cloud</a></li>
+<li class="toctree-l1"><a class="reference internal" href="microsoft/step-zero-azure.html">Step Zero: Kubernetes on Microsoft Azure Container Service (AKS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="amazon/step-zero-aws.html">Step Zero: Kubernetes on Amazon Web Services (AWS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="redhat/step-zero-openshift.html">JupyterHub on Red Hat OpenShift</a></li>
+</ul>
 <p class="caption"><span class="caption-text">Creating your JupyterHub</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started with JupyterHub</a></li>
-<li class="toctree-l1"><a class="reference internal" href="create-k8s-cluster.html">Creating a Kubernetes Cluster</a></li>
 <li class="toctree-l1"><a class="reference internal" href="setup-helm.html">Setting up Helm</a></li>
 <li class="toctree-l1"><a class="reference internal" href="setup-jupyterhub.html">Setting up JupyterHub</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Turning Off JupyterHub and Computational Resources</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#for-all-cloud-providers">For all cloud providers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#google-cloud-platform">Google Cloud Platform</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#microsoft-azure-aks">Microsoft Azure AKS</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#amazon-web-services-aws">Amazon Web Services (AWS)</a></li>
-</ul>
-</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Turning Off JupyterHub and Computational Resources</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Customization Guide</span></p>
 <ul>
@@ -237,19 +238,28 @@ the actions above if needed.</p>
 </ul>
 <p class="caption"><span class="caption-text">Administrator Guide</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">The JupyterHub Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="debug.html">Debugging Kubernetes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cost.html">Estimating costs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optimization.html">Speed and Optimization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="security.html">Security</a></li>
-<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading the helm chart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading your JupyterHub Kubernetes deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cost.html">Appendix: Projecting deployment costs</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Resources from the community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="additional-resources.html">Community-authored documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="users-list.html">Zero to JupyterHub Gallery of Deployments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tips.html">Tips and command snippets</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="reference.html">Helm Chart Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference-docs.html">Official JupyterHub and Project Jupyter Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tools.html">Tools used in a JupyterHub Deployment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
-<li class="toctree-l1"><a class="reference internal" href="additional-resources.html">Additional resources</a></li>
 </ul>
 
 

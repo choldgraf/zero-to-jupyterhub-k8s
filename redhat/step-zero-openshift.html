@@ -1,0 +1,200 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>JupyterHub on Red Hat OpenShift &#8212; Zero to JupyterHub with Kubernetes 0.4 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script type="text/javascript" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/custom.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@1/dist/clipboard.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Getting started with JupyterHub" href="../getting-started.html" />
+    <link rel="prev" title="Step Zero: Kubernetes on Amazon Web Services (AWS)" href="../amazon/step-zero-aws.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class='prev-next-top'>
+    
+     <a class='left-prev' href="../amazon/step-zero-aws.html" title="previous chapter">Previous</a>
+     <a class='right-next' href="../getting-started.html" title="next chapter">Next</a>
+  <div style='clear:both;'></div>
+
+  </div>
+
+  
+  <div class="section" id="jupyterhub-on-red-hat-openshift">
+<span id="redhat-openshift"></span><h1>JupyterHub on Red Hat OpenShift<a class="headerlink" href="#jupyterhub-on-red-hat-openshift" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://openshift.org/">OpenShift</a> from RedHat is a cluster manager based on Kubernetes.</p>
+<p>For setting up JupyterHub on OpenShift, check out the <a class="reference external" href="https://github.com/jupyter-on-openshift/jupyterhub-quickstart">JupyterHub on OpenShift</a>
+project. It provides an OpenShift template based JupyterHub deployment. Zero to JupyterHub uses
+<a class="reference external" href="https://helm.sh">helm</a> which is currently usable with OpenShift; yet deploying helm on OpenShift
+is somewhat complicated (see RedHat’s blog post on <a class="reference external" href="https://blog.openshift.com/getting-started-helm-openshift/">Getting Started with Helm on OpenShift</a>).</p>
+<div class="section" id="additional-resources-about-jupyter-on-openshift">
+<h2>Additional resources about Jupyter on OpenShift<a class="headerlink" href="#additional-resources-about-jupyter-on-openshift" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>An excellent series of OpenShift blog posts on Jupyter and OpenShift
+authored by Red Hat developer, Graham Dumpleton, are
+available on the <a class="reference external" href="https://blog.openshift.com/tag/jupyter/">OpenShift blog</a>.</li>
+</ul>
+</div>
+</div>
+
+
+  <div class='prev-next-bottom'>
+    
+     <a class='left-prev' href="../amazon/step-zero-aws.html" title="previous chapter">Step Zero: Kubernetes on Amazon Web Services (AWS)</a>
+     <a class='right-next' href="../getting-started.html" title="next chapter">Getting started with JupyterHub</a>
+  <div style='clear:both;'></div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+<h1 class="logo"><a href="../index.html">Zero to JupyterHub with Kubernetes</a></h1>
+
+
+
+<p class="blurb">A tutorial to help install and manage JupyterHub with Kubernetes</p>
+
+
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3>Table of Contents</h3>
+<p class="caption"><span class="caption-text">Step Zero: your Kubernetes cluster</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../create-k8s-cluster.html">Creating a Kubernetes Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../google/step-zero-gcp.html">Step Zero: Kubernetes on Google Cloud</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../microsoft/step-zero-azure.html">Step Zero: Kubernetes on Microsoft Azure Container Service (AKS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../amazon/step-zero-aws.html">Step Zero: Kubernetes on Amazon Web Services (AWS)</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">JupyterHub on Red Hat OpenShift</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Creating your JupyterHub</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started.html">Getting started with JupyterHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../setup-helm.html">Setting up Helm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../setup-jupyterhub.html">Setting up JupyterHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../turn-off.html">Turning Off JupyterHub and Computational Resources</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Customization Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../extending-jupyterhub.html">Extending your JupyterHub setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user-environment.html">Customizing the User Environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user-resources.html">User Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user-storage.html">User storage in JupyterHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user-management.html">User Management</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Administrator Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">The JupyterHub Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../debug.html">Debugging Kubernetes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../authentication.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../optimization.html">Speed and Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../security.html">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../upgrading.html">Upgrading your JupyterHub Kubernetes deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced.html">Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cost.html">Appendix: Projecting deployment costs</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Resources from the community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../additional-resources.html">Community-authored documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../users-list.html">Zero to JupyterHub Gallery of Deployments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tips.html">Tips and command snippets</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../reference.html">Helm Chart Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference-docs.html">Official JupyterHub and Project Jupyter Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools.html">Tools used in a JupyterHub Deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="http://github.com/jupyterhub/zero-to-jupyterhub-k8s">GitHub Repo</a></li>
+    
+    <li class="toctree-l1"><a href="http://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues">Issue Tracker</a></li>
+    
+</ul>
+
+<div class="relations">
+<h3>Navigation</h3>
+<ul>
+  <li><a href="../index.html">Documentation Home</a><ul>
+  <li><a href="../amazon/step-zero-aws.html" title="Previous">Previous topic</a></li>
+  <li><a href="../getting-started.html" title="Next">Next topic</a></li>
+  </ul>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/redhat/step-zero-openshift.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Project Jupyter team.
+      
+      |
+      <a href="../_sources/redhat/step-zero-openshift.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

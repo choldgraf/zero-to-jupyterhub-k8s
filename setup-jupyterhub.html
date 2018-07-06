@@ -4,24 +4,18 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Setting up JupyterHub &#8212; Zero to JupyterHub with Kubernetes 0.4 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/custom.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '0.4',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/custom.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@1/dist/clipboard.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
@@ -34,8 +28,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
-  </head>
-  <body>
+  </head><body>
   
 
     <div class="document">
@@ -66,22 +59,22 @@ needed for future changes to JupyterHub’s settings.</p>
 <p>For the following steps, use your favorite code editor. We’ll use the
 <a class="reference external" href="https://en.wikipedia.org/wiki/GNU_nano">nano</a> editor as an example.</p>
 <ol class="arabic">
-<li><p class="first">Create a file called <code class="docutils literal"><span class="pre">config.yaml</span></code>. Using the nano editor, for example,
-entering <code class="docutils literal"><span class="pre">nano</span> <span class="pre">config.yaml</span></code> at the terminal will start the editor and
+<li><p class="first">Create a file called <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>. Using the nano editor, for example,
+entering <code class="docutils literal notranslate"><span class="pre">nano</span> <span class="pre">config.yaml</span></code> at the terminal will start the editor and
 open the config file.</p>
 </li>
 <li><p class="first">Create a random hex string to use as a security token. Run this command
 in a terminal</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>openssl rand -hex <span class="m">32</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>openssl rand -hex <span class="m">32</span>
 </pre></div>
 </div>
 <p>Copy the output for use in the next step</p>
 </li>
-<li><p class="first">Insert these lines into the <code class="docutils literal"><span class="pre">config.yaml</span></code> file. When editing YAML files,
+<li><p class="first">Insert these lines into the <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> file. When editing YAML files,
 use straight quotes and spaces and avoid using curly quotes or tabs.
-Substitute <code class="docutils literal"><span class="pre">RANDOM_STRING</span></code> below with the output of <code class="docutils literal"><span class="pre">openssl</span> <span class="pre">rand</span> <span class="pre">-hex</span> <span class="pre">32</span></code>
+Substitute <code class="docutils literal notranslate"><span class="pre">RANDOM_STRING</span></code> below with the output of <code class="docutils literal notranslate"><span class="pre">openssl</span> <span class="pre">rand</span> <span class="pre">-hex</span> <span class="pre">32</span></code>
 from step 2.</p>
-<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">proxy</span><span class="p p-Indicator">:</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">proxy</span><span class="p p-Indicator">:</span>
   <span class="l l-Scalar l-Scalar-Plain">secretToken</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;OUTPUT-OF-`openssl</span><span class="nv"> </span><span class="s">rand</span><span class="nv"> </span><span class="s">-hex</span><span class="nv"> </span><span class="s">32`&gt;&quot;</span>
 </pre></div>
 </div>
@@ -89,15 +82,15 @@ from step 2.</p>
 </ol>
 <ol class="arabic" start="4">
 <li><p class="first"><strong>Azure AKS only</strong> If you’re on Microsoft Azure AKS, you must disable
-RBAC. Do so by putting the following in <code class="docutils literal"><span class="pre">config.yaml</span></code></p>
-<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">rbac</span><span class="p p-Indicator">:</span>
+RBAC. Do so by putting the following in <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">rbac</span><span class="p p-Indicator">:</span>
    <span class="l l-Scalar l-Scalar-Plain">enabled</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
 </pre></div>
 </div>
 <p>See the <a class="reference external" href="security.html#use-role-based-access-control-rbac">RBAC documentation</a>
 for more details.</p>
 </li>
-<li><p class="first">Save the <code class="docutils literal"><span class="pre">config.yaml</span></code> file.</p>
+<li><p class="first">Save the <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> file.</p>
 </li>
 </ol>
 </div>
@@ -107,12 +100,12 @@ for more details.</p>
 <li><p class="first">Let’s add the JupyterHub <a class="reference external" href="https://github.com/kubernetes/helm/blob/master/docs/chart_repository.md">helm repository</a>
 to your helm, so you can install JupyterHub from it. This makes it easy to refer to the JupyterHub chart
 without having to use a long URL each time.</p>
-<div class="code bash highlight-default"><div class="highlight"><pre><span></span><span class="n">helm</span> <span class="n">repo</span> <span class="n">add</span> <span class="n">jupyterhub</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">jupyterhub</span><span class="o">.</span><span class="n">github</span><span class="o">.</span><span class="n">io</span><span class="o">/</span><span class="n">helm</span><span class="o">-</span><span class="n">chart</span><span class="o">/</span>
+<div class="code bash highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">helm</span> <span class="n">repo</span> <span class="n">add</span> <span class="n">jupyterhub</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">jupyterhub</span><span class="o">.</span><span class="n">github</span><span class="o">.</span><span class="n">io</span><span class="o">/</span><span class="n">helm</span><span class="o">-</span><span class="n">chart</span><span class="o">/</span>
 <span class="n">helm</span> <span class="n">repo</span> <span class="n">update</span>
 </pre></div>
 </div>
 <p>This should show output like:</p>
-<div class="code highlight-default"><div class="highlight"><pre><span></span>Hang tight while we grab the latest from your chart repositories...
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span>Hang tight while we grab the latest from your chart repositories...
 ...Skip local chart repository
 ...Successfully got an update from the &quot;stable&quot; chart repository
 ...Successfully got an update from the &quot;jupyterhub&quot; chart repository
@@ -121,8 +114,8 @@ Update Complete. ⎈ Happy Helming!⎈
 </div>
 </li>
 <li><p class="first">Now you can install the chart! Run this command from the directory that contains the
-<code class="docutils literal"><span class="pre">config.yaml</span></code> file to spin up JupyterHub:</p>
-<div class="code bash highlight-default"><div class="highlight"><pre><span></span><span class="n">helm</span> <span class="n">install</span> <span class="n">jupyterhub</span><span class="o">/</span><span class="n">jupyterhub</span> \
+<code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> file to spin up JupyterHub:</p>
+<div class="code bash highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">helm</span> <span class="n">install</span> <span class="n">jupyterhub</span><span class="o">/</span><span class="n">jupyterhub</span> \
     <span class="o">--</span><span class="n">version</span><span class="o">=</span><span class="n">v0</span><span class="o">.</span><span class="mi">6</span> \
     <span class="o">--</span><span class="n">name</span><span class="o">=&lt;</span><span class="n">YOUR</span><span class="o">-</span><span class="n">RELEASE</span><span class="o">-</span><span class="n">NAME</span><span class="o">&gt;</span> \
     <span class="o">--</span><span class="n">namespace</span><span class="o">=&lt;</span><span class="n">YOUR</span><span class="o">-</span><span class="n">NAMESPACE</span><span class="o">&gt;</span> \
@@ -131,44 +124,44 @@ Update Complete. ⎈ Happy Helming!⎈
 </div>
 <p>where:</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">--name</span></code> is an identifier used by helm to refer to this deployment.
+<li><code class="docutils literal notranslate"><span class="pre">--name</span></code> is an identifier used by helm to refer to this deployment.
 You need it when you are changing the configuration of this install
 or deleting it. Use something descriptive that you will easily
 remember. For a class called <em>data8</em> you might wish set the name to
 <strong>data8-jupyterhub</strong>. In the future you can find out the name by
-using <code class="docutils literal"><span class="pre">helm</span> <span class="pre">list</span></code>.</li>
-<li><code class="docutils literal"><span class="pre">--namespace</span></code>  is an identifier
+using <code class="docutils literal notranslate"><span class="pre">helm</span> <span class="pre">list</span></code>.</li>
+<li><code class="docutils literal notranslate"><span class="pre">--namespace</span></code>  is an identifier
 <a class="reference external" href="https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/">used by Kubernetes</a>
 (among other things) to identify a particular application that might
 be running on a single Kubernetes cluster. You can install many
 applications into the same Kubernetes cluster, and each instance of
 an application is usually separated by being in its own namespace.
 You’ll need the namespace identifier for performing any commands
-with <code class="docutils literal"><span class="pre">kubectl</span></code>.</li>
+with <code class="docutils literal notranslate"><span class="pre">kubectl</span></code>.</li>
 </ul>
-<p>We recommend providing the same value to <code class="docutils literal"><span class="pre">--name</span></code> and <code class="docutils literal"><span class="pre">--namespace</span></code>
+<p>We recommend providing the same value to <code class="docutils literal notranslate"><span class="pre">--name</span></code> and <code class="docutils literal notranslate"><span class="pre">--namespace</span></code>
 for now to avoid too much confusion, but advanced users of Kubernetes and
 helm should feel free to use different values.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<ul class="last">
-<li><p class="first">This step may take a moment, during which time there will be no output
-to your terminal. JupyterHub is being installed in the background.</p>
-</li>
-<li><p class="first">If you get a <code class="docutils literal"><span class="pre">release</span> <span class="pre">named</span> <span class="pre">&lt;YOUR-RELEASE-NAME&gt;</span> <span class="pre">already</span> <span class="pre">exists</span></code> error, then
+<ul class="last simple">
+<li>This step may take a moment, during which time there will be no output
+to your terminal. JupyterHub is being installed in the background.</li>
+<li>If you get a <code class="docutils literal notranslate"><span class="pre">release</span> <span class="pre">named</span> <span class="pre">&lt;YOUR-RELEASE-NAME&gt;</span> <span class="pre">already</span> <span class="pre">exists</span></code> error, then
 you should delete the release by running
-<code class="docutils literal"><span class="pre">helm</span> <span class="pre">delete</span> <span class="pre">--purge</span> <span class="pre">&lt;YOUR-RELEASE-NAME&gt;</span></code>. Then reinstall by repeating this
-step. If it persists, also do <code class="docutils literal"><span class="pre">kubectl</span> <span class="pre">delete</span> <span class="pre">&lt;YOUR-NAMESPACE&gt;</span></code> and try again.</p>
-<p>If you’re pulling from a large Docker image you may get a
-<code class="docutils literal"><span class="pre">Error:</span> <span class="pre">timed</span> <span class="pre">out</span> <span class="pre">waiting</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">condition</span></code> error,
-add a <code class="docutils literal"><span class="pre">--timeout=SOME-LARGE-NUMBER</span></code>
-parameter to the <code class="docutils literal"><span class="pre">helm</span> <span class="pre">install</span></code> command.</p>
-</li>
-<li><p class="first">The <code class="docutils literal"><span class="pre">--version</span></code> parameter corresponds to the <em>version of the helm chart</em>,
+<code class="docutils literal notranslate"><span class="pre">helm</span> <span class="pre">delete</span> <span class="pre">--purge</span> <span class="pre">&lt;YOUR-RELEASE-NAME&gt;</span></code>. Then reinstall by repeating this
+step. If it persists, also do <code class="docutils literal notranslate"><span class="pre">kubectl</span> <span class="pre">delete</span> <span class="pre">&lt;YOUR-NAMESPACE&gt;</span></code> and try again.</li>
+<li>In general, if something goes <em>wrong</em> with the install step, delete the
+Helm namespace by running <code class="docutils literal notranslate"><span class="pre">helm</span> <span class="pre">delete</span> <span class="pre">--purge</span> <span class="pre">&lt;YOUR-RELEASE-NAME&gt;</span></code>
+before re-running the install command.</li>
+<li>If you’re pulling from a large Docker image you may get a
+<code class="docutils literal notranslate"><span class="pre">Error:</span> <span class="pre">timed</span> <span class="pre">out</span> <span class="pre">waiting</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">condition</span></code> error,
+add a <code class="docutils literal notranslate"><span class="pre">--timeout=SOME-LARGE-NUMBER</span></code>
+parameter to the <code class="docutils literal notranslate"><span class="pre">helm</span> <span class="pre">install</span></code> command.</li>
+<li>The <code class="docutils literal notranslate"><span class="pre">--version</span></code> parameter corresponds to the <em>version of the helm chart</em>,
 not the version of JupyterHub. Each version of the JupyterHub helm chart
 is paired with a specific version of JupyterHub. E.g., v0.5 of the helm
-chart runs JupyterHub v0.8.</p>
-</li>
+chart runs JupyterHub v0.8.</li>
 </ul>
 </div>
 </li>
@@ -176,34 +169,34 @@ chart runs JupyterHub v0.8.</p>
 <ol class="arabic" start="2">
 <li><p class="first">While Step 1 is running, you can see the pods being created by entering in
 a different terminal:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>kubectl --namespace<span class="o">=</span>&lt;YOUR-NAMESPACE&gt; get pod
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl --namespace<span class="o">=</span>&lt;YOUR-NAMESPACE&gt; get pod
 </pre></div>
 </div>
 </li>
 <li><p class="first">Wait for the hub and proxy pod to begin running.</p>
 </li>
 <li><p class="first">You can find the IP to use for accessing the JupyterHub with:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>kubectl --namespace<span class="o">=</span>&lt;YOUR-NAMESPACE&gt; get svc
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl --namespace<span class="o">=</span>&lt;YOUR-NAMESPACE&gt; get svc
 </pre></div>
 </div>
-<p>The external IP for the <code class="docutils literal"><span class="pre">proxy-public</span></code> service should be accessible in a
+<p>The external IP for the <code class="docutils literal notranslate"><span class="pre">proxy-public</span></code> service should be accessible in a
 minute or two.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p>If the IP for <code class="docutils literal"><span class="pre">proxy-public</span></code> is too long to fit into the window, you
+<p>If the IP for <code class="docutils literal notranslate"><span class="pre">proxy-public</span></code> is too long to fit into the window, you
 can find the longer version by calling:</p>
-<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">kubectl</span> <span class="o">--</span><span class="n">namespace</span><span class="o">=&lt;</span><span class="n">YOUR</span><span class="o">-</span><span class="n">NAMESPACE</span><span class="o">&gt;</span> <span class="n">describe</span> <span class="n">svc</span> <span class="n">proxy</span><span class="o">-</span><span class="n">public</span>
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">kubectl</span> <span class="o">--</span><span class="n">namespace</span><span class="o">=&lt;</span><span class="n">YOUR</span><span class="o">-</span><span class="n">NAMESPACE</span><span class="o">&gt;</span> <span class="n">describe</span> <span class="n">svc</span> <span class="n">proxy</span><span class="o">-</span><span class="n">public</span> <span class="o">--</span><span class="n">output</span><span class="o">=</span><span class="n">wide</span>
 </pre></div>
 </div>
 </div>
 </li>
-<li><p class="first">To use JupyterHub, enter the external IP for the <code class="docutils literal"><span class="pre">proxy-public</span></code> service in
+<li><p class="first">To use JupyterHub, enter the external IP for the <code class="docutils literal notranslate"><span class="pre">proxy-public</span></code> service in
 to a browser. JupyterHub is running with a default <em>dummy</em> authenticator so
 entering any username and password combination will let you enter the hub.</p>
 </li>
 </ol>
 <p>Congratulations! Now that you have JupyterHub running, you can
-<a class="reference external" href="extending-jupyterhub.html">extend it</a> in many ways. You can use a pre-built
+<a class="reference external" href="extending-jupyterhub">extend it</a> in many ways. You can use a pre-built
 image for the user container, build your own image, configure different
 authenticators, and more!</p>
 </div>
@@ -242,25 +235,30 @@ authenticators, and more!</p>
 
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3>Table of Contents</h3>
+<p class="caption"><span class="caption-text">Step Zero: your Kubernetes cluster</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="create-k8s-cluster.html">Creating a Kubernetes Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="google/step-zero-gcp.html">Step Zero: Kubernetes on Google Cloud</a></li>
+<li class="toctree-l1"><a class="reference internal" href="microsoft/step-zero-azure.html">Step Zero: Kubernetes on Microsoft Azure Container Service (AKS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="amazon/step-zero-aws.html">Step Zero: Kubernetes on Amazon Web Services (AWS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="redhat/step-zero-openshift.html">JupyterHub on Red Hat OpenShift</a></li>
+</ul>
 <p class="caption"><span class="caption-text">Creating your JupyterHub</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started with JupyterHub</a></li>
-<li class="toctree-l1"><a class="reference internal" href="create-k8s-cluster.html">Creating a Kubernetes Cluster</a></li>
 <li class="toctree-l1"><a class="reference internal" href="setup-helm.html">Setting up Helm</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Setting up JupyterHub</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#prepare-configuration-file">Prepare configuration file</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#install-jupyterhub">Install JupyterHub</a></li>
-</ul>
-</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Setting up JupyterHub</a></li>
 <li class="toctree-l1"><a class="reference internal" href="turn-off.html">Turning Off JupyterHub and Computational Resources</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Customization Guide</span></p>
@@ -273,19 +271,28 @@ authenticators, and more!</p>
 </ul>
 <p class="caption"><span class="caption-text">Administrator Guide</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">The JupyterHub Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="debug.html">Debugging Kubernetes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cost.html">Estimating costs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optimization.html">Speed and Optimization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="security.html">Security</a></li>
-<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading the helm chart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading your JupyterHub Kubernetes deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cost.html">Appendix: Projecting deployment costs</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Resources from the community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="additional-resources.html">Community-authored documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="users-list.html">Zero to JupyterHub Gallery of Deployments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tips.html">Tips and command snippets</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="reference.html">Helm Chart Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference-docs.html">Official JupyterHub and Project Jupyter Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tools.html">Tools used in a JupyterHub Deployment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
-<li class="toctree-l1"><a class="reference internal" href="additional-resources.html">Additional resources</a></li>
 </ul>
 
 

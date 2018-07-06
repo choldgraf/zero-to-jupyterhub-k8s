@@ -4,38 +4,31 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Advanced Topics &#8212; Zero to JupyterHub with Kubernetes 0.4 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/custom.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '0.4',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/custom.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@1/dist/clipboard.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Helm Chart Configuration Reference" href="reference.html" />
-    <link rel="prev" title="Upgrading the helm chart" href="upgrading.html" />
+    <link rel="next" title="Appendix: Projecting deployment costs" href="cost.html" />
+    <link rel="prev" title="FAQ" href="troubleshooting.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
-  </head>
-  <body>
+  </head><body>
   
 
     <div class="document">
@@ -45,8 +38,8 @@
             
   <div class='prev-next-top'>
     
-     <a class='left-prev' href="upgrading.html" title="previous chapter">Previous</a>
-     <a class='right-next' href="reference.html" title="next chapter">Next</a>
+     <a class='left-prev' href="troubleshooting.html" title="previous chapter">Previous</a>
+     <a class='right-next' href="cost.html" title="next chapter">Next</a>
   <div style='clear:both;'></div>
 
   </div>
@@ -54,59 +47,62 @@
   
   <div class="section" id="advanced-topics">
 <span id="advanced-topics"></span><h1>Advanced Topics<a class="headerlink" href="#advanced-topics" title="Permalink to this headline">¶</a></h1>
-<p>This page contains a grab bag of various useful topics that don't have an easy
+<p>This page contains a grab bag of various useful topics that don’t have an easy
 home elsewhere:</p>
 <ul class="simple">
 <li>Ingress</li>
-<li>Arbitrary code in <code class="docutils literal"><span class="pre">jupyterhub_config.py</span></code></li>
-<li>Picking a Scheduler Strategy</li>
-<li>Pre-pulling Images for Faster Startup</li>
+<li>Arbitrary extra code and configuration in <code class="docutils literal notranslate"><span class="pre">jupyterhub_config.py</span></code></li>
 </ul>
-<p>Most people setting up JupyterHubs on popular public clouds
-should not have to use any of this information, but it is essential for more
-complex installations.</p>
+<p>Most people setting up JupyterHubs on popular public clouds should not have
+to use any of this information, but these topics are essential for more complex
+installations.</p>
 <div class="section" id="ingress">
 <span id="ingress"></span><h2>Ingress<a class="headerlink" href="#ingress" title="Permalink to this headline">¶</a></h2>
 <p>If you are using a Kubernetes Cluster that does not provide public IPs for
 services directly, you need to use
 an <a class="reference external" href="https://kubernetes.io/docs/concepts/services-networking/ingress/">ingress</a>
 to get traffic into your JupyterHub. This varies wildly
-based on how your cluster was set up, which is why this is in the 'Advanced' section.</p>
-<p>You can enable the required <code class="docutils literal"><span class="pre">ingress</span></code> object with the following in your
-<code class="docutils literal"><span class="pre">config.yaml</span></code></p>
-<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">ingress</span><span class="p p-Indicator">:</span>
+based on how your cluster was set up, which is why this is in the ‘Advanced’ section.</p>
+<p>You can enable the required <code class="docutils literal notranslate"><span class="pre">ingress</span></code> object with the following in your
+<code class="docutils literal notranslate"><span class="pre">config.yaml</span></code></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">ingress</span><span class="p p-Indicator">:</span>
     <span class="l l-Scalar l-Scalar-Plain">enabled</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
     <span class="l l-Scalar l-Scalar-Plain">hosts</span><span class="p p-Indicator">:</span>
      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">&lt;hostname&gt;</span>
 </pre></div>
 </div>
 <p>You can specify multiple hosts that should be routed to the hub by listing them
-under <code class="docutils literal"><span class="pre">ingress.hosts</span></code>.</p>
+under <code class="docutils literal notranslate"><span class="pre">ingress.hosts</span></code>.</p>
 <p>Note that you need to install and configure an
 <a class="reference external" href="https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-controllers">Ingress Controller</a>
-for the ingress object to work. We recommend the
-<a class="reference external" href="https://github.com/kubernetes/charts/tree/master/stable/nginx-ingress">nginx ingress</a>
-controller maintained by the community.</p>
-<div class="section" id="automatic-https-with-kube-lego-let-s-encrypt">
-<span id="automatic-https-with-kube-lego-let-s-encrypt"></span><h3>Automatic HTTPS with kube-lego &amp; Let's Encrypt<a class="headerlink" href="#automatic-https-with-kube-lego-let-s-encrypt" title="Permalink to this headline">¶</a></h3>
-<p>The default automatic HTTPS support does not work if you are using an ingress
-object. You'd have to set it up yourself.</p>
-<p>This uses <a class="reference external" href="https://github.com/jetstack/kube-lego">kube-lego</a> to automatically
-fetch and renew HTTPS certificates
-from <a class="reference external" href="https://letsencrypt.org/">Let's Encrypt</a>. This currently only works with
-the nginx ingress controller &amp; google cloud's ingress controller.</p>
+for the ingress object to work.</p>
+<p>We recommend the community-maintained <a class="reference external" href="https://github.com/kubernetes/charts/tree/master/stable/nginx-ingress">nginx ingress</a>
+controller, <a class="reference external" href="https://github.com/kubernetes/ingress-nginx"><strong>kubernetes/ingress-nginx</strong></a>.
+Note that Nginx maintains two additional ingress controllers.
+For most use cases, we recommend the community maintained <strong>kubernetes/ingress-nginx</strong> since that
+is the ingress controller that the development team has the most experience using.</p>
+<div class="section" id="ingress-and-automatic-https-with-kube-lego-let-s-encrypt">
+<span id="ingress-and-automatic-https-with-kube-lego-let-s-encrypt"></span><h3>Ingress and Automatic HTTPS with kube-lego &amp; Let’s Encrypt<a class="headerlink" href="#ingress-and-automatic-https-with-kube-lego-let-s-encrypt" title="Permalink to this headline">¶</a></h3>
+<p>When using an ingress object, the default automatic HTTPS support does not work.
+To have automatic fetch and renewal of HTTPS certificates, you must set it up
+yourself.</p>
+<p>Here’s a method that uses <a class="reference external" href="https://github.com/jetstack/kube-lego">kube-lego</a>
+to automatically fetch and renew HTTPS certificates from <a class="reference external" href="https://letsencrypt.org/">Let’s Encrypt</a>.
+This approach with kube-lego and Let’s Encrypt currently only works with two ingress controllers:
+the community-maintained <a class="reference external" href="https://github.com/kubernetes/ingress-nginx"><strong>kubernetes/ingress-nginx</strong></a>
+and <strong>google cloud’s ingress controller</strong>.</p>
 <ol>
-<li><p class="first">Make sure that DNS is properly set up (varies wildly depending on the ingress
+<li><p class="first">Make sure that DNS is properly set up (configuration depends on the ingress
 controller you are using and how your cluster was set up). Accessing
-<code class="docutils literal"><span class="pre">&lt;hostname&gt;</span></code> from a browser should route traffic to the hub.</p>
+<code class="docutils literal notranslate"><span class="pre">&lt;hostname&gt;</span></code> from a browser should route traffic to the hub.</p>
 </li>
 <li><p class="first">Install &amp; configure kube-lego using the
 <a class="reference external" href="https://github.com/kubernetes/charts/tree/master/stable/kube-lego">kube-lego helm-chart</a>.
-Remember to change <code class="docutils literal"><span class="pre">config.LEGO_EMAIL</span></code> and <code class="docutils literal"><span class="pre">config.LEGO_URL</span></code> at the least.</p>
+Remember to change <code class="docutils literal notranslate"><span class="pre">config.LEGO_EMAIL</span></code> and <code class="docutils literal notranslate"><span class="pre">config.LEGO_URL</span></code> at the least.</p>
 </li>
 <li><p class="first">Add an annotation + TLS config to the ingress so kube-lego knows to get certificates for
 it:</p>
-<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">ingress</span><span class="p p-Indicator">:</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">ingress</span><span class="p p-Indicator">:</span>
   <span class="l l-Scalar l-Scalar-Plain">annotations</span><span class="p p-Indicator">:</span>
     <span class="l l-Scalar l-Scalar-Plain">kubernetes.io/tls-acme</span><span class="p p-Indicator">:</span> <span class="s">&quot;true&quot;</span>
   <span class="l l-Scalar l-Scalar-Plain">tls</span><span class="p p-Indicator">:</span>
@@ -121,18 +117,18 @@ it:</p>
 to expiry!</p>
 </div>
 </div>
-<div class="section" id="arbitrary-code-in-jupyterhub-config-py">
-<span id="arbitrary-code-in-jupyterhub-config-py"></span><h2>Arbitrary code in <code class="docutils literal"><span class="pre">jupyterhub_config.py</span></code><a class="headerlink" href="#arbitrary-code-in-jupyterhub-config-py" title="Permalink to this headline">¶</a></h2>
-<p>Sometimes the various options exposed via the helm-chart's <code class="docutils literal"><span class="pre">values.yaml</span></code> is not
+<div class="section" id="arbitrary-extra-code-and-configuration-in-jupyterhub-config-py">
+<span id="arbitrary-extra-code-and-configuration-in-jupyterhub-config-py"></span><h2>Arbitrary extra code and configuration in <code class="docutils literal notranslate"><span class="pre">jupyterhub_config.py</span></code><a class="headerlink" href="#arbitrary-extra-code-and-configuration-in-jupyterhub-config-py" title="Permalink to this headline">¶</a></h2>
+<p>Sometimes the various options exposed via the helm-chart’s <code class="docutils literal notranslate"><span class="pre">values.yaml</span></code> is not
 enough, and you need to insert arbitrary extra code / config into
-<code class="docutils literal"><span class="pre">jupyterhub_config.py</span></code>. This is a valuable escape hatch for both prototyping new
+<code class="docutils literal notranslate"><span class="pre">jupyterhub_config.py</span></code>. This is a valuable escape hatch for both prototyping new
 features that are not yet present in the helm-chart, and also for
 installation-specific customization that is not suited for upstreaming.</p>
-<p>There are four properties you can set in your <code class="docutils literal"><span class="pre">config.yaml</span></code> to do this.</p>
+<p>There are four properties you can set in your <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> to do this.</p>
 <div class="section" id="hub-extraconfig">
-<span id="hub-extraconfig"></span><h3><code class="docutils literal"><span class="pre">hub.extraConfig</span></code><a class="headerlink" href="#hub-extraconfig" title="Permalink to this headline">¶</a></h3>
-<p>The value specified for <code class="docutils literal"><span class="pre">hub.extraConfig</span></code> is evaluated as python code at the end
-of <code class="docutils literal"><span class="pre">jupyterhub_config.py</span></code>. You can do anything here since it is arbitrary Python
+<span id="hub-extraconfig"></span><h3><code class="docutils literal notranslate"><span class="pre">hub.extraConfig</span></code><a class="headerlink" href="#hub-extraconfig" title="Permalink to this headline">¶</a></h3>
+<p>The value specified for <code class="docutils literal notranslate"><span class="pre">hub.extraConfig</span></code> is evaluated as python code at the end
+of <code class="docutils literal notranslate"><span class="pre">jupyterhub_config.py</span></code>. You can do anything here since it is arbitrary Python
 Code. Some examples of things you can do:</p>
 <ol class="simple">
 <li>Override various methods in the Spawner / Authenticator by subclassing them.
@@ -145,11 +141,11 @@ configuration.</li>
 <li>Set traitlets for JupyterHub / Spawner / Authenticator that are not currently
 supported in the helm chart</li>
 </ol>
-<p>Unfortunately, you have to write your python <em>in</em> your YAML file. There's no way
-to include a file in <code class="docutils literal"><span class="pre">config.yaml</span></code>.</p>
-<p>You can specify <code class="docutils literal"><span class="pre">hub.extraConfig</span></code> as a raw string (remember to use the <code class="docutils literal"><span class="pre">|</span></code> for multi-line
+<p>Unfortunately, you have to write your python <em>in</em> your YAML file. There’s no way
+to include a file in <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>.</p>
+<p>You can specify <code class="docutils literal notranslate"><span class="pre">hub.extraConfig</span></code> as a raw string (remember to use the <code class="docutils literal notranslate"><span class="pre">|</span></code> for multi-line
 YAML strings):</p>
-<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">hub</span><span class="p p-Indicator">:</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">hub</span><span class="p p-Indicator">:</span>
   <span class="l l-Scalar l-Scalar-Plain">extraConfig</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
     <span class="no">import time</span>
     <span class="no">c.Spawner.environment += {</span>
@@ -157,10 +153,10 @@ YAML strings):</p>
     <span class="no">}</span>
 </pre></div>
 </div>
-<p>You can also specify <code class="docutils literal"><span class="pre">hub.extraConfig</span></code> as a dictionary, if you want to logically
+<p>You can also specify <code class="docutils literal notranslate"><span class="pre">hub.extraConfig</span></code> as a dictionary, if you want to logically
 split your customizations. The code will be evaluated in alphabetical sorted
 order of the key.</p>
-<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">hub</span><span class="p p-Indicator">:</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">hub</span><span class="p p-Indicator">:</span>
   <span class="l l-Scalar l-Scalar-Plain">extraConfig</span><span class="p p-Indicator">:</span>
    <span class="l l-Scalar l-Scalar-Plain">00-first-config</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
      <span class="no"># some code</span>
@@ -170,13 +166,13 @@ order of the key.</p>
 </div>
 </div>
 <div class="section" id="hub-extraconfigmap">
-<span id="hub-extraconfigmap"></span><h3><code class="docutils literal"><span class="pre">hub.extraConfigMap</span></code><a class="headerlink" href="#hub-extraconfigmap" title="Permalink to this headline">¶</a></h3>
+<span id="hub-extraconfigmap"></span><h3><code class="docutils literal notranslate"><span class="pre">hub.extraConfigMap</span></code><a class="headerlink" href="#hub-extraconfigmap" title="Permalink to this headline">¶</a></h3>
 <p>This property takes a dictionary of values that are then made available for code
-in <code class="docutils literal"><span class="pre">hub.extraConfig</span></code> to read using a <code class="docutils literal"><span class="pre">z2jh.get_config</span></code> function. You can use this to
-easily separate your code (which goes in <code class="docutils literal"><span class="pre">hub.extraConfig</span></code>) from your config
+in <code class="docutils literal notranslate"><span class="pre">hub.extraConfig</span></code> to read using a <code class="docutils literal notranslate"><span class="pre">z2jh.get_config</span></code> function. You can use this to
+easily separate your code (which goes in <code class="docutils literal notranslate"><span class="pre">hub.extraConfig</span></code>) from your config
 (which should go here).</p>
 <p>For example, if you use the following snippet in your config.yaml file:</p>
-<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">hub</span><span class="p p-Indicator">:</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">hub</span><span class="p p-Indicator">:</span>
   <span class="l l-Scalar l-Scalar-Plain">extraConfigMap</span><span class="p p-Indicator">:</span>
     <span class="l l-Scalar l-Scalar-Plain">myString</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Hello!</span>
     <span class="l l-Scalar l-Scalar-Plain">myList</span><span class="p p-Indicator">:</span>
@@ -189,30 +185,30 @@ easily separate your code (which goes in <code class="docutils literal"><span cl
       <span class="no">Line2</span>
 </pre></div>
 </div>
-<p>In your <code class="docutils literal"><span class="pre">hub.extraConfig</span></code>,</p>
+<p>In your <code class="docutils literal notranslate"><span class="pre">hub.extraConfig</span></code>,</p>
 <ol class="simple">
-<li><code class="docutils literal"><span class="pre">z2jh.get_config('custom.myString')</span></code> will return a string <code class="docutils literal"><span class="pre">&quot;Hello!&quot;</span></code></li>
-<li><code class="docutils literal"><span class="pre">z2jh.get_config('custom.myList')</span></code> will return a list <code class="docutils literal"><span class="pre">[&quot;Item1&quot;,</span> <span class="pre">&quot;Item2&quot;]</span></code></li>
-<li><code class="docutils literal"><span class="pre">z2jh.get_config('custom.myDict')</span></code> will return a dict <code class="docutils literal"><span class="pre">{&quot;key&quot;:</span> <span class="pre">&quot;value&quot;}</span></code></li>
-<li><code class="docutils literal"><span class="pre">z2jh.get_config('custom.myLongString')</span></code> will return a string <code class="docutils literal"><span class="pre">&quot;Line1\nLine2&quot;</span></code></li>
-<li><code class="docutils literal"><span class="pre">z2jh.get_config('custom.nonExistent')</span></code> will return <code class="docutils literal"><span class="pre">None</span></code> (since you didn't
-specify any value for <code class="docutils literal"><span class="pre">nonExistent</span></code>)</li>
-<li><code class="docutils literal"><span class="pre">z2jh.get_config('custom.myDefault',</span> <span class="pre">True)</span></code> will return <code class="docutils literal"><span class="pre">True</span></code>, since that is
+<li><code class="docutils literal notranslate"><span class="pre">z2jh.get_config('custom.myString')</span></code> will return a string <code class="docutils literal notranslate"><span class="pre">&quot;Hello!&quot;</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">z2jh.get_config('custom.myList')</span></code> will return a list <code class="docutils literal notranslate"><span class="pre">[&quot;Item1&quot;,</span> <span class="pre">&quot;Item2&quot;]</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">z2jh.get_config('custom.myDict')</span></code> will return a dict <code class="docutils literal notranslate"><span class="pre">{&quot;key&quot;:</span> <span class="pre">&quot;value&quot;}</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">z2jh.get_config('custom.myLongString')</span></code> will return a string <code class="docutils literal notranslate"><span class="pre">&quot;Line1\nLine2&quot;</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">z2jh.get_config('custom.nonExistent')</span></code> will return <code class="docutils literal notranslate"><span class="pre">None</span></code> (since you didn’t
+specify any value for <code class="docutils literal notranslate"><span class="pre">nonExistent</span></code>)</li>
+<li><code class="docutils literal notranslate"><span class="pre">z2jh.get_config('custom.myDefault',</span> <span class="pre">True)</span></code> will return <code class="docutils literal notranslate"><span class="pre">True</span></code>, since that is
 specified as the second parameter (default)</li>
 </ol>
-<p>You need to have a <code class="docutils literal"><span class="pre">import</span> <span class="pre">z2jh</span></code> at the top of your <code class="docutils literal"><span class="pre">extraConfig</span></code> for
-<code class="docutils literal"><span class="pre">z2jh.get_config()</span></code> to work.</p>
-<p>Note that the keys in <code class="docutils literal"><span class="pre">hub.extraConfigMap</span></code> must be alpha numeric strings
+<p>You need to have a <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">z2jh</span></code> at the top of your <code class="docutils literal notranslate"><span class="pre">extraConfig</span></code> for
+<code class="docutils literal notranslate"><span class="pre">z2jh.get_config()</span></code> to work.</p>
+<p>Note that the keys in <code class="docutils literal notranslate"><span class="pre">hub.extraConfigMap</span></code> must be alpha numeric strings
 starting with a character. Dashes and Underscores are not allowed.</p>
 </div>
 <div class="section" id="hub-extraenv">
-<span id="hub-extraenv"></span><h3><code class="docutils literal"><span class="pre">hub.extraEnv</span></code><a class="headerlink" href="#hub-extraenv" title="Permalink to this headline">¶</a></h3>
+<span id="hub-extraenv"></span><h3><code class="docutils literal notranslate"><span class="pre">hub.extraEnv</span></code><a class="headerlink" href="#hub-extraenv" title="Permalink to this headline">¶</a></h3>
 <p>This property takes a dictionary that is set as environment variables in the hub
 container. You can use this to either pass in additional config to code in your
-<code class="docutils literal"><span class="pre">hub.extraConfig</span></code> or set some hub parameters that are not settable by other means.</p>
+<code class="docutils literal notranslate"><span class="pre">hub.extraConfig</span></code> or set some hub parameters that are not settable by other means.</p>
 </div>
 <div class="section" id="hub-extracontainers">
-<span id="hub-extracontainers"></span><h3><code class="docutils literal"><span class="pre">hub.extraContainers</span></code><a class="headerlink" href="#hub-extracontainers" title="Permalink to this headline">¶</a></h3>
+<span id="hub-extracontainers"></span><h3><code class="docutils literal notranslate"><span class="pre">hub.extraContainers</span></code><a class="headerlink" href="#hub-extracontainers" title="Permalink to this headline">¶</a></h3>
 <p>A list of extra containers that are bundled alongside the hub container in the
 same pod. This is a
 <a class="reference external" href="http://blog.kubernetes.io/2015/06/the-distributed-system-toolkit-patterns.html">common pattern</a> in
@@ -221,10 +217,10 @@ kubernetes that as a long list of cool use cases. Some example use cases are:</p
 <li>Database Proxies, which are sometimes required for the hub to talk to its
 configured database
 (in <a class="reference external" href="https://cloud.google.com/sql/docs/mysql/sql-proxy">Google Cloud</a>) for example</li>
-<li>Servers / other daemons that are used by code in your <code class="docutils literal"><span class="pre">hub.customConfig</span></code></li>
+<li>Servers / other daemons that are used by code in your <code class="docutils literal notranslate"><span class="pre">hub.customConfig</span></code></li>
 </ol>
 <p>The items in this list must be valid kubernetes
-<a class="reference external" href="https://kubernetes.io/docs/api-reference/v1.8/#container-v1-core">container specifications</a>.</p>
+<a class="reference external" href="https://v1-8.docs.kubernetes.io/docs/api-reference/v1.8/#container-v1-core">container specifications</a>.</p>
 </div>
 </div>
 <div class="section" id="picking-a-scheduler-strategy">
@@ -241,8 +237,8 @@ limits, this strategy also allows your users the most efficient use of RAM &amp;
 <li><strong>Drawbacks</strong>: This strategy is less efficient when used with autoscaling.</li>
 </ul>
 <p>This is the default strategy. To explicitly specify it, use the following in your
-<code class="docutils literal"><span class="pre">config.yaml</span></code>:</p>
-<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">singleuser</span><span class="p p-Indicator">:</span>
+<code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">singleuser</span><span class="p p-Indicator">:</span>
    <span class="l l-Scalar l-Scalar-Plain">schedulerStrategy</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">spread</span>
 </pre></div>
 </div>
@@ -253,12 +249,12 @@ limits, this strategy also allows your users the most efficient use of RAM &amp;
 <li><strong>Behavior</strong>: This packs user pods into <strong>as few nodes as possible</strong>.</li>
 <li><strong>Benefits</strong>: This reduces your resource utilization, which is useful in conjunction with autoscalers.</li>
 <li><strong>Drawbacks</strong>: A single node going down might affect more user pods than using
-a &quot;spread&quot; strategy (depending on the node).</li>
+a “spread” strategy (depending on the node).</li>
 </ul>
 <p>When you use this strategy, you should specify limits and guarantees for memory
-and cpu. This will make your users' experience more predictable.</p>
-<p>To explicitly specify this strategy, use the following in your <code class="docutils literal"><span class="pre">config.yaml</span></code>:</p>
-<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">singleuser</span><span class="p p-Indicator">:</span>
+and cpu. This will make your users’ experience more predictable.</p>
+<p>To explicitly specify this strategy, use the following in your <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">singleuser</span><span class="p p-Indicator">:</span>
     <span class="l l-Scalar l-Scalar-Plain">schedulerStrategy</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">pack</span>
 </pre></div>
 </div>
@@ -266,25 +262,25 @@ and cpu. This will make your users' experience more predictable.</p>
 </div>
 <div class="section" id="pre-pulling-images-for-faster-startup">
 <span id="pre-pulling-images-for-faster-startup"></span><h2>Pre-pulling Images for Faster Startup<a class="headerlink" href="#pre-pulling-images-for-faster-startup" title="Permalink to this headline">¶</a></h2>
-<p>Pulling and building a user's images forces a user to wait before the user's
+<p>Pulling and building a user’s images forces a user to wait before the user’s
 server is started. Sometimes, the wait can be 5 to 10 minutes. <strong>Pre-pulling</strong>
-the images on all the nodes can cut this wait time to a few seconds. Let's look
+the images on all the nodes can cut this wait time to a few seconds. Let’s look
 at how pre-pulling works.</p>
 <div class="section" id="pre-pulling-basics">
 <span id="pre-pulling-basics"></span><h3>Pre-pulling basics<a class="headerlink" href="#pre-pulling-basics" title="Permalink to this headline">¶</a></h3>
-<p>With <strong>pre-pulling</strong>, which is enabled by default, the user's container image
-is pulled on all nodes whenever a <code class="docutils literal"><span class="pre">helm</span> <span class="pre">install</span></code> or <code class="docutils literal"><span class="pre">helm</span> <span class="pre">upgrade</span></code> is performed.
-While this causes <code class="docutils literal"><span class="pre">helm</span> <span class="pre">install</span></code> and <code class="docutils literal"><span class="pre">helm</span> <span class="pre">upgrade</span></code> to take several minutes,
+<p>With <strong>pre-pulling</strong>, which is enabled by default, the user’s container image
+is pulled on all nodes whenever a <code class="docutils literal notranslate"><span class="pre">helm</span> <span class="pre">install</span></code> or <code class="docutils literal notranslate"><span class="pre">helm</span> <span class="pre">upgrade</span></code> is performed.
+While this causes <code class="docutils literal notranslate"><span class="pre">helm</span> <span class="pre">install</span></code> and <code class="docutils literal notranslate"><span class="pre">helm</span> <span class="pre">upgrade</span></code> to take several minutes,
 this time makes the user startup experience faster and more pleasant.</p>
-<p>With the default <strong>pre-pulling</strong> setting, a <code class="docutils literal"><span class="pre">helm</span> <span class="pre">install</span></code> or <code class="docutils literal"><span class="pre">helm</span> <span class="pre">upgrade</span></code>
+<p>With the default <strong>pre-pulling</strong> setting, a <code class="docutils literal notranslate"><span class="pre">helm</span> <span class="pre">install</span></code> or <code class="docutils literal notranslate"><span class="pre">helm</span> <span class="pre">upgrade</span></code>
 will cause the system to wait for 5 minutes to begin pulling the images before
-timing out. This wait time is configurable by passing the <code class="docutils literal"><span class="pre">--wait</span> <span class="pre">&lt;seconds&gt;</span></code>
-flag to the <code class="docutils literal"><span class="pre">helm</span></code> commands.</p>
+timing out. This wait time is configurable by passing the <code class="docutils literal notranslate"><span class="pre">--wait</span> <span class="pre">&lt;seconds&gt;</span></code>
+flag to the <code class="docutils literal notranslate"><span class="pre">helm</span></code> commands.</p>
 <p>We recommend using pre-pulling. For the rare cases where you have a good reason
 to disable it, pre-pulling can be disabled. To disable the pre-pulling during
-<code class="docutils literal"><span class="pre">helm</span> <span class="pre">install</span></code> and <code class="docutils literal"><span class="pre">helm</span> <span class="pre">upgrade</span></code>, you can use the following snippet in
-your <code class="docutils literal"><span class="pre">config.yaml</span></code>:</p>
-<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">prePuller</span><span class="p p-Indicator">:</span>
+<code class="docutils literal notranslate"><span class="pre">helm</span> <span class="pre">install</span></code> and <code class="docutils literal notranslate"><span class="pre">helm</span> <span class="pre">upgrade</span></code>, you can use the following snippet in
+your <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">prePuller</span><span class="p p-Indicator">:</span>
    <span class="l l-Scalar l-Scalar-Plain">hook</span><span class="p p-Indicator">:</span>
      <span class="l l-Scalar l-Scalar-Plain">enabled</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
 </pre></div>
@@ -304,8 +300,8 @@ to force kubernetes to pull the user image on all nodes as soon as a node is
 present. The continuous pre-puller uses minimal resources on all nodes and
 greatly speeds up the user pod start time.</p>
 <p>The continuous pre-puller is disabled by default. To enable it, use the
-following snippet in your <code class="docutils literal"><span class="pre">config.yaml</span></code>:</p>
-<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">prePuller</span><span class="p p-Indicator">:</span>
+following snippet in your <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">prePuller</span><span class="p p-Indicator">:</span>
   <span class="l l-Scalar l-Scalar-Plain">continuous</span><span class="p p-Indicator">:</span>
     <span class="l l-Scalar l-Scalar-Plain">enabled</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
 </pre></div>
@@ -317,14 +313,14 @@ following snippet in your <code class="docutils literal"><span class="pre">confi
 access to cloud metadata is disabled). If you have customizations that need additional
 images present on all nodes, you can ask the pre-puller to also pull an arbitrary number
 of additional images.</p>
-<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">prePuller</span><span class="p p-Indicator">:</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">prePuller</span><span class="p p-Indicator">:</span>
    <span class="l l-Scalar l-Scalar-Plain">extraImages</span><span class="p p-Indicator">:</span>
      <span class="l l-Scalar l-Scalar-Plain">ubuntu-xenial</span><span class="p p-Indicator">:</span>
        <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">ubuntu</span>
        <span class="l l-Scalar l-Scalar-Plain">tag</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">16.04</span>
 </pre></div>
 </div>
-<p>This snippet will pre-pull the <code class="docutils literal"><span class="pre">ubuntu:16.04</span></code> image on all nodes, for example. You can
+<p>This snippet will pre-pull the <code class="docutils literal notranslate"><span class="pre">ubuntu:16.04</span></code> image on all nodes, for example. You can
 pre-pull any number of images.</p>
 </div>
 </div>
@@ -333,8 +329,8 @@ pre-pull any number of images.</p>
 
   <div class='prev-next-bottom'>
     
-     <a class='left-prev' href="upgrading.html" title="previous chapter">Upgrading the helm chart</a>
-     <a class='right-next' href="reference.html" title="next chapter">Helm Chart Configuration Reference</a>
+     <a class='left-prev' href="troubleshooting.html" title="previous chapter">FAQ</a>
+     <a class='right-next' href="cost.html" title="next chapter">Appendix: Projecting deployment costs</a>
   <div style='clear:both;'></div>
 
   </div>
@@ -363,19 +359,28 @@ pre-pull any number of images.</p>
 
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3>Table of Contents</h3>
+<p class="caption"><span class="caption-text">Step Zero: your Kubernetes cluster</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="create-k8s-cluster.html">Creating a Kubernetes Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="google/step-zero-gcp.html">Step Zero: Kubernetes on Google Cloud</a></li>
+<li class="toctree-l1"><a class="reference internal" href="microsoft/step-zero-azure.html">Step Zero: Kubernetes on Microsoft Azure Container Service (AKS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="amazon/step-zero-aws.html">Step Zero: Kubernetes on Amazon Web Services (AWS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="redhat/step-zero-openshift.html">JupyterHub on Red Hat OpenShift</a></li>
+</ul>
 <p class="caption"><span class="caption-text">Creating your JupyterHub</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started with JupyterHub</a></li>
-<li class="toctree-l1"><a class="reference internal" href="create-k8s-cluster.html">Creating a Kubernetes Cluster</a></li>
 <li class="toctree-l1"><a class="reference internal" href="setup-helm.html">Setting up Helm</a></li>
 <li class="toctree-l1"><a class="reference internal" href="setup-jupyterhub.html">Setting up JupyterHub</a></li>
 <li class="toctree-l1"><a class="reference internal" href="turn-off.html">Turning Off JupyterHub and Computational Resources</a></li>
@@ -390,25 +395,34 @@ pre-pull any number of images.</p>
 </ul>
 <p class="caption"><span class="caption-text">Administrator Guide</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">The JupyterHub Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="debug.html">Debugging Kubernetes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cost.html">Estimating costs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optimization.html">Speed and Optimization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="security.html">Security</a></li>
-<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading the helm chart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading your JupyterHub Kubernetes deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">FAQ</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Advanced Topics</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#ingress">Ingress</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#arbitrary-code-in-jupyterhub-config-py">Arbitrary code in <code class="docutils literal"><span class="pre">jupyterhub_config.py</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#arbitrary-extra-code-and-configuration-in-jupyterhub-config-py">Arbitrary extra code and configuration in <code class="docutils literal notranslate"><span class="pre">jupyterhub_config.py</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#picking-a-scheduler-strategy">Picking a Scheduler Strategy</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pre-pulling-images-for-faster-startup">Pre-pulling Images for Faster Startup</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="cost.html">Appendix: Projecting deployment costs</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Resources from the community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="additional-resources.html">Community-authored documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="users-list.html">Zero to JupyterHub Gallery of Deployments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tips.html">Tips and command snippets</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="reference.html">Helm Chart Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference-docs.html">Official JupyterHub and Project Jupyter Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tools.html">Tools used in a JupyterHub Deployment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
-<li class="toctree-l1"><a class="reference internal" href="additional-resources.html">Additional resources</a></li>
 </ul>
 
 
@@ -425,8 +439,8 @@ pre-pull any number of images.</p>
 <h3>Navigation</h3>
 <ul>
   <li><a href="index.html">Documentation Home</a><ul>
-  <li><a href="upgrading.html" title="Previous">Previous topic</a></li>
-  <li><a href="reference.html" title="Next">Next topic</a></li>
+  <li><a href="troubleshooting.html" title="Previous">Previous topic</a></li>
+  <li><a href="cost.html" title="Next">Next topic</a></li>
   </ul>
 </ul>
 </div>

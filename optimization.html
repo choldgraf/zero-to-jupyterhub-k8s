@@ -1,0 +1,298 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Speed and Optimization &#8212; Zero to JupyterHub with Kubernetes 0.4 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+    <script type="text/javascript" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/custom.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@1/dist/clipboard.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Security" href="security.html" />
+    <link rel="prev" title="Authentication" href="authentication.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class='prev-next-top'>
+    
+     <a class='left-prev' href="authentication.html" title="previous chapter">Previous</a>
+     <a class='right-next' href="security.html" title="next chapter">Next</a>
+  <div style='clear:both;'></div>
+
+  </div>
+
+  
+  <div class="section" id="speed-and-optimization">
+<span id="speed-and-optimization"></span><h1>Speed and Optimization<a class="headerlink" href="#speed-and-optimization" title="Permalink to this headline">¶</a></h1>
+<p>This page contains information and guidelines for improving the speed,
+stability, and general optimization of your JupyterHub deployment.</p>
+<div class="section" id="picking-a-scheduler-strategy">
+<span id="picking-a-scheduler-strategy"></span><h2>Picking a Scheduler Strategy<a class="headerlink" href="#picking-a-scheduler-strategy" title="Permalink to this headline">¶</a></h2>
+<p>Kubernetes offers very flexible ways to determine how it distributes pods on
+your nodes. The JupyterHub helm chart supports two common configurations, see
+below for a brief description of each.</p>
+<div class="section" id="spread">
+<span id="spread"></span><h3>Spread<a class="headerlink" href="#spread" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><strong>Behavior</strong>: This spreads user pods across <strong>as many nodes as possible</strong>.</li>
+<li><strong>Benefits</strong>: A single node going down will not affect too many users. If you
+do not have explicit memory &amp; cpu limits, this strategy also allows your users
+the most efficient use of RAM &amp; CPU.</li>
+<li><strong>Drawbacks</strong>: This strategy is less efficient when used with autoscaling.</li>
+</ul>
+<p>This is the default strategy. To explicitly specify it, use the following in
+your <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">singleuser</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">schedulerStrategy</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">spread</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="pack">
+<span id="pack"></span><h3>Pack<a class="headerlink" href="#pack" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><strong>Behavior</strong>: This packs user pods into <strong>as few nodes as possible</strong>.</li>
+<li><strong>Benefits</strong>: This reduces your resource utilization, which is useful in
+conjunction with autoscalers.</li>
+<li><strong>Drawbacks</strong>: A single node going down might affect more user pods than using
+a “spread” strategy (depending on the node).</li>
+</ul>
+<p>When you use this strategy, you should specify limits and guarantees for memory
+and cpu. This will make your users’ experience more predictable.</p>
+<p>To explicitly specify this strategy, use the following in your <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">singleuser</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">schedulerStrategy</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">pack</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="pre-pulling">
+<span id="pre-pulling"></span><h2>Pre-pulling<a class="headerlink" href="#pre-pulling" title="Permalink to this headline">¶</a></h2>
+<p>Pulling a user’s images to a node forces a user to wait before the user’s server
+is started. Sometimes, the wait can be 5 to 10 minutes. <strong>Pre-pulling</strong> the
+images on all the nodes can cut this wait time to a few seconds. Let’s look at
+how pre-pulling works.</p>
+<div class="section" id="hook-image-pulling-before-upgrades">
+<span id="hook-image-pulling-before-upgrades"></span><h3>Hook - image pulling before upgrades<a class="headerlink" href="#hook-image-pulling-before-upgrades" title="Permalink to this headline">¶</a></h3>
+<p>With the <strong>pre-pulling hook</strong>, which is enabled by default, the user’s container
+image is pulled on all nodes whenever a <code class="docutils literal notranslate"><span class="pre">helm</span> <span class="pre">install</span></code> or <code class="docutils literal notranslate"><span class="pre">helm</span> <span class="pre">upgrade</span></code> is
+performed. While this causes <code class="docutils literal notranslate"><span class="pre">helm</span> <span class="pre">install</span></code> and <code class="docutils literal notranslate"><span class="pre">helm</span> <span class="pre">upgrade</span></code> to take several
+minutes as the update is scheduled after the pulling has completed, the users
+waiting time will decrease and become more reliable.</p>
+<p>With the default helm upgrade settings, a <code class="docutils literal notranslate"><span class="pre">helm</span> <span class="pre">install</span></code> or <code class="docutils literal notranslate"><span class="pre">helm</span> <span class="pre">upgrade</span></code> will
+allow 5 minutes of image pulling before timing out. This wait time is
+configurable by passing the <code class="docutils literal notranslate"><span class="pre">--wait</span> <span class="pre">&lt;seconds&gt;</span></code> flag to the <code class="docutils literal notranslate"><span class="pre">helm</span></code> commands.</p>
+<p>We recommend using pre-pulling. For the rare cases where you have a good reason
+to disable it, pre-pulling can be disabled. To disable the pre-pulling during
+<code class="docutils literal notranslate"><span class="pre">helm</span> <span class="pre">install</span></code> and <code class="docutils literal notranslate"><span class="pre">helm</span> <span class="pre">upgrade</span></code>, you can use the following snippet in your
+<code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">prePuller</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">hook</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">enabled</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="continuous-image-pulling-for-added-nodes">
+<span id="continuous-image-pulling-for-added-nodes"></span><h3>Continuous - image pulling for added nodes<a class="headerlink" href="#continuous-image-pulling-for-added-nodes" title="Permalink to this headline">¶</a></h3>
+<p>Cluster size can change through manual addition of nodes or autoscaling. When a
+new node is added to the cluster, the new node does not yet have the user image.
+A user using this new node would be forced to wait while the image is pulled
+from scratch. Ideally, it would be helpful to pre-pull images when the new node
+is added to the cluster.</p>
+<p>With the <strong>continuous pre-puller</strong> enabled (disabled by default), the user’s
+container image will be pre-pulled when a new node is added. New nodes can for
+example be added manually or by a cluster autoscaler. The <strong>continuous
+pre-puller</strong> uses a
+<a class="reference external" href="https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/">daemonset</a>
+to force kubernetes to pull the user image on all nodes as soon as a node is
+present. The continuous pre-puller uses minimal resources on all nodes and
+greatly speeds up the user pod start time.</p>
+<p>The continuous pre-puller is disabled by default. To enable it, use the
+following snippet in your <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">prePuller</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">continuous</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">enabled</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="pre-pulling-additional-images">
+<span id="pre-pulling-additional-images"></span><h3>Pre-pulling additional images<a class="headerlink" href="#pre-pulling-additional-images" title="Permalink to this headline">¶</a></h3>
+<p>By default, the pre-puller only pulls the singleuser image &amp; the networktools
+image (if access to cloud metadata is disabled). If you have customizations that
+need additional images present on all nodes, you can ask the pre-puller to also
+pull an arbitrary number of additional images.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">prePuller</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">extraImages</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">ubuntu-xenial</span><span class="p p-Indicator">:</span>
+      <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">ubuntu</span>
+      <span class="l l-Scalar l-Scalar-Plain">tag</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">16.04</span>
+</pre></div>
+</div>
+<p>This snippet will pre-pull the <code class="docutils literal notranslate"><span class="pre">ubuntu:16.04</span></code> image on all nodes, for example.
+You can pre-pull any number of images.</p>
+</div>
+</div>
+</div>
+
+
+  <div class='prev-next-bottom'>
+    
+     <a class='left-prev' href="authentication.html" title="previous chapter">Authentication</a>
+     <a class='right-next' href="security.html" title="next chapter">Security</a>
+  <div style='clear:both;'></div>
+
+  </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+<h1 class="logo"><a href="index.html">Zero to JupyterHub with Kubernetes</a></h1>
+
+
+
+<p class="blurb">A tutorial to help install and manage JupyterHub with Kubernetes</p>
+
+
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3>Table of Contents</h3>
+<p class="caption"><span class="caption-text">Step Zero: your Kubernetes cluster</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="create-k8s-cluster.html">Creating a Kubernetes Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="google/step-zero-gcp.html">Step Zero: Kubernetes on Google Cloud</a></li>
+<li class="toctree-l1"><a class="reference internal" href="microsoft/step-zero-azure.html">Step Zero: Kubernetes on Microsoft Azure Container Service (AKS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="amazon/step-zero-aws.html">Step Zero: Kubernetes on Amazon Web Services (AWS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="redhat/step-zero-openshift.html">JupyterHub on Red Hat OpenShift</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Creating your JupyterHub</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started with JupyterHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup-helm.html">Setting up Helm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup-jupyterhub.html">Setting up JupyterHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="turn-off.html">Turning Off JupyterHub and Computational Resources</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Customization Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="extending-jupyterhub.html">Extending your JupyterHub setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-environment.html">Customizing the User Environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-resources.html">User Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-storage.html">User storage in JupyterHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-management.html">User Management</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Administrator Guide</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">The JupyterHub Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="debug.html">Debugging Kubernetes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Speed and Optimization</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#picking-a-scheduler-strategy">Picking a Scheduler Strategy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pre-pulling">Pre-pulling</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="security.html">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrading.html">Upgrading your JupyterHub Kubernetes deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cost.html">Appendix: Projecting deployment costs</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Resources from the community</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="additional-resources.html">Community-authored documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="users-list.html">Zero to JupyterHub Gallery of Deployments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tips.html">Tips and command snippets</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Helm Chart Configuration Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference-docs.html">Official JupyterHub and Project Jupyter Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">Tools used in a JupyterHub Deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="http://github.com/jupyterhub/zero-to-jupyterhub-k8s">GitHub Repo</a></li>
+    
+    <li class="toctree-l1"><a href="http://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues">Issue Tracker</a></li>
+    
+</ul>
+
+<div class="relations">
+<h3>Navigation</h3>
+<ul>
+  <li><a href="index.html">Documentation Home</a><ul>
+  <li><a href="authentication.html" title="Previous">Previous topic</a></li>
+  <li><a href="security.html" title="Next">Next topic</a></li>
+  </ul>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/optimization.md.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Project Jupyter team.
+      
+      |
+      <a href="_sources/optimization.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
